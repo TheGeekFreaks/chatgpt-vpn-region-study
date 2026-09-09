@@ -11,3 +11,6 @@ Recorded durations are submission-to-capture intervals including operator activi
 # Editorial clarification during collection
 
 The protocol heading was changed from "Preregistered exploratory protocol" to "Frozen prospective exploratory protocol" to avoid implying external registration. The protocol was committed locally before collection; no external registry or certified timestamp was used. This heading-only correction changes no hypothesis, prompt, schedule, endpoint or analysis rule.
+# Node-status observation after app log rollover
+
+Before M11, the original NordVPN app log stopped updating at approximately 10 MiB and a new empty log appeared. Browser checks already confirmed the intended country. The connected node was therefore verified directly in the native NordVPN status UI before submitting M11 (the intended BR-B node was shown). Subsequent node checks may use this same observable UI. This changes the observation source for the node label only; both independent browser egress-country checks and stable pre/post IP checks remain required.

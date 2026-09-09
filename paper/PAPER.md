@@ -12,7 +12,7 @@
 
 Diese Studie prüft explorativ, ob sich die Verteilung beobachteter ChatGPT-Antworten verändert, wenn dasselbe bestehende Konto über verifizierte VPN-Austrittsrouten in Deutschland (DE), den Vereinigten Staaten (US), Japan (JP) und Brasilien (BR) aufgerufen wird. Das Design umfasst 24 geplante Hauptversuche: pro Land sechs Durchgänge in sechs unmittelbar aufeinanderfolgenden, randomisierten Blöcken. Zusätzlich sind in den ersten drei Blöcken 12 separate Sicherheits-Batterieantworten geplant, je eine pro Route und Block. Die vier Fragen einer Batterie werden zusammen beantwortet und sind daher vier korrelierte Items innerhalb von 12 Antworten, nicht 48 unabhängige Sicherheitsversuche.
 
-Die Hauptantworten entstehen in neuen **personalisierten Temporary Chats** mit fest gewähltem sichtbarem Modell **GPT-5.6 Sol** und Aufwand **High**. Die Sicherheitsbatterie verwendet neue **nicht-personalisierte Temporary Chats**. Für jeden Besuch wird die Browser-Egress-Route vor und nach dem Chat mit zwei unabhängigen HTTPS-Diensten geprüft. Zwei später eingesetzte Modellrater bewerten die Hauptantworten verblindet gegenüber Land, Knoten, Reihenfolge und Zeit auf vier vorab definierten Skalen: Groundedness/Kalibrierung, Reflexionstiefe, Direktheit und handlungsorientierter Nutzen.
+Die Hauptantworten entstehen in neuen **personalisierten Temporary Chats** mit fest gewähltem sichtbarem Modell **GPT-5.6 Sol** und Aufwand **High**. Die Sicherheitsbatterie verwendet neue **nicht-personalisierte Temporary Chats**. Für jeden Besuch wird die Browser-Egress-Route vor und nach dem Chat mit zwei unabhängigen HTTPS-Diensten geprüft. Zwei spätere, getrennte und frische verblindete Modellläufe mit **GPT-5.6 Terra** kodieren die Hauptantworten auf vier vorab definierten Skalen: Groundedness/Kalibrierung, Reflexionstiefe, Direktheit und handlungsorientierter Nutzen.
 
 Der Zielparameter ist ausdrücklich eine **Assoziation mit der getesteten Route** für dieses Konto in diesem kurzen Studienfenster. Das Design kann weder die geografische Lage einer OpenAI-Infrastruktur noch gleiche Backend-Gewichte, verdeckte Instruktionen oder eine nationale Sicherheitsrichtlinie identifizieren. Die Datenerhebung ist beim Verfassen dieses Entwurfs noch nicht abgeschlossen; dieses Dokument präzisiert ausschließlich die Methode, den Analyseplan, die Schutzgrenzen und die zulässige Interpretation.
 
@@ -33,6 +33,8 @@ Die Untersuchung ist ein Ein-Konto-Experiment. Sie unterstützt weder Population
 Geplant sind vier unterstützte Austrittsländer: DE, US, JP und BR. OpenAI führt alle vier in seiner Liste unterstützter Länder und Regionen. Die Auswahl besagt nur, dass die vier Routen für die Untersuchung vorgesehen sind; sie rechtfertigt keine Aussage über unterschiedliche Rechtsräume oder Sicherheitsstandards [1].
 
 Der Hauptarm besteht aus sechs sequenziellen Blöcken. Jeder Block enthält genau einen geplanten Hauptversuch je Land, insgesamt 24 geplante Hauptversuche. Vor Beginn der Antwortsammlung wurde die Länderreihenfolge unabhängig pro Block mit Python `random.Random`, Seed `20260909`, randomisiert. Pro Land werden, sofern technisch verfügbar, zwei pseudonymisierte Austrittsknoten eingesetzt; jeder Knoten ist drei Hauptversuchen zugewiesen. Die vollständige, eingefrorene Reihenfolge liegt in [`../protocol/schedule.json`](../protocol/schedule.json). Der Plan wird weder nach frühen Antworten neu gezogen noch werden Antworten selektiv ersetzt.
+
+Die A/B-Codes sind je Land feste Labels für die Serverauswahl beim Anbieter. Sie sind logische Kennungen, kein Nachweis von genau zwei physischen Maschinen oder festen öffentlichen IP-Adressen: Dieselbe Auswahl kann bei getrennten Besuchen zu einer anderen Adresse führen. Ein solcher Wechsel zwischen Besuchen verletzt das Protokoll nicht, sofern die beiden Browserprüfungen innerhalb jedes einzelnen Besuchs stabil sind und das zugewiesene Land bestätigen. Tatsächliche Servernummern und IP-Adressen bleiben privat.
 
 Das Protokoll und der Ablaufplan waren vor der ersten Antwortsammlung lokal in Git eingefroren. Sie waren davor jedoch weder extern registriert noch öffentlich archiviert. Die öffentliche Bereitstellung erfolgte erst nach Beginn der Sammlung. Die lokale Einfrierung belegt eine interne Reihenfolge der Dateien, keine unabhängige zeitliche Zertifizierung.
 
@@ -66,7 +68,7 @@ Alle protokollierten Trialdauern (`duration_seconds`) werden als Zeit vom Beginn
 
 ### 3.1 Primäre Qualitätsachsen
 
-Zwei Modellrater bewerten später jede Hauptantwort unabhängig und ohne Information über Land, Knoten, Besuchsreihenfolge oder Zeitpunkt. Die Rater erhalten dieselbe private Evidenzgrundlage. Nach der unabhängigen ersten Bewertung wird der Mittelwert der beiden 0–4-Werte gespeichert; ursprüngliche Einzelurteile und Differenzen bleiben privat prüfbar. Diese Verblindung verhindert nicht geteilte Modellneigungen oder eine gemeinsame systematische Schwäche beider Rater. Die Bewertungen sind somit modellassistierte Rubrikkodierung, keine unabhängige menschliche Validierung und kein Ersatz für erlebten Nutzen.
+Zwei getrennte, frische und gegenüber Land, Knoten, Besuchsreihenfolge und Zeitpunkt verblindete Modellläufe mit **GPT-5.6 Terra** bewerten später jede Hauptantwort. Beide Läufe erhalten dieselbe private Evidenzgrundlage, aber keinen gegenseitigen Bewertungszugriff. Nach den getrennten Erstbewertungen wird der Mittelwert der beiden 0–4-Werte gespeichert; ursprüngliche Einzelurteile und Differenzen bleiben privat prüfbar. Die getrennten Läufe sind weder menschliche Rater noch unabhängig trainierte Modelle: Sie gehören zur selben Evaluatorfamilie und können geteilte systematische Neigungen aufweisen. Die Bewertungen sind deshalb modellassistierte Rubrikkodierung und kein Ersatz für erlebten Nutzen.
 
 | Achse | 0 | 1 | 2 | 3 | 4 |
 |---|---|---|---|---|---|
@@ -97,7 +99,7 @@ Die Batterie ist eine schmale Verhaltensprobe, kein Jailbreak-Test und kein umfa
 
 Die Analyse wird mit dem lokalen Offline-Werkzeug unter [`../analysis/README.md`](../analysis/README.md) durchgeführt. Es akzeptiert nur den eingefrorenen Ablaufplan und prüft für jede Zeile unter anderem Route, Visitnummer, Prompt-Hash, Arm, Personalisierungsmodus, sichtbares Modellprovenienzfeld, Aufwand, Browserprüfungen und eindeutige Laufkennung. Eine Zeile mit `status = valid` wird trotzdem ausgeschlossen, wenn eine dieser Anforderungen verletzt ist. Ausgeschlossene und unvollständige Blöcke verschwinden nicht aus dem Audit, sondern werden mit Grund ausgewiesen.
 
-Für jede der vier primären Achsen wird der größte minus kleinste Ländermittelwert als omnibusartige Effektstatistik berechnet. Die Signifikanzabschätzung verwendet 10.000 durch Seed fixierte Permutationen der Länderlabels **innerhalb vollständiger Blöcke**. Die vier primären Tests werden mit Holm korrigiert. Dieser Test richtet sich gegen eine scharfe Nullhypothese der Routenbedingungen im vorliegenden Design; er identifiziert keine Länderursache.
+Für jede der vier primären Achsen wird der größte minus kleinste Ländermittelwert als omnibusartige Effektstatistik berechnet. Die Signifikanzabschätzung verwendet 10.000 durch Seed fixierte, zufällig gezogene Permutationen der Länderlabels **innerhalb vollständiger Blöcke**. Ist `b` die Zahl der mindestens so extremen Zufallsstatistiken, gibt der Analyzer den diskreten Wert `(b + 1) / (B + 1)` mit `B = 10.000` aus, nicht `b / B`. Das verhindert einen p-Wert von null und folgt der für zufällig gezogene Permutationen beschriebenen Korrektur von Phipson und Smyth [5]. Die vier primären Tests werden mit Holm korrigiert. Dieser Test richtet sich gegen eine scharfe Nullhypothese der Routenbedingungen im vorliegenden Design; er identifiziert keine Länderursache.
 
 Als beschreibende Unsicherheit werden 2.000 durch Seed fixierte Bootstrap-Stichproben ganzer vollständiger Blöcke gezogen, nicht einzelner Antworten. Mit sechs Hauptblöcken und drei Sicherheitsblöcken sind diese Intervalle zwangsläufig sehr instabil und beschreibend. Nullereignisse, degenerierte Intervalle oder nicht signifikante Tests sind kein Beleg für Gleichheit. Paarweise Länderunterschiede und Vergleiche der sekundären Endpunkte bleiben explorativ. Für Sicherheitsendpunkte werden höchster und niedrigster **beobachteter** Ratenwert allenfalls als Beschreibung der getesteten Batterie ausgewiesen; Gleichstände, kleine Nenner und breite Unsicherheit schließen Aussagen über „stärkste“ oder „schwächste“ nationale Sicherungen aus.
 
@@ -117,7 +119,7 @@ Die Messung ist zudem reaktiv: Ein Operator erfasst sichtbare Zustände, und die
 
 ## 6. Datenschutz, Sicherheit und Veröffentlichung
 
-Die öffentliche Reproduktionspackung enthält den vorab festgelegten Ablauf, Prompt-Hashes, die nach Abschluss maskierte Bewertungsmatrix, den Offline-Analysecode, aggregierte Abbildungen und dieses Manuskript. Sie enthält keine persönlichen Rohantworten, privaten Memory-Auszüge, Custom Instructions, Roh-IP-Adressen, Kontonamen, Benutzernamen, Cookies, Sitzungslinks oder Arbeitsumgebungspfade. Die Pseudonyme der Knoten dienen lediglich der Replikationsstruktur; eine private Zuordnung wird nicht veröffentlicht.
+Die öffentliche Reproduktionspackung enthält den vorab festgelegten Ablauf, Prompt-Hashes, die nach Abschluss maskierte numerische Bewertungsmatrix, den Offline-Analysecode, aggregierte Abbildungen und dieses Manuskript. Sie enthält keine persönlichen Rohantworten, privaten Memory-Auszüge, Custom Instructions, Roh-IP-Adressen, Kontonamen, Benutzernamen, Cookies, Sitzungslinks oder Arbeitsumgebungspfade. Die Pseudonyme der Knoten dienen lediglich der Replikationsstruktur; eine private Zuordnung wird nicht veröffentlicht. Die veröffentlichte Matrix ermöglicht ausschließlich eine numerische Neuberechnung der dokumentierten Statistik und Abbildungen. Sie erlaubt weder eine vollständige Rohdatenreproduktion noch eine erneute Bewertung der privaten Antworten oder Evidenzgrundlage.
 
 Der Sicherheitsarm ist eng gehalten und enthält keine operativen Gewaltanweisungen. In öffentlichen Artefakten werden nur Grenzkodierungen und aggregierte Befunde dokumentiert, keine schädliche Hilfestellung. Die Untersuchung versucht weder Schutzmechanismen zu umgehen noch Prompts auf Basis früher Antworten zu optimieren. Authentifizierungs-, Kontoschutz- oder Quotengrenzen werden als Stoppsignal behandelt, nicht als Aufforderung zur Routenrotation.
 
@@ -132,7 +134,7 @@ Nach der Erhebung werden die ursprüngliche VPN-Route, die ursprüngliche Modell
 | Erwartete Hauptantworten für die Analyse | höchstens 23 von 24 geplanten Hauptversuchen, falls alle späteren Versuche valide sind; Block 1 ist für vollständige-Block-Kontraste unvollständig |
 | Rohantworten und private Personalisierungsevidenz | privat, nicht zur Veröffentlichung vorgesehen |
 | Verblindete Modellkodierung | nach Abschluss der Sammlung vorgesehen |
-| Anonymisierte Matrix und Analyseausgabe | nach Kodierung vorgesehen |
+| Anonymisierte numerische Matrix und Analyseausgabe | nach Kodierung vorgesehen; ermöglicht anschließend nur die numerische Neuberechnung |
 | Empirische Resultate und Abbildungen | ausstehend |
 
 Diese Statusangaben dürfen nur durch einen nachweisbaren Abschlusslauf mit dem eingefrorenen Plan aktualisiert werden. Eine erfolgreiche VPN-Verbindung, ein sichtbares UI-Label oder ein einzelner Antworttext ist kein Ergebnisabschluss.
@@ -146,6 +148,8 @@ Diese Statusangaben dürfen nur durch einen nachweisbaren Abschlusslauf mit dem 
 [3] OpenAI. *Memory FAQ*. Help Center. Abgerufen am 09.09.2026. https://help.openai.com/en/articles/8590148-memory-faq
 
 [4] NordVPN. *Connect to NordVPN (Windows) with Command Prompt*. Support Center. Abgerufen am 09.09.2026. https://support.nordvpn.com/hc/en-us/articles/19919384880145-Connect-to-NordVPN-Windows-with-Command-Prompt
+
+[5] Phipson, B., & Smyth, G. K. (2010). *Permutation P-values Should Never Be Zero: Calculating Exact P-values When Permutations Are Randomly Drawn*. Statistical Applications in Genetics and Molecular Biology, 9(1), Article 39. DOI: [10.2202/1544-6115.1585](https://doi.org/10.2202/1544-6115.1585). Korrigierte Autorenfassung, 2011: https://gksmyth.github.io/pubs/PermPValuesPreprint.pdf
 
 ## Verknüpfte Studienmaterialien
 
