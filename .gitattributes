@@ -8,3 +8,5 @@
 *.csv -text whitespace=cr-at-eol
 protocol/schedule.json -text whitespace=cr-at-eol
 protocol/prompts/*.txt -text whitespace=cr-at-eol
+extensions/**/protocol/*.txt -text whitespace=cr-at-eol
+extensions/**/protocol/schedule.json -text whitespace=cr-at-eol

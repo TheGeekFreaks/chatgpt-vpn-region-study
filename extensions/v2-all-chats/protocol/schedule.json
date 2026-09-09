@@ -1,0 +1,180 @@
+{
+  "study_id": "v2-all-chats-6pro",
+  "seed": 2026090902,
+  "algorithm": "Mulberry32 uint32 seeded 2026090902; Fisher-Yates shuffle AAABBB node labels in DE US JP BR order, then country order independently per block",
+  "collected_model": "GPT-6 Astra",
+  "effort": "pro",
+  "endpoint_inference": true,
+  "main_prompt_sha256": "d1495ae567a2a693c58d0064fe71e16f91cbe97bd619556e12ff389ed3a3beb9",
+  "safety_prompt_sha256": "7f6fa7c9096bdb5e3a9bb35dab9f62892a80a48cbffe67adcc8d5b36b027611d",
+  "visits": [
+    {
+      "visit": 1,
+      "block": 1,
+      "country": "JP",
+      "node_code": "JP-A",
+      "safety": false
+    },
+    {
+      "visit": 2,
+      "block": 1,
+      "country": "US",
+      "node_code": "US-B",
+      "safety": false
+    },
+    {
+      "visit": 3,
+      "block": 1,
+      "country": "BR",
+      "node_code": "BR-A",
+      "safety": false
+    },
+    {
+      "visit": 4,
+      "block": 1,
+      "country": "DE",
+      "node_code": "DE-A",
+      "safety": false
+    },
+    {
+      "visit": 5,
+      "block": 2,
+      "country": "JP",
+      "node_code": "JP-A",
+      "safety": false
+    },
+    {
+      "visit": 6,
+      "block": 2,
+      "country": "DE",
+      "node_code": "DE-B",
+      "safety": false
+    },
+    {
+      "visit": 7,
+      "block": 2,
+      "country": "US",
+      "node_code": "US-A",
+      "safety": false
+    },
+    {
+      "visit": 8,
+      "block": 2,
+      "country": "BR",
+      "node_code": "BR-A",
+      "safety": false
+    },
+    {
+      "visit": 9,
+      "block": 3,
+      "country": "US",
+      "node_code": "US-A",
+      "safety": false
+    },
+    {
+      "visit": 10,
+      "block": 3,
+      "country": "JP",
+      "node_code": "JP-B",
+      "safety": false
+    },
+    {
+      "visit": 11,
+      "block": 3,
+      "country": "DE",
+      "node_code": "DE-A",
+      "safety": false
+    },
+    {
+      "visit": 12,
+      "block": 3,
+      "country": "BR",
+      "node_code": "BR-B",
+      "safety": false
+    },
+    {
+      "visit": 13,
+      "block": 4,
+      "country": "JP",
+      "node_code": "JP-A",
+      "safety": false
+    },
+    {
+      "visit": 14,
+      "block": 4,
+      "country": "US",
+      "node_code": "US-B",
+      "safety": false
+    },
+    {
+      "visit": 15,
+      "block": 4,
+      "country": "DE",
+      "node_code": "DE-B",
+      "safety": false
+    },
+    {
+      "visit": 16,
+      "block": 4,
+      "country": "BR",
+      "node_code": "BR-A",
+      "safety": false
+    },
+    {
+      "visit": 17,
+      "block": 5,
+      "country": "US",
+      "node_code": "US-A",
+      "safety": false
+    },
+    {
+      "visit": 18,
+      "block": 5,
+      "country": "DE",
+      "node_code": "DE-B",
+      "safety": false
+    },
+    {
+      "visit": 19,
+      "block": 5,
+      "country": "BR",
+      "node_code": "BR-B",
+      "safety": false
+    },
+    {
+      "visit": 20,
+      "block": 5,
+      "country": "JP",
+      "node_code": "JP-B",
+      "safety": false
+    },
+    {
+      "visit": 21,
+      "block": 6,
+      "country": "BR",
+      "node_code": "BR-B",
+      "safety": false
+    },
+    {
+      "visit": 22,
+      "block": 6,
+      "country": "JP",
+      "node_code": "JP-B",
+      "safety": false
+    },
+    {
+      "visit": 23,
+      "block": 6,
+      "country": "US",
+      "node_code": "US-B",
+      "safety": false
+    },
+    {
+      "visit": 24,
+      "block": 6,
+      "country": "DE",
+      "node_code": "DE-A",
+      "safety": false
+    }
+  ]
+}
