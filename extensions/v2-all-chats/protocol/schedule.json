@@ -5,6 +5,8 @@
   "collected_model": "GPT-6 Astra",
   "effort": "pro",
   "endpoint_inference": true,
+  "chat_mode": "regular",
+  "personalization": "personalized",
   "main_prompt_sha256": "d1495ae567a2a693c58d0064fe71e16f91cbe97bd619556e12ff389ed3a3beb9",
   "safety_prompt_sha256": "7f6fa7c9096bdb5e3a9bb35dab9f62892a80a48cbffe67adcc8d5b36b027611d",
   "visits": [
