@@ -3,6 +3,7 @@
   "seed": 2026090902,
   "algorithm": "Mulberry32 uint32 seeded 2026090902; Fisher-Yates shuffle AAABBB node labels in DE US JP BR order, then country order independently per block",
   "collected_model": "GPT-6 Astra",
+  "model_label": "6 Pro",
   "effort": "pro",
   "endpoint_inference": true,
   "chat_mode": "regular",
