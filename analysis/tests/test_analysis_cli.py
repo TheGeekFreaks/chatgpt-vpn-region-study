@@ -19,10 +19,13 @@ from analysis_cli import (  # noqa: E402
     DEFAULT_COUNTRIES,
     ENDPOINTS,
     REQUIRED_COLUMNS,
+    REPOSITORY_ROOT,
     SchemaError,
     analyze,
     load_schedule,
     load_trials,
+    publication_path,
+    render_markdown,
 )
 
 
@@ -275,6 +278,25 @@ class AnalysisTests(unittest.TestCase):
         second = load_trials(path, schedule)
         self.assertNotEqual(first.csv_sha256, second.csv_sha256)
         self.assertEqual(first.schedule.sha256, second.schedule.sha256)
+
+    def test_standalone_markdown_includes_measurement_limits_links(self) -> None:
+        data = load_synthetic_data(self._workspace(), all_main_rows())
+        report = render_markdown(analyze(data, permutations=1_000, bootstrap_samples=1_000))
+        self.assertIn("`data/rater-agreement.json`", report)
+        self.assertIn("`paper/PAPER.md`", report)
+        self.assertIn("zero-width bootstrap intervals", report)
+
+    def test_publication_paths_do_not_expose_host_directories(self) -> None:
+        workspace = self._workspace()
+        data = load_synthetic_data(workspace, all_main_rows())
+        result = analyze(data, permutations=1_000, bootstrap_samples=1_000)
+        output_path = result["design"]["frozen_schedule"]["path"]
+        self.assertEqual(output_path, "SYNTHETIC_SCHEDULE_ONLY.json")
+        self.assertNotIn(str(workspace), output_path)
+        self.assertEqual(
+            publication_path(REPOSITORY_ROOT / "protocol" / "schedule.json"),
+            "protocol/schedule.json",
+        )
 
 
 if __name__ == "__main__":

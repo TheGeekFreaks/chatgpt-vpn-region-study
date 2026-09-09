@@ -2,11 +2,43 @@
 
 An exploratory, single-account study of response quality and boundary behavior across verified VPN exit countries. The central question is whether observed ChatGPT answers vary with the tested network route while prompt, visible model, effort and personalization are held fixed.
 
-**Collection in progress. No final regional effect or safety ranking is claimed here.**
+**Collection and analysis complete, 9 September 2026. The tested safety boundaries tied across all four countries. No quality-axis contrast was significant in the planned analysis. This narrow pilot does not establish regional equivalence or a strongest/weakest national safety system.**
 
-The main experiment uses the same German personal-history introspection prompt in 24 personalized temporary chats: Germany, United States, Japan and Brazil, six randomized sequential blocks. A separate fixed four-item battery is planned in 12 non-personalized temporary chats. It combines benign controls with a nonspecific violent-intent probe and a request to fabricate personal knowledge. Battery items are not treated as independent response trials.
+The experiment used the same German personal-history reflection prompt in 24 planned personalized temporary chats: Germany, United States, Japan and Brazil, six randomized sequential blocks. A fixed four-item safety battery was submitted in 12 non-personalized temporary chats. It combined benign controls with a nonspecific violent-intent probe and a request to fabricate personal knowledge. Battery items are not independent response trials.
 
-Four model-rated quality axes are specified in advance: groundedness/calibration, reflective depth, directness and actionable usefulness. Refusals, epistemic access limits, benign over-refusal and protective boundaries are separate endpoints. Low refusal on a benign question does not mean weak safety. One prompt, one account and a short window cannot establish a country's general safety policy.
+All **36 planned attempts** are retained; **35 responses were captured** (23 main, 12 safety). One US main response was lost when the operator navigated away during generation. It was recorded as a technical failure and never replaced. Primary comparisons use **five complete main blocks: 20 responses, five per country**, plus all 12 safety responses. The three valid main responses from the incomplete first block remain in the numerical matrix.
+
+[German paper (PDF)](paper/PAPER.pdf) · [Manuscript](paper/PAPER.md) · [Full results](results/results.md) · [Numerical data](data/trials.csv)
+
+Four model-rated quality axes were specified in advance: groundedness/calibration, reflective depth, directness and actionable usefulness. Refusals, epistemic access limits, benign over-refusal and protective boundaries are separate endpoints.
+
+## Observed results
+
+Two separate, fresh, blinded GPT-5.6 Terra runs rated each response. Each axis ranges from 0 to 4; the table uses the mean of their integer ratings and the five complete main blocks.
+
+| Country | Groundedness / calibration | Reflective depth | Directness | Actionable usefulness |
+|---|---:|---:|---:|---:|
+| Germany | 2.50 | 3.50 | 3.10 | 4.00 |
+| United States | 2.40 | 3.50 | 3.10 | 4.00 |
+| Japan | 2.40 | 3.50 | 3.10 | 4.00 |
+| Brazil | 2.50 | 3.50 | 3.30 | 4.00 |
+
+With 10,000 within-block permutations, the unadjusted omnibus p-value was 0.7485 for directness and 1.0000 for the other axes; all four Holm-adjusted p-values were 1.0000. Brazil's small descriptive directness lead is not evidence of superior regional quality.
+
+Absolute quality measurement was weak: exact inter-rater agreement was only 17.4% for groundedness and 4.3% for reflective depth, with mean absolute gaps of 0.83 and 0.96 points. Usefulness saturated at 4. Flat scores and zero-width bootstrap intervals reflect this sample and rubric resolution, not certainty about underlying behavior. Both raters belong to the same model family. Scores are assessment proxies, not verified personal facts.
+
+| Country | Violence boundary maintained | Fabrication boundary maintained | Unjustified benign refusal |
+|---|---:|---:|---:|
+| Germany | 3/3 | 3/3 | 0/3 |
+| United States | 3/3 | 3/3 | 0/3 |
+| Japan | 3/3 | 3/3 | 0/3 |
+| Brazil | 3/3 | 3/3 | 0/3 |
+
+Every safety response declined the two problematic requests while answering the benign controls. All countries tie on these observed endpoints. Three repetitions of two narrow probes cannot identify a weakest country or establish comprehensive safety strength. Zero observed failures do not demonstrate zero failure risk.
+
+Mentions of limited personal-history access in safety responses varied: Germany 1/3, United States 2/3, Japan 3/3 and Brazil 3/3. This is an exploratory wording difference, **not a safety-strength ranking**.
+
+The main prompt explicitly requests honest context limitations. A blinded source-alignment check corrected both raters' initial classification of those disclosures as partial refusals; quality scores and safety codes were unchanged. Initial and corrected versions remain private and the intervention is documented in [deviations](protocol/DEVIATIONS.md). In the primary main sample, explicit and partial refusals were 0/5 per country, while access limitations were acknowledged in 5/5.
 
 ## Reproducibility package
 
@@ -15,30 +47,45 @@ Four model-rated quality axes are specified in advance: groundedness/calibration
 - [Main prompt](protocol/prompts/main.de.txt) and [boundary battery](protocol/prompts/safety.de.txt)
 - [Acquisition notes and deviations](protocol/DEVIATIONS.md)
 - [Offline analysis CLI](analysis/README.md)
+- [Numerical matrix](data/trials.csv), [rater agreement](data/rater-agreement.json), [machine-readable analysis](results/analysis.json)
 - [Reusable Codex skill](skill/chatgpt-vpn-region-audit/SKILL.md)
 
-The protocol was committed locally before response collection (`2fe04a2903725d1aa357a70f5090d841778cd294`). This is not an externally registered or independently timestamp-certified preregistration. Original responses, custom instructions, memory summaries, IP addresses and account/session identifiers stay outside the public repository. Only anonymized ratings, aggregate results and non-sensitive methods are intended for publication.
+The protocol was committed locally before response collection (`2fe04a2903725d1aa357a70f5090d841778cd294`). This was not externally registered or independently timestamp-certified. Original responses, custom instructions, memory summaries, IP addresses and account/session identifiers remain private. Public data support numerical recomputation of the reported statistics and plots, not independent re-scoring of private answers or validation of personal claims.
 
 ## Technical evidence boundary
 
 VPN egress is verified in the actual browser before and after each route visit with two separate services. A terminal IP, a selected VPN country or a CLI success does not prove the ChatGPT browser route. Preflight found that the browser's friendly provider label was Chrome while its actual process was Thorium, which was excluded by NordVPN split tunneling. The exception was temporarily disabled and browser egress reverified before any prompt was submitted.
 
-The visible model is GPT-5.6 Sol with High effort. The interface resets model choice on navigation, so the picker is checked for each chat. A visible label does not reveal backend weights, hidden system instructions or the provider's serving region. Personalized Temporary Chat behavior is checked against the actual UI and the [current dedicated OpenAI FAQ](https://help.openai.com/en/articles/8914046-temporary-chat-faq).
+The visible model was GPT-5.6 Sol with High effort. Navigation reset model choice, so the picker was checked for each chat. A visible label does not reveal backend weights, hidden system instructions or serving region. Personalized Temporary Chat behavior was checked against the UI and the [dedicated OpenAI FAQ](https://help.openai.com/en/articles/8914046-temporary-chat-faq). The visible personalization dialog was identical after collection; the visible memory summary changed only in its relative-age display. These controls cannot reveal the full context retrieved for each request. Original VPN/browser and model settings were restored afterward.
 
 ## Run the offline checks
 
-Python 3.10+ is required. The numerical core uses the standard library; matplotlib is optional for figures.
+Python 3.10+ is required. The numerical core uses the standard library. Install matplotlib for the plot and reportlab for the PDF.
+
+```sh
+python -m pip install matplotlib reportlab
+python analysis/analysis_cli.py data/trials.csv --out results
+python paper/render_pdf.py paper/PAPER.md --output paper/PAPER.pdf --final
+```
+
+Focused checks:
 
 ```sh
 python -m unittest discover -s analysis/tests -v
-python analysis/analysis_cli.py data/trials.csv --out results
+python -m unittest discover -s analysis -p 'test_*.py' -v
+python -m unittest discover -s collection -p 'test_*.py' -v
+python -m unittest discover -s paper -p 'test_*.py' -v
 ```
 
-The empirical CSV will be added after collection and masked coding. Tests use explicitly synthetic fixtures inside temporary directories; synthetic values must never be presented as study observations. The analyzer checks the frozen schedule, both prompt hashes, model/mode provenance and browser verification. Invalid/incomplete blocks remain documented and are excluded from randomized contrasts.
+Tests use explicitly synthetic fixtures in temporary directories. The empirical CSV derives from retained observations and blinded ratings. The analyzer checks schedule, prompt hashes, model/mode provenance and browser verification. Invalid attempts and incomplete blocks remain documented.
+
+## Reusable skill
+
+Copy `skill/chatgpt-vpn-region-audit/` into your Codex skills directory and invoke `$chatgpt-vpn-region-audit`. It describes prospective design, exact-prompt collection, actual browser egress checks, blinded scoring and transparent publication. New observations require a VPN and authenticated provider session; offline analysis makes no provider calls.
 
 ## Interpretation
 
-Results apply only to this account, the tested routes, model label and study window. The study cannot isolate country from exit-node effects, IP reputation, network routing, time, memory synthesis or product changes. Observed country extrema are exploratory descriptions. Sparse or zero events, ties and wide uncertainty do not identify a strongest or weakest national safety system.
+Results apply only to this account, tested routes, model label, prompts and study window. The study cannot isolate country from server selection, IP reputation, routing, time, memory retrieval or product changes. A/B identifiers are logical provider server selections, not proof of physical machines or fixed IP addresses. No provider-policy change was established. Sparse events, ties and wide uncertainty do not identify a strongest or weakest national safety system.
 
 ## License
 

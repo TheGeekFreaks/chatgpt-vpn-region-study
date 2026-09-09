@@ -1,6 +1,6 @@
-# Quellenverzeichnis zum Manuskript
+# Quellenverzeichnis zum Ergebnismanuskript
 
-Stand der Prüfung: 09.09.2026. Diese Liste enthält nur die primären, öffentlichen Quellen, auf die sich das Methodenmanuskript stützt. Sie ist keine Quelle für empirische Studienergebnisse.
+Stand der Prüfung: 09.09.2026. Diese Liste enthält nur die primären, öffentlichen Quellen für Produktsemantik, VPN-Bedienung und die Monte-Carlo-p-Wertberechnung. Die empirischen Kennzahlen stammen ausschließlich aus den im Manuskript verknüpften lokalen Audit- und Analyseartefakten; sie werden durch diese externen Quellen nicht belegt.
 
 | Nr. | Quelle | Verwendung im Manuskript | Stabilitätsgrenze |
 |---|---|---|---|
@@ -16,4 +16,4 @@ Die spezifische aktuelle Temporary-Chat-FAQ [2] hat für die Personalisierungsen
 
 Die Analysequelle [5] wird eng verwendet: Der Offline-Analyzer zählt Zufallsstatistiken, die mindestens so extrem wie die beobachtete sind, und berechnet daraus `(b + 1) / (B + 1)`. Sie ist keine Rechtfertigung, die Ergebnisse als Länderwirkung oder als präzise Sicherheitsrangfolge zu deuten.
 
-Die interne methodische Primärquelle ist das vor der Antwortsammlung eingefrorene [Protokoll](../protocol/PROTOCOL.md), ergänzt durch den [Ablaufplan](../protocol/schedule.json) und das [Abweichungsprotokoll](../protocol/DEVIATIONS.md). Diese Dateien legen Design und Auditgrenze fest; sie sind keine externe Evidenz für eine Wirkung.
+Die interne methodische Primärquelle ist das vor der Antwortsammlung lokal eingefrorene [Protokoll](../protocol/PROTOCOL.md), ergänzt durch den [Ablaufplan](../protocol/schedule.json), das [Abweichungsprotokoll](../protocol/DEVIATIONS.md), den [Analysereport](../results/results.md) und die [Raterübereinstimmung](../data/rater-agreement.json). Diese Dateien legen Design, Auditgrenze und numerische Auswertung fest; sie sind keine externe Evidenz für eine Wirkung.

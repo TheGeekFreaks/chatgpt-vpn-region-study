@@ -1,0 +1,12 @@
+{
+  "python": "3.11.1",
+  "platform": "Windows",
+  "matplotlib": "3.7.3",
+  "reportlab": "4.0.5",
+  "collection_date": "2026-09-09",
+  "provider_surface": "ChatGPT web",
+  "selected_model": "GPT-5.6 Sol",
+  "selected_effort": "High",
+  "evaluator_requested_model": "GPT-5.6 Terra",
+  "vpn_client_observed_version": "8.10.3.0"
+}

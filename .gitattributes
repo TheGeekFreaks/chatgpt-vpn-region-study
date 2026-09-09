@@ -1,0 +1,10 @@
+*.md text eol=lf
+*.py text eol=lf
+*.json text eol=lf
+*.pdf binary
+*.png binary
+
+# Preserve exact bytes for inputs bound by SHA-256 in the study provenance.
+*.csv -text whitespace=cr-at-eol
+protocol/schedule.json -text whitespace=cr-at-eol
+protocol/prompts/*.txt -text whitespace=cr-at-eol

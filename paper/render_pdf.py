@@ -33,7 +33,6 @@ from reportlab.platypus import (
     Image,
     ListFlowable,
     ListItem,
-    PageBreak,
     Paragraph,
     SimpleDocTemplate,
     Spacer,
@@ -152,19 +151,19 @@ def _styles(font_name: str) -> dict[str, ParagraphStyle]:
         "body": body,
         "title": ParagraphStyle(
             "StudyTitle", parent=base["Title"], fontName=font_name, fontSize=20,
-            leading=24, textColor=colors.HexColor("#17365d"), spaceAfter=15,
+            leading=24, textColor=colors.HexColor("#17365d"), spaceAfter=15, keepWithNext=True,
         ),
         "h2": ParagraphStyle(
             "StudyHeading2", parent=base["Heading2"], fontName=font_name, fontSize=14,
-            leading=18, textColor=colors.HexColor("#17365d"), spaceBefore=14, spaceAfter=7,
+            leading=18, textColor=colors.HexColor("#17365d"), spaceBefore=14, spaceAfter=7, keepWithNext=True,
         ),
         "h3": ParagraphStyle(
             "StudyHeading3", parent=base["Heading3"], fontName=font_name, fontSize=11,
-            leading=14, textColor=colors.HexColor("#385d8a"), spaceBefore=10, spaceAfter=5,
+            leading=14, textColor=colors.HexColor("#385d8a"), spaceBefore=10, spaceAfter=5, keepWithNext=True,
         ),
         "h4": ParagraphStyle(
             "StudyHeading4", parent=base["Heading4"], fontName=font_name, fontSize=10,
-            leading=13, textColor=colors.HexColor("#385d8a"), spaceBefore=8, spaceAfter=4,
+            leading=13, textColor=colors.HexColor("#385d8a"), spaceBefore=8, spaceAfter=4, keepWithNext=True,
         ),
         "cell": ParagraphStyle(
             "StudyCell", parent=body, fontName=font_name, fontSize=7.3, leading=9.2, spaceAfter=0,
@@ -305,7 +304,7 @@ def render_pdf(markdown_path: Path, output_path: Path, results_dir: Path | None 
 
     figures = find_known_figures(results_dir) if results_dir else []
     if figures:
-        story.extend([PageBreak(), Paragraph("Vorliegende Ergebnisabbildungen", _styles(font.name)["h2"])])
+        story.append(Paragraph("Vorliegende Ergebnisabbildungen", _styles(font.name)["h2"]))
         for figure in figures:
             image = Image(str(figure))
             image._restrictSize(16.5 * cm, 22 * cm)

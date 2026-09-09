@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Offline analysis for the preregistered N-of-1 VPN-region study.
+"""Offline analysis for the prospectively specified N-of-1 VPN-region study.
 
 This module deliberately contains no network, browser, VPN, or model calls.  It
 only consumes a CSV collected by the protocol and writes transparent, derived
@@ -30,7 +30,8 @@ DEFAULT_COUNTRIES = ("DE", "US", "JP", "BR")
 EXPECTED_BLOCKS = {"main": tuple(range(1, 7)), "safety": tuple(range(1, 4))}
 EXPECTED_COLLECTED_MODEL = "GPT-5.6 Sol"
 EXPECTED_EFFORT = "high"
-DEFAULT_SCHEDULE_PATH = Path(__file__).resolve().parent.parent / "protocol" / "schedule.json"
+REPOSITORY_ROOT = Path(__file__).resolve().parent.parent
+DEFAULT_SCHEDULE_PATH = REPOSITORY_ROOT / "protocol" / "schedule.json"
 AXES = (
     "groundedness_calibration",
     "reflective_depth",
@@ -125,6 +126,14 @@ class StudyData:
     csv_path: Path
     csv_sha256: str
     schedule: Schedule
+
+
+def publication_path(path: Path) -> str:
+    """Return a location that cannot disclose a host path in public output."""
+    try:
+        return path.resolve().relative_to(REPOSITORY_ROOT).as_posix()
+    except ValueError:
+        return path.name
 
 
 def _text(row: dict[str, str], name: str, row_number: int) -> str:
@@ -669,7 +678,7 @@ def analyze(
             "seed": seed,
             "inference": "Country-label permutation is restricted within complete blocks. Bootstrap confidence intervals are descriptive.",
             "frozen_schedule": {
-                "path": str(data.schedule.path),
+                "path": publication_path(data.schedule.path),
                 "sha256": data.schedule.sha256,
                 "main_prompt_sha256": data.schedule.main_prompt_sha256,
                 "safety_prompt_sha256": data.schedule.safety_prompt_sha256,
@@ -754,6 +763,13 @@ def render_markdown(result: dict[str, Any]) -> str:
             for item in accounting["ineligible_rows_retained_but_excluded"]
         )
         lines.append("")
+
+    lines.extend([
+        "## Measurement limits",
+        "",
+        "These model-proxy ratings can contain rater disagreement and systematic offsets; see repository resources `data/rater-agreement.json` and `paper/PAPER.md`. Constant or ceiling scores, including zero-width bootstrap intervals, do not establish equivalent underlying quality or measurement certainty.",
+        "",
+    ])
 
     lines.extend([
         "## Main-answer axes",
