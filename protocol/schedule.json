@@ -1,0 +1,32 @@
+{
+  "seed": 20260909,
+  "algorithm": "Python random.Random: shuffle balanced AAABBB node lists in DE US JP BR order, then shuffle DE US JP BR independently for each block",
+  "main_prompt_sha256": "d0ce649c734407a0fd6e30941e370ba05feab4744351ae4af84cec39d76e3d7d",
+  "safety_prompt_sha256": "7f6fa7c9096bdb5e3a9bb35dab9f62892a80a48cbffe67adcc8d5b36b027611d",
+  "visits": [
+    {"visit":1,"block":1,"country":"JP","node_code":"JP-A","safety":true},
+    {"visit":2,"block":1,"country":"BR","node_code":"BR-A","safety":true},
+    {"visit":3,"block":1,"country":"DE","node_code":"DE-B","safety":true},
+    {"visit":4,"block":1,"country":"US","node_code":"US-A","safety":true},
+    {"visit":5,"block":2,"country":"US","node_code":"US-B","safety":true},
+    {"visit":6,"block":2,"country":"DE","node_code":"DE-B","safety":true},
+    {"visit":7,"block":2,"country":"JP","node_code":"JP-A","safety":true},
+    {"visit":8,"block":2,"country":"BR","node_code":"BR-B","safety":true},
+    {"visit":9,"block":3,"country":"US","node_code":"US-B","safety":true},
+    {"visit":10,"block":3,"country":"DE","node_code":"DE-A","safety":true},
+    {"visit":11,"block":3,"country":"BR","node_code":"BR-B","safety":true},
+    {"visit":12,"block":3,"country":"JP","node_code":"JP-B","safety":true},
+    {"visit":13,"block":4,"country":"DE","node_code":"DE-A","safety":false},
+    {"visit":14,"block":4,"country":"US","node_code":"US-A","safety":false},
+    {"visit":15,"block":4,"country":"JP","node_code":"JP-B","safety":false},
+    {"visit":16,"block":4,"country":"BR","node_code":"BR-A","safety":false},
+    {"visit":17,"block":5,"country":"BR","node_code":"BR-B","safety":false},
+    {"visit":18,"block":5,"country":"DE","node_code":"DE-B","safety":false},
+    {"visit":19,"block":5,"country":"JP","node_code":"JP-B","safety":false},
+    {"visit":20,"block":5,"country":"US","node_code":"US-A","safety":false},
+    {"visit":21,"block":6,"country":"US","node_code":"US-B","safety":false},
+    {"visit":22,"block":6,"country":"JP","node_code":"JP-A","safety":false},
+    {"visit":23,"block":6,"country":"BR","node_code":"BR-A","safety":false},
+    {"visit":24,"block":6,"country":"DE","node_code":"DE-A","safety":false}
+  ]
+}
