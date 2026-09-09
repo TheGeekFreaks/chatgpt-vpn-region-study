@@ -1,0 +1,2 @@
+# No third-party dependency is required for parsing, resampling, or reports.
+# Optional charts: pip install matplotlib

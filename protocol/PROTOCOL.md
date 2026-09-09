@@ -1,4 +1,4 @@
-# Preregistered exploratory protocol
+# Frozen prospective exploratory protocol
 
 Status: frozen before response collection; route preflight is not a response trial. Date: 2026-09-09. No empirical result is asserted by this document.
 
