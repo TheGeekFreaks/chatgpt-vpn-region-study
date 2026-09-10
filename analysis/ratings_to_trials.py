@@ -251,24 +251,40 @@ def _mapping_attempts(
             raise ConversionError(f"{context}: visit is absent from frozen schedule")
         visit_arms.setdefault(visit, []).append(raw["arm"])
         if block != frozen_schedule.visits[visit].block:
-            raise ConversionError(f"{context}: block does not match frozen schedule visit")
+            raise ConversionError(
+                f"{context}: block does not match frozen schedule visit"
+            )
         if raw["arm"] not in frozen_schedule.expected_arms_by_visit[visit]:
-            raise ConversionError(f"{context}: arm is not planned for frozen schedule visit")
+            raise ConversionError(
+                f"{context}: arm is not planned for frozen schedule visit"
+            )
+        if raw["country"] != frozen_schedule.visits[visit].country:
+            raise ConversionError(f"{context}: country does not match frozen schedule")
+        if raw["node_code"] != frozen_schedule.visits[visit].node_code:
+            raise ConversionError(
+                f"{context}: node_code does not match frozen schedule"
+            )
         for field in ("collected_model", "effort"):
             if not isinstance(raw[field], str) or not raw[field]:
                 raise ConversionError(f"{context}: {field} must be a nonempty string")
         if raw["collected_model"] != frozen_schedule.collected_model:
-            raise ConversionError(f"{context}: collected_model does not match frozen schedule")
+            raise ConversionError(
+                f"{context}: collected_model does not match frozen schedule"
+            )
         if raw["effort"] != frozen_schedule.effort:
             raise ConversionError(f"{context}: effort does not match frozen schedule")
         chat_mode = raw.get("chat_mode")
         if frozen_schedule.chat_mode is None:
             if chat_mode is not None:
-                raise ConversionError(f"{context}: chat_mode is not declared by frozen schedule")
+                raise ConversionError(
+                    f"{context}: chat_mode is not declared by frozen schedule"
+                )
         elif not isinstance(chat_mode, str) or not chat_mode:
             raise ConversionError(f"{context}: chat_mode must match frozen schedule")
         elif chat_mode != frozen_schedule.chat_mode:
-            raise ConversionError(f"{context}: chat_mode does not match frozen schedule")
+            raise ConversionError(
+                f"{context}: chat_mode does not match frozen schedule"
+            )
         for field in (
             "browser_pre_verified",
             "browser_post_verified",
@@ -299,7 +315,9 @@ def _mapping_attempts(
             else frozen_schedule.safety_prompt_sha256
         )
         if raw["prompt_sha256"] != expected_prompt_sha256:
-            raise ConversionError(f"{context}: prompt_sha256 does not match frozen schedule")
+            raise ConversionError(
+                f"{context}: prompt_sha256 does not match frozen schedule"
+            )
         if not isinstance(raw["deviation_reason"], str):
             raise ConversionError(f"{context}: deviation_reason must be a string")
         if status == "valid" and raw["deviation_reason"]:
@@ -320,7 +338,9 @@ def _mapping_attempts(
         attempts.append(MappingAttempt(label=label, status=status, values=dict(raw)))
 
     if not allow_partial and set(visit_arms) != set(frozen_schedule.visits):
-        raise ConversionError("private mapping must contain every frozen schedule visit")
+        raise ConversionError(
+            "private mapping must contain every frozen schedule visit"
+        )
     for visit, arms in visit_arms.items():
         expected_arms = sorted(frozen_schedule.expected_arms_by_visit[visit])
         if sorted(arms) != expected_arms:

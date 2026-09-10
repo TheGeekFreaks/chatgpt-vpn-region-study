@@ -174,7 +174,11 @@ def _normalize_deviation_reason(raw: Any, context: str) -> str:
 
 
 def _validate_attempt(
-    observation: Any, envelope: dict[str, Any], source_visit: int, index: int, schedule: Schedule
+    observation: Any,
+    envelope: dict[str, Any],
+    source_visit: int,
+    index: int,
+    schedule: Schedule,
 ) -> Attempt:
     context = f"visit {source_visit} observation {index + 1}"
     if not isinstance(observation, dict):
@@ -190,10 +194,7 @@ def _validate_attempt(
         raise PreparationError(
             f"{context}: observation visit does not match envelope visit"
         )
-    if (
-        not isinstance(observation["arm"], str)
-        or observation["arm"] not in VALID_ARMS
-    ):
+    if not isinstance(observation["arm"], str) or observation["arm"] not in VALID_ARMS:
         raise PreparationError(f"{context}: arm must be main or safety")
     block = _require_int(observation["block"], "block", context)
     for field in (
@@ -218,11 +219,17 @@ def _validate_attempt(
     if scheduled is None:
         raise PreparationError(f"{context}: visit is absent from frozen schedule")
     if observation["arm"] not in schedule.expected_arms_by_visit[source_visit]:
-        raise PreparationError(f"{context}: arm is not planned for this frozen schedule visit")
+        raise PreparationError(
+            f"{context}: arm is not planned for this frozen schedule visit"
+        )
     if block != scheduled.block:
         raise PreparationError(
             f"{context}: block {block} does not match frozen visit block {scheduled.block}"
         )
+    if observation["country"] != scheduled.country:
+        raise PreparationError(f"{context}: country does not match frozen schedule")
+    if observation["node_code"] != scheduled.node_code:
+        raise PreparationError(f"{context}: node_code does not match frozen schedule")
     if observation["collected_model"] != schedule.collected_model:
         raise PreparationError(
             f"{context}: collected_model does not match frozen schedule"
@@ -232,7 +239,9 @@ def _validate_attempt(
     chat_mode = observation.get("chat_mode")
     if schedule.chat_mode is None:
         if "chat_mode" in observation:
-            raise PreparationError(f"{context}: chat_mode is not declared by frozen schedule")
+            raise PreparationError(
+                f"{context}: chat_mode is not declared by frozen schedule"
+            )
     elif not isinstance(chat_mode, str) or not chat_mode:
         raise PreparationError(f"{context}: chat_mode must match frozen schedule")
     elif chat_mode != schedule.chat_mode:
@@ -250,6 +259,15 @@ def _validate_attempt(
             raise PreparationError(
                 f"{context}: {field} must be a lowercase hexadecimal SHA-256 digest"
             )
+    expected_prompt_sha256 = (
+        schedule.main_prompt_sha256
+        if observation["arm"] == "main"
+        else schedule.safety_prompt_sha256
+    )
+    if prompt_sha256 != expected_prompt_sha256:
+        raise PreparationError(
+            f"{context}: prompt_sha256 does not match frozen schedule"
+        )
     if _sha256_text(observation["response"]) != response_sha256:
         raise PreparationError(
             f"{context}: response_sha256 does not match the exact UTF-8 response text"
@@ -325,7 +343,9 @@ def load_attempts(
         if not isinstance(observations, list) or not observations:
             raise PreparationError(f"{path.name}: observations must be a nonempty list")
         for index, observation in enumerate(observations):
-            attempt = _validate_attempt(observation, envelope, visit, index, frozen_schedule)
+            attempt = _validate_attempt(
+                observation, envelope, visit, index, frozen_schedule
+            )
             run_id = attempt.observation["run_id"]
             if not run_id:
                 raise PreparationError(
@@ -367,7 +387,8 @@ def _validate_complete_collection(
                 "unexpected visits " + ", ".join(str(value) for value in unexpected)
             )
         raise PreparationError(
-            "complete collection requires visits 1 through 24 from the frozen schedule; " + "; ".join(details)
+            "complete collection requires visits 1 through 24 from the frozen schedule; "
+            + "; ".join(details)
         )
     expected_arms = schedule.expected_arms_by_visit
     expected_observations = sum(len(arms) for arms in expected_arms.values())
@@ -603,7 +624,9 @@ def main(argv: list[str] | None = None) -> int:
     try:
         schedule = load_schedule(arguments.schedule)
         attempts = load_attempts(
-            arguments.visits_dir, schedule=schedule, allow_partial=arguments.allow_partial
+            arguments.visits_dir,
+            schedule=schedule,
+            allow_partial=arguments.allow_partial,
         )
         pack, mapping = build_blinded_artifacts(attempts, arguments.seed)
         pack_path, mapping_path = write_artifacts(pack, mapping, arguments.out_dir)

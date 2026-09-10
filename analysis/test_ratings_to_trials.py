@@ -13,7 +13,7 @@ from pathlib import Path
 ANALYSIS_DIR = Path(__file__).resolve().parent
 sys.path.insert(0, str(ANALYSIS_DIR))
 
-from analysis_cli import DEFAULT_SCHEDULE_PATH, load_schedule
+from analysis_cli import DEFAULT_SCHEDULE_PATH, Schedule, load_schedule
 from prepare_ratings import build_blinded_artifacts, load_attempts
 from ratings_to_trials import (  # type: ignore[import-not-found]
     AXES,
@@ -45,9 +45,11 @@ def synthetic_mapping(
     main_prompt_sha256: str = DEFAULT_TEST_SCHEDULE.main_prompt_sha256,
     safety_prompt_sha256: str = DEFAULT_TEST_SCHEDULE.safety_prompt_sha256,
     visits: tuple[int, ...] = tuple(range(1, 25)),
+    schedule: Schedule = DEFAULT_TEST_SCHEDULE,
 ) -> dict[str, object]:
     attempts: list[dict[str, object]] = []
     for visit in visits:
+        planned = schedule.visits[visit]
         arms = ["main", "safety"] if visit in safety_visits else ["main"]
         for arm in arms:
             technical_failure = (visit, arm) in technical_failures
@@ -65,10 +67,10 @@ def synthetic_mapping(
                     ),
                     "run_id": f"synthetic-{visit:02d}-{arm}",
                     "arm": arm,
-                    "block": (visit - 1) // 4 + 1,
-                    "country": ("DE", "US", "JP", "BR")[(visit - 1) % 4],
+                    "block": planned.block,
+                    "country": planned.country,
                     "visit": visit,
-                    "node_code": "SYN-A",
+                    "node_code": planned.node_code,
                     "model_label": "Synthetic label",
                     "collected_model": collected_model,
                     "effort": effort,
@@ -98,7 +100,7 @@ def synthetic_mapping(
     }
 
 
-def v2_partial_mapping() -> dict[str, object]:
+def v2_partial_mapping(schedule: Schedule) -> dict[str, object]:
     return synthetic_mapping(
         frozenset(),
         frozenset(),
@@ -108,6 +110,7 @@ def v2_partial_mapping() -> dict[str, object]:
         main_prompt_sha256=digest("v2-main"),
         safety_prompt_sha256=digest("v2-safety"),
         visits=tuple(range(1, 15)),
+        schedule=schedule,
     )
 
 
@@ -375,6 +378,7 @@ class RatingsToTrialsTests(unittest.TestCase):
                 chat_mode="regular",
                 main_prompt_sha256=digest("v2-main"),
                 safety_prompt_sha256=digest("v2-safety"),
+                schedule=schedule,
             ),
         )
         attempts = _mapping_attempts(mapping_path, schedule)
@@ -387,7 +391,7 @@ class RatingsToTrialsTests(unittest.TestCase):
         workspace = self.workspace()
         schedule = load_schedule(write_v2_schedule(workspace))
         mapping_path = self.write_json(
-            workspace, "partial-v2-mapping.json", v2_partial_mapping()
+            workspace, "partial-v2-mapping.json", v2_partial_mapping(schedule)
         )
 
         with self.assertRaisesRegex(ConversionError, "requires exactly 24"):
@@ -440,19 +444,42 @@ class RatingsToTrialsTests(unittest.TestCase):
     def test_partial_v2_mapping_rejects_off_schedule_visit(self) -> None:
         workspace = self.workspace()
         schedule = load_schedule(write_v2_schedule(workspace))
-        mapping = v2_partial_mapping()
+        mapping = v2_partial_mapping(schedule)
         mapping["attempts"][0]["visit"] = 25
-        mapping_path = self.write_json(workspace, "off-schedule-v2-mapping.json", mapping)
+        mapping_path = self.write_json(
+            workspace, "off-schedule-v2-mapping.json", mapping
+        )
 
-        with self.assertRaisesRegex(ConversionError, "visit is absent from frozen schedule"):
+        with self.assertRaisesRegex(
+            ConversionError, "visit is absent from frozen schedule"
+        ):
             _mapping_attempts(mapping_path, schedule, allow_partial=True)
+
+    def test_partial_v2_mapping_rejects_country_and_node_tampering(self) -> None:
+        for field, value, message in (
+            ("country", "ZZ", "country does not match frozen schedule"),
+            ("node_code", "ZZ-A", "node_code does not match frozen schedule"),
+        ):
+            with self.subTest(field=field):
+                workspace = self.workspace()
+                schedule = load_schedule(write_v2_schedule(workspace))
+                mapping = v2_partial_mapping(schedule)
+                mapping["attempts"][0][field] = value
+                mapping_path = self.write_json(
+                    workspace, f"wrong-{field}-v2-mapping.json", mapping
+                )
+
+                with self.assertRaisesRegex(ConversionError, message):
+                    _mapping_attempts(mapping_path, schedule, allow_partial=True)
 
     def test_partial_v2_mapping_rejects_wrong_prompt_digest(self) -> None:
         workspace = self.workspace()
         schedule = load_schedule(write_v2_schedule(workspace))
-        mapping = v2_partial_mapping()
+        mapping = v2_partial_mapping(schedule)
         mapping["attempts"][0]["prompt_sha256"] = digest("wrong-v2-main")
-        mapping_path = self.write_json(workspace, "wrong-prompt-v2-mapping.json", mapping)
+        mapping_path = self.write_json(
+            workspace, "wrong-prompt-v2-mapping.json", mapping
+        )
 
         with self.assertRaisesRegex(
             ConversionError, "prompt_sha256 does not match frozen schedule"
@@ -466,7 +493,9 @@ class RatingsToTrialsTests(unittest.TestCase):
     def test_v2_recorder_shape_round_trips_through_private_custody(self) -> None:
         workspace = self.workspace()
         schedule = load_schedule(write_v2_schedule(workspace))
-        prepared = load_attempts(write_v2_recorder_envelopes(workspace), schedule=schedule)
+        prepared = load_attempts(
+            write_v2_recorder_envelopes(workspace), schedule=schedule
+        )
         pack, mapping = build_blinded_artifacts(prepared, seed=17)
         self.assertEqual(len(pack["records"]), 24)
         self.assertTrue(
@@ -507,10 +536,13 @@ class RatingsToTrialsTests(unittest.TestCase):
                 chat_mode="temporary",
                 main_prompt_sha256=digest("v2-main"),
                 safety_prompt_sha256=digest("v2-safety"),
+                schedule=schedule,
             ),
         )
 
-        with self.assertRaisesRegex(ConversionError, "chat_mode does not match frozen schedule"):
+        with self.assertRaisesRegex(
+            ConversionError, "chat_mode does not match frozen schedule"
+        ):
             _mapping_attempts(mapping_path, schedule)
 
     def test_v2_schedule_rejects_wrong_collected_model(self) -> None:
@@ -525,6 +557,7 @@ class RatingsToTrialsTests(unittest.TestCase):
                 effort="pro",
                 main_prompt_sha256=digest("v2-main"),
                 safety_prompt_sha256=digest("v2-safety"),
+                schedule=schedule,
             ),
         )
 
@@ -545,10 +578,13 @@ class RatingsToTrialsTests(unittest.TestCase):
                 collected_model="GPT-6 Astra",
                 main_prompt_sha256=digest("v2-main"),
                 safety_prompt_sha256=digest("v2-safety"),
+                schedule=schedule,
             ),
         )
 
-        with self.assertRaisesRegex(ConversionError, "effort does not match frozen schedule"):
+        with self.assertRaisesRegex(
+            ConversionError, "effort does not match frozen schedule"
+        ):
             _mapping_attempts(mapping_path, schedule)
 
     def test_main_axis_values_are_averaged_and_public_csv_has_no_label_or_text(

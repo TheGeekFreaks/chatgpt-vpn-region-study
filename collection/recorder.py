@@ -11,6 +11,7 @@ from pathlib import Path
 
 MAX_POST = 1_000_000
 SCHEDULE = Path(__file__).resolve().parent.parent / "protocol" / "schedule.json"
+PUBLIC_STUDY_ROOT = Path(__file__).resolve().parent.parent
 REQUIRED = {
     "run_id", "visit", "arm", "block", "country", "node_code", "start", "end",
     "model_label", "personalization", "response", "response_sha256",
@@ -151,8 +152,24 @@ def validate_payload(payload, schedule):
     return hashes
 
 
+def _ensure_private_output_paths(out_dir):
+    """Keep visits and sibling evidence outside the public study tree."""
+    visits_dir = Path(out_dir).resolve()
+    evidence_dir = (visits_dir.parent / "evidence").resolve()
+    public_root = PUBLIC_STUDY_ROOT.resolve()
+    for path in (visits_dir, evidence_dir):
+        try:
+            path.relative_to(public_root)
+        except ValueError:
+            continue
+        raise ValidationError(
+            "recorder visits and sibling evidence must stay outside the public study directory"
+        )
+    return visits_dir
+
+
 def save_payload(out_dir, payload):
-    out_dir = Path(out_dir)
+    out_dir = _ensure_private_output_paths(out_dir)
     filename = "visit-%02d.json" % payload["visit"]
     target = out_dir / filename
     data = canonical(payload)
@@ -183,7 +200,8 @@ def validate_evidence(payload):
 
 
 def save_evidence(out_dir, payload):
-    evidence_dir = Path(out_dir).parent / "evidence"
+    visits_dir = _ensure_private_output_paths(out_dir)
+    evidence_dir = visits_dir.parent / "evidence"
     evidence_dir.mkdir(parents=True, exist_ok=True)
     filename = "%s.json" % payload["evidence_id"]
     target, data = evidence_dir / filename, canonical(payload)
@@ -201,7 +219,7 @@ def save_evidence(out_dir, payload):
 
 
 def save_schedule_provenance(out_dir, schedule):
-    out_dir = Path(out_dir)
+    out_dir = _ensure_private_output_paths(out_dir)
     target = out_dir / "schedule-provenance.json"
     data = canonical({"schedule_sha256": schedule["_schedule_sha256"]})
     try:
@@ -282,7 +300,7 @@ def make_handler(out_dir, schedule):
 
 
 def create_server(out_dir, port=43127, schedule_path=SCHEDULE):
-    out_dir = Path(out_dir)
+    out_dir = _ensure_private_output_paths(out_dir)
     schedule = load_schedule(schedule_path)
     provenance = out_dir / "schedule-provenance.json"
     if not provenance.exists() and any(out_dir.glob("visit-*.json")):
@@ -300,13 +318,24 @@ def create_server(out_dir, port=43127, schedule_path=SCHEDULE):
 
 def main():
     parser = argparse.ArgumentParser(description="Private loopback measurement recorder")
-    parser.add_argument("--out", required=True, help="absolute private output directory")
+    parser.add_argument(
+        "--out",
+        required=True,
+        help=(
+            "absolute private visits directory; evidence is written to its sibling "
+            "../evidence directory"
+        ),
+    )
     parser.add_argument("--port", type=int, default=43127)
     parser.add_argument("--schedule", default=str(SCHEDULE), help="frozen schedule JSON path")
     args = parser.parse_args()
     requested = Path(args.out)
     if not requested.is_absolute():
         parser.error("--out must be an absolute directory")
+    try:
+        requested = _ensure_private_output_paths(requested)
+    except ValidationError as error:
+        parser.error(str(error))
     requested.mkdir(parents=True, exist_ok=True)
     try:
         server = create_server(requested, args.port, args.schedule)

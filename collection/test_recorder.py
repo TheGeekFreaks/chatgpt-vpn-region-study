@@ -122,6 +122,19 @@ class RecorderTests(unittest.TestCase):
             with self.assertRaises(recorder.ConflictError): recorder.save_evidence(visits, evidence({"private": "changed"}))
             with self.assertRaises(recorder.ValidationError): recorder.validate_evidence({"evidence_id": "../baseline", "data": {}})
 
+    def test_recorder_rejects_public_visits_and_sibling_evidence_paths(self):
+        public_visits = (
+            recorder.PUBLIC_STUDY_ROOT / "test-recorder-public-output" / "visits"
+        )
+        with self.assertRaises(recorder.ValidationError):
+            recorder.create_server(public_visits, 0)
+        with self.assertRaises(recorder.ValidationError):
+            recorder.save_payload(public_visits, payload())
+        with self.assertRaises(recorder.ValidationError):
+            recorder.save_evidence(public_visits, evidence())
+        self.assertFalse(public_visits.exists())
+        self.assertFalse((public_visits.parent / "evidence").exists())
+
     def test_server_rejects_remote_origin_and_accepts_local_post(self):
         with tempfile.TemporaryDirectory() as directory:
             server = recorder.HTTPServer(("127.0.0.1", 0), recorder.make_handler(Path(directory), SCHEDULE))

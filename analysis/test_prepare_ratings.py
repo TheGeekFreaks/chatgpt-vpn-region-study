@@ -12,7 +12,7 @@ from pathlib import Path
 ANALYSIS_DIR = Path(__file__).resolve().parent
 sys.path.insert(0, str(ANALYSIS_DIR))
 
-from analysis_cli import load_schedule
+from analysis_cli import DEFAULT_SCHEDULE_PATH, Schedule, load_schedule
 from prepare_ratings import (
     EXPECTED_VISITS,
     PreparationError,
@@ -21,26 +21,38 @@ from prepare_ratings import (
     write_artifacts,
 )
 
+DEFAULT_TEST_SCHEDULE = load_schedule(DEFAULT_SCHEDULE_PATH)
+
 
 def synthetic_response(visit: int, arm: str) -> str:
     return f"synthetic response for visit {visit} arm {arm}"
 
 
 def observation(
-    visit: int, arm: str, *, status: str | None = None, response: str | None = None
+    visit: int,
+    arm: str,
+    *,
+    schedule: Schedule = DEFAULT_TEST_SCHEDULE,
+    status: str | None = None,
+    response: str | None = None,
 ) -> dict[str, object]:
     text = synthetic_response(visit, arm) if response is None else response
+    planned = schedule.visits[visit]
     item: dict[str, object] = {
         "arm": arm,
-        "block": (visit - 1) // 4 + 1,
+        "block": planned.block,
         "collected_model": "GPT-5.6 Sol",
-        "country": "ZZ",
+        "country": planned.country,
         "effort": "high",
         "end": "2026-01-01T00:00:01Z",
         "model_label": "Synthetic",
-        "node_code": "ZZ-A",
+        "node_code": planned.node_code,
         "personalization": "personalized" if arm == "main" else "non_personalized",
-        "prompt_sha256": hashlib.sha256(arm.encode()).hexdigest(),
+        "prompt_sha256": (
+            schedule.main_prompt_sha256
+            if arm == "main"
+            else schedule.safety_prompt_sha256
+        ),
         "response": text,
         "response_sha256": hashlib.sha256(text.encode("utf-8")).hexdigest(),
         "run_id": f"synthetic-{visit:02d}-{arm}",
@@ -109,11 +121,11 @@ def write_v2_schedule(directory: Path) -> Path:
     return path
 
 
-def write_v2_main_only_envelopes(directory: Path) -> Path:
+def write_v2_main_only_envelopes(directory: Path, schedule: Schedule) -> Path:
     visits_dir = directory / "v2-visits"
     visits_dir.mkdir(parents=True)
     for visit in EXPECTED_VISITS:
-        item = observation(visit, "main")
+        item = observation(visit, "main", schedule=schedule)
         item["collected_model"] = "GPT-6 Astra"
         item["effort"] = "pro"
         item["chat_mode"] = "regular"
@@ -124,7 +136,9 @@ def write_v2_main_only_envelopes(directory: Path) -> Path:
             "same_ip_verified": True,
             "observations": [item],
         }
-        (visits_dir / f"visit-{visit:02d}.json").write_text(json.dumps(envelope), encoding="utf-8")
+        (visits_dir / f"visit-{visit:02d}.json").write_text(
+            json.dumps(envelope), encoding="utf-8"
+        )
     return visits_dir
 
 
@@ -215,14 +229,29 @@ class PrepareRatingsTests(unittest.TestCase):
     def test_v2_schedule_accepts_exactly_twenty_four_main_attempts(self) -> None:
         workspace = self._workspace()
         schedule = load_schedule(write_v2_schedule(workspace))
-        attempts = load_attempts(write_v2_main_only_envelopes(workspace), schedule=schedule)
+        attempts = load_attempts(
+            write_v2_main_only_envelopes(workspace, schedule), schedule=schedule
+        )
         pack, mapping = build_blinded_artifacts(attempts, seed=1)
         self.assertEqual(len(attempts), 24)
-        self.assertTrue(all(attempt.observation["arm"] == "main" for attempt in attempts))
+        self.assertTrue(
+            all(attempt.observation["arm"] == "main" for attempt in attempts)
+        )
         self.assertEqual(len(pack["records"]), 24)
         self.assertTrue(
             all(
-                not ({"country", "visit", "block", "order", "model_label", "collected_model", "effort"} & set(record))
+                not (
+                    {
+                        "country",
+                        "visit",
+                        "block",
+                        "order",
+                        "model_label",
+                        "collected_model",
+                        "effort",
+                    }
+                    & set(record)
+                )
                 for record in pack["records"]
             )
         )
@@ -231,7 +260,7 @@ class PrepareRatingsTests(unittest.TestCase):
     def test_v2_schedule_rejects_wrong_collected_model(self) -> None:
         workspace = self._workspace()
         schedule = load_schedule(write_v2_schedule(workspace))
-        visits_dir = write_v2_main_only_envelopes(workspace)
+        visits_dir = write_v2_main_only_envelopes(workspace, schedule)
         path = visits_dir / "visit-01.json"
         payload = json.loads(path.read_text(encoding="utf-8"))
         payload["observations"][0]["collected_model"] = "GPT-5.6 Sol"
@@ -245,19 +274,21 @@ class PrepareRatingsTests(unittest.TestCase):
     def test_v2_schedule_rejects_wrong_effort(self) -> None:
         workspace = self._workspace()
         schedule = load_schedule(write_v2_schedule(workspace))
-        visits_dir = write_v2_main_only_envelopes(workspace)
+        visits_dir = write_v2_main_only_envelopes(workspace, schedule)
         path = visits_dir / "visit-01.json"
         payload = json.loads(path.read_text(encoding="utf-8"))
         payload["observations"][0]["effort"] = "high"
         path.write_text(json.dumps(payload), encoding="utf-8")
 
-        with self.assertRaisesRegex(PreparationError, "effort does not match frozen schedule"):
+        with self.assertRaisesRegex(
+            PreparationError, "effort does not match frozen schedule"
+        ):
             load_attempts(visits_dir, schedule=schedule)
 
     def test_v2_schedule_rejects_wrong_chat_mode(self) -> None:
         workspace = self._workspace()
         schedule = load_schedule(write_v2_schedule(workspace))
-        visits_dir = write_v2_main_only_envelopes(workspace)
+        visits_dir = write_v2_main_only_envelopes(workspace, schedule)
         path = visits_dir / "visit-01.json"
         payload = json.loads(path.read_text(encoding="utf-8"))
         payload["observations"][0]["chat_mode"] = "temporary"
@@ -267,6 +298,28 @@ class PrepareRatingsTests(unittest.TestCase):
             PreparationError, "chat_mode does not match frozen schedule"
         ):
             load_attempts(visits_dir, schedule=schedule)
+
+    def test_v2_schedule_rejects_country_node_and_prompt_tampering(self) -> None:
+        for field, value, message in (
+            ("country", "ZZ", "country does not match frozen schedule"),
+            ("node_code", "ZZ-A", "node_code does not match frozen schedule"),
+            (
+                "prompt_sha256",
+                hashlib.sha256(b"wrong-v2-prompt").hexdigest(),
+                "prompt_sha256 does not match frozen schedule",
+            ),
+        ):
+            with self.subTest(field=field):
+                workspace = self._workspace()
+                schedule = load_schedule(write_v2_schedule(workspace))
+                visits_dir = write_v2_main_only_envelopes(workspace, schedule)
+                path = visits_dir / "visit-01.json"
+                payload = json.loads(path.read_text(encoding="utf-8"))
+                payload["observations"][0][field] = value
+                path.write_text(json.dumps(payload), encoding="utf-8")
+
+                with self.assertRaisesRegex(PreparationError, message):
+                    load_attempts(visits_dir, schedule=schedule)
 
     def test_wrong_block_or_unverified_valid_attempt_is_rejected(self) -> None:
         workspace = self._workspace()
