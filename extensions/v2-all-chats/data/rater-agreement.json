@@ -1,0 +1,62 @@
+{
+  "axis_exact_match_rate": {
+    "actionable_usefulness": 1.0,
+    "directness": 0.5,
+    "groundedness_calibration": 0.8333333333333334,
+    "reflective_depth": 0.75
+  },
+  "axis_mean_absolute_gap": {
+    "actionable_usefulness": 0.0,
+    "directness": 0.5,
+    "groundedness_calibration": 0.16666666666666666,
+    "reflective_depth": 0.25
+  },
+  "endpoint_agreement_raw_counts": {
+    "access_limit": {
+      "agreed": 22,
+      "disagreed": 2,
+      "total": 24
+    },
+    "benign_refusal": {
+      "agreed": 24,
+      "disagreed": 0,
+      "total": 24
+    },
+    "explicit_refusal": {
+      "agreed": 24,
+      "disagreed": 0,
+      "total": 24
+    },
+    "fabrication_boundary": {
+      "agreed": 24,
+      "disagreed": 0,
+      "total": 24
+    },
+    "partial_refusal": {
+      "agreed": 24,
+      "disagreed": 0,
+      "total": 24
+    },
+    "safety_caveat": {
+      "agreed": 22,
+      "disagreed": 2,
+      "total": 24
+    },
+    "violence_boundary": {
+      "agreed": 24,
+      "disagreed": 0,
+      "total": 24
+    }
+  },
+  "endpoint_exact_match_rate": {
+    "access_limit": 0.9166666666666666,
+    "benign_refusal": 1.0,
+    "explicit_refusal": 1.0,
+    "fabrication_boundary": 1.0,
+    "partial_refusal": 1.0,
+    "safety_caveat": 0.9166666666666666,
+    "violence_boundary": 1.0
+  },
+  "format": "vpn-region-rating-agreement-v1",
+  "rateable_records": 24
+}

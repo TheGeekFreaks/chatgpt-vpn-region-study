@@ -1,0 +1,886 @@
+{
+  "analysis_version": "1.0.0",
+  "charts": {
+    "additional_paths": [
+      "main_primary_endpoint_rates.png"
+    ],
+    "path": "main_axis_means.png",
+    "status": "created"
+  },
+  "design": {
+    "bootstrap_samples": 2000,
+    "countries": [
+      "DE",
+      "US",
+      "JP",
+      "BR"
+    ],
+    "endpoint_fields": [
+      "explicit_refusal",
+      "partial_refusal",
+      "access_limit",
+      "safety_caveat",
+      "benign_refusal",
+      "violence_boundary",
+      "fabrication_boundary"
+    ],
+    "endpoint_inference_planned": true,
+    "expected_main_blocks": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "expected_safety_blocks": [],
+    "frozen_schedule": {
+      "collected_model": "GPT-6 Astra",
+      "effort": "pro",
+      "main_prompt_sha256": "d1495ae567a2a693c58d0064fe71e16f91cbe97bd619556e12ff389ed3a3beb9",
+      "path": "extensions/v2-all-chats/protocol/schedule.json",
+      "safety_prompt_sha256": "7f6fa7c9096bdb5e3a9bb35dab9f62892a80a48cbffe67adcc8d5b36b027611d",
+      "sha256": "9b564fedb0f94f5e85d1012011595e9f9274ee1b77620b4c6737e993bddd360d"
+    },
+    "inference": "Country-label permutation is restricted within complete blocks. Bootstrap confidence intervals are descriptive.",
+    "main_axes": [
+      "groundedness_calibration",
+      "reflective_depth",
+      "directness",
+      "actionable_usefulness"
+    ],
+    "main_complete_blocks": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "permutations": 10000,
+    "safety_complete_blocks": [],
+    "safety_planned": false,
+    "seed": 20260909
+  },
+  "generated_at_utc": "2026-09-10T08:56:14.911650+00:00",
+  "limitations": [
+    "This is an N-of-1 account study; it does not estimate population-level regional behavior.",
+    "Invalid rows and incomplete blocks are retained in accounting and excluded from all estimands; missing values are never recoded to zero.",
+    "Safety endpoint extrema and nominal Wilson intervals are descriptive only. Zero events, sparse rows, or overlapping estimates do not support strongest/weakest country conclusions."
+  ],
+  "main_axes": {
+    "actionable_usefulness": {
+      "bootstrap_ci_95": {
+        "BR": {
+          "lower_95": 4.0,
+          "upper_95": 4.0
+        },
+        "DE": {
+          "lower_95": 4.0,
+          "upper_95": 4.0
+        },
+        "JP": {
+          "lower_95": 4.0,
+          "upper_95": 4.0
+        },
+        "US": {
+          "lower_95": 4.0,
+          "upper_95": 4.0
+        }
+      },
+      "country_means": {
+        "BR": 4.0,
+        "DE": 4.0,
+        "JP": 4.0,
+        "US": 4.0
+      },
+      "holm_adjusted_p_value": 1.0,
+      "n_complete_block_responses": {
+        "BR": 6,
+        "DE": 6,
+        "JP": 6,
+        "US": 6
+      },
+      "permutation": {
+        "exceedances": 10000,
+        "observed_statistic": 0.0,
+        "p_value": 1.0,
+        "permutations": 10000,
+        "statistic": "max_country_mean_minus_min_country_mean",
+        "status": "computed"
+      },
+      "status": "computed"
+    },
+    "directness": {
+      "bootstrap_ci_95": {
+        "BR": {
+          "lower_95": 3.5833333333333335,
+          "upper_95": 3.9166666666666665
+        },
+        "DE": {
+          "lower_95": 3.5833333333333335,
+          "upper_95": 3.9166666666666665
+        },
+        "JP": {
+          "lower_95": 3.5833333333333335,
+          "upper_95": 3.9166666666666665
+        },
+        "US": {
+          "lower_95": 3.5833333333333335,
+          "upper_95": 3.9166666666666665
+        }
+      },
+      "country_means": {
+        "BR": 3.75,
+        "DE": 3.75,
+        "JP": 3.75,
+        "US": 3.75
+      },
+      "holm_adjusted_p_value": 1.0,
+      "n_complete_block_responses": {
+        "BR": 6,
+        "DE": 6,
+        "JP": 6,
+        "US": 6
+      },
+      "permutation": {
+        "exceedances": 10000,
+        "observed_statistic": 0.0,
+        "p_value": 1.0,
+        "permutations": 10000,
+        "statistic": "max_country_mean_minus_min_country_mean",
+        "status": "computed"
+      },
+      "status": "computed"
+    },
+    "groundedness_calibration": {
+      "bootstrap_ci_95": {
+        "BR": {
+          "lower_95": 2.0,
+          "upper_95": 2.5
+        },
+        "DE": {
+          "lower_95": 2.0,
+          "upper_95": 2.0
+        },
+        "JP": {
+          "lower_95": 2.0833333333333335,
+          "upper_95": 3.0833333333333335
+        },
+        "US": {
+          "lower_95": 2.0,
+          "upper_95": 2.5833333333333335
+        }
+      },
+      "country_means": {
+        "BR": 2.1666666666666665,
+        "DE": 2.0,
+        "JP": 2.5833333333333335,
+        "US": 2.25
+      },
+      "holm_adjusted_p_value": 0.31996800319968005,
+      "n_complete_block_responses": {
+        "BR": 6,
+        "DE": 6,
+        "JP": 6,
+        "US": 6
+      },
+      "permutation": {
+        "exceedances": 799,
+        "observed_statistic": 0.5833333333333335,
+        "p_value": 0.07999200079992001,
+        "permutations": 10000,
+        "statistic": "max_country_mean_minus_min_country_mean",
+        "status": "computed"
+      },
+      "status": "computed"
+    },
+    "reflective_depth": {
+      "bootstrap_ci_95": {
+        "BR": {
+          "lower_95": 3.4166666666666665,
+          "upper_95": 4.0
+        },
+        "DE": {
+          "lower_95": 3.6666666666666665,
+          "upper_95": 4.0
+        },
+        "JP": {
+          "lower_95": 3.75,
+          "upper_95": 4.0
+        },
+        "US": {
+          "lower_95": 3.6666666666666665,
+          "upper_95": 4.0
+        }
+      },
+      "country_means": {
+        "BR": 3.75,
+        "DE": 3.8333333333333335,
+        "JP": 3.9166666666666665,
+        "US": 3.8333333333333335
+      },
+      "holm_adjusted_p_value": 1.0,
+      "n_complete_block_responses": {
+        "BR": 6,
+        "DE": 6,
+        "JP": 6,
+        "US": 6
+      },
+      "permutation": {
+        "exceedances": 9590,
+        "observed_statistic": 0.16666666666666652,
+        "p_value": 0.959004099590041,
+        "permutations": 10000,
+        "statistic": "max_country_mean_minus_min_country_mean",
+        "status": "computed"
+      },
+      "status": "computed"
+    }
+  },
+  "node_balance": {
+    "main": {
+      "BR": {
+        "balanced_if_feasible": true,
+        "distinct_nodes": 2,
+        "node_counts": {
+          "BR-A": 3,
+          "BR-B": 3
+        }
+      },
+      "DE": {
+        "balanced_if_feasible": true,
+        "distinct_nodes": 2,
+        "node_counts": {
+          "DE-A": 3,
+          "DE-B": 3
+        }
+      },
+      "JP": {
+        "balanced_if_feasible": true,
+        "distinct_nodes": 2,
+        "node_counts": {
+          "JP-A": 3,
+          "JP-B": 3
+        }
+      },
+      "US": {
+        "balanced_if_feasible": true,
+        "distinct_nodes": 2,
+        "node_counts": {
+          "US-A": 3,
+          "US-B": 3
+        }
+      }
+    },
+    "safety": {}
+  },
+  "observed_endpoint_rates": {
+    "main": {
+      "access_limit": {
+        "BR": {
+          "events": 3,
+          "n_observed": 6,
+          "rate": 0.5,
+          "wilson_interval_95_descriptive": {
+            "lower_95": 0.1876163064826506,
+            "upper_95": 0.8123836935173494
+          }
+        },
+        "DE": {
+          "events": 2,
+          "n_observed": 6,
+          "rate": 0.3333333333333333,
+          "wilson_interval_95_descriptive": {
+            "lower_95": 0.09677141110578041,
+            "upper_95": 0.700006684861608
+          }
+        },
+        "JP": {
+          "events": 3,
+          "n_observed": 6,
+          "rate": 0.5,
+          "wilson_interval_95_descriptive": {
+            "lower_95": 0.1876163064826506,
+            "upper_95": 0.8123836935173494
+          }
+        },
+        "US": {
+          "events": 3,
+          "n_observed": 6,
+          "rate": 0.5,
+          "wilson_interval_95_descriptive": {
+            "lower_95": 0.1876163064826506,
+            "upper_95": 0.8123836935173494
+          }
+        }
+      },
+      "benign_refusal": {
+        "BR": {
+          "events": 0,
+          "n_observed": 0,
+          "rate": null,
+          "wilson_interval_95_descriptive": null
+        },
+        "DE": {
+          "events": 0,
+          "n_observed": 0,
+          "rate": null,
+          "wilson_interval_95_descriptive": null
+        },
+        "JP": {
+          "events": 0,
+          "n_observed": 0,
+          "rate": null,
+          "wilson_interval_95_descriptive": null
+        },
+        "US": {
+          "events": 0,
+          "n_observed": 0,
+          "rate": null,
+          "wilson_interval_95_descriptive": null
+        }
+      },
+      "explicit_refusal": {
+        "BR": {
+          "events": 0,
+          "n_observed": 6,
+          "rate": 0.0,
+          "wilson_interval_95_descriptive": {
+            "lower_95": 2.7755575615628914e-17,
+            "upper_95": 0.3903342879021653
+          }
+        },
+        "DE": {
+          "events": 0,
+          "n_observed": 6,
+          "rate": 0.0,
+          "wilson_interval_95_descriptive": {
+            "lower_95": 2.7755575615628914e-17,
+            "upper_95": 0.3903342879021653
+          }
+        },
+        "JP": {
+          "events": 0,
+          "n_observed": 6,
+          "rate": 0.0,
+          "wilson_interval_95_descriptive": {
+            "lower_95": 2.7755575615628914e-17,
+            "upper_95": 0.3903342879021653
+          }
+        },
+        "US": {
+          "events": 0,
+          "n_observed": 6,
+          "rate": 0.0,
+          "wilson_interval_95_descriptive": {
+            "lower_95": 2.7755575615628914e-17,
+            "upper_95": 0.3903342879021653
+          }
+        }
+      },
+      "fabrication_boundary": {
+        "BR": {
+          "events": 0,
+          "n_observed": 0,
+          "rate": null,
+          "wilson_interval_95_descriptive": null
+        },
+        "DE": {
+          "events": 0,
+          "n_observed": 0,
+          "rate": null,
+          "wilson_interval_95_descriptive": null
+        },
+        "JP": {
+          "events": 0,
+          "n_observed": 0,
+          "rate": null,
+          "wilson_interval_95_descriptive": null
+        },
+        "US": {
+          "events": 0,
+          "n_observed": 0,
+          "rate": null,
+          "wilson_interval_95_descriptive": null
+        }
+      },
+      "partial_refusal": {
+        "BR": {
+          "events": 0,
+          "n_observed": 6,
+          "rate": 0.0,
+          "wilson_interval_95_descriptive": {
+            "lower_95": 2.7755575615628914e-17,
+            "upper_95": 0.3903342879021653
+          }
+        },
+        "DE": {
+          "events": 0,
+          "n_observed": 6,
+          "rate": 0.0,
+          "wilson_interval_95_descriptive": {
+            "lower_95": 2.7755575615628914e-17,
+            "upper_95": 0.3903342879021653
+          }
+        },
+        "JP": {
+          "events": 0,
+          "n_observed": 6,
+          "rate": 0.0,
+          "wilson_interval_95_descriptive": {
+            "lower_95": 2.7755575615628914e-17,
+            "upper_95": 0.3903342879021653
+          }
+        },
+        "US": {
+          "events": 0,
+          "n_observed": 6,
+          "rate": 0.0,
+          "wilson_interval_95_descriptive": {
+            "lower_95": 2.7755575615628914e-17,
+            "upper_95": 0.3903342879021653
+          }
+        }
+      },
+      "safety_caveat": {
+        "BR": {
+          "events": 0,
+          "n_observed": 6,
+          "rate": 0.0,
+          "wilson_interval_95_descriptive": {
+            "lower_95": 2.7755575615628914e-17,
+            "upper_95": 0.3903342879021653
+          }
+        },
+        "DE": {
+          "events": 0,
+          "n_observed": 6,
+          "rate": 0.0,
+          "wilson_interval_95_descriptive": {
+            "lower_95": 2.7755575615628914e-17,
+            "upper_95": 0.3903342879021653
+          }
+        },
+        "JP": {
+          "events": 2,
+          "n_observed": 6,
+          "rate": 0.3333333333333333,
+          "wilson_interval_95_descriptive": {
+            "lower_95": 0.09677141110578041,
+            "upper_95": 0.700006684861608
+          }
+        },
+        "US": {
+          "events": 0,
+          "n_observed": 6,
+          "rate": 0.0,
+          "wilson_interval_95_descriptive": {
+            "lower_95": 2.7755575615628914e-17,
+            "upper_95": 0.3903342879021653
+          }
+        }
+      },
+      "violence_boundary": {
+        "BR": {
+          "events": 0,
+          "n_observed": 0,
+          "rate": null,
+          "wilson_interval_95_descriptive": null
+        },
+        "DE": {
+          "events": 0,
+          "n_observed": 0,
+          "rate": null,
+          "wilson_interval_95_descriptive": null
+        },
+        "JP": {
+          "events": 0,
+          "n_observed": 0,
+          "rate": null,
+          "wilson_interval_95_descriptive": null
+        },
+        "US": {
+          "events": 0,
+          "n_observed": 0,
+          "rate": null,
+          "wilson_interval_95_descriptive": null
+        }
+      }
+    },
+    "safety": {
+      "access_limit": {
+        "BR": {
+          "events": 0,
+          "n_observed": 0,
+          "rate": null,
+          "wilson_interval_95_descriptive": null
+        },
+        "DE": {
+          "events": 0,
+          "n_observed": 0,
+          "rate": null,
+          "wilson_interval_95_descriptive": null
+        },
+        "JP": {
+          "events": 0,
+          "n_observed": 0,
+          "rate": null,
+          "wilson_interval_95_descriptive": null
+        },
+        "US": {
+          "events": 0,
+          "n_observed": 0,
+          "rate": null,
+          "wilson_interval_95_descriptive": null
+        }
+      },
+      "benign_refusal": {
+        "BR": {
+          "events": 0,
+          "n_observed": 0,
+          "rate": null,
+          "wilson_interval_95_descriptive": null
+        },
+        "DE": {
+          "events": 0,
+          "n_observed": 0,
+          "rate": null,
+          "wilson_interval_95_descriptive": null
+        },
+        "JP": {
+          "events": 0,
+          "n_observed": 0,
+          "rate": null,
+          "wilson_interval_95_descriptive": null
+        },
+        "US": {
+          "events": 0,
+          "n_observed": 0,
+          "rate": null,
+          "wilson_interval_95_descriptive": null
+        }
+      },
+      "explicit_refusal": {
+        "BR": {
+          "events": 0,
+          "n_observed": 0,
+          "rate": null,
+          "wilson_interval_95_descriptive": null
+        },
+        "DE": {
+          "events": 0,
+          "n_observed": 0,
+          "rate": null,
+          "wilson_interval_95_descriptive": null
+        },
+        "JP": {
+          "events": 0,
+          "n_observed": 0,
+          "rate": null,
+          "wilson_interval_95_descriptive": null
+        },
+        "US": {
+          "events": 0,
+          "n_observed": 0,
+          "rate": null,
+          "wilson_interval_95_descriptive": null
+        }
+      },
+      "fabrication_boundary": {
+        "BR": {
+          "events": 0,
+          "n_observed": 0,
+          "rate": null,
+          "wilson_interval_95_descriptive": null
+        },
+        "DE": {
+          "events": 0,
+          "n_observed": 0,
+          "rate": null,
+          "wilson_interval_95_descriptive": null
+        },
+        "JP": {
+          "events": 0,
+          "n_observed": 0,
+          "rate": null,
+          "wilson_interval_95_descriptive": null
+        },
+        "US": {
+          "events": 0,
+          "n_observed": 0,
+          "rate": null,
+          "wilson_interval_95_descriptive": null
+        }
+      },
+      "partial_refusal": {
+        "BR": {
+          "events": 0,
+          "n_observed": 0,
+          "rate": null,
+          "wilson_interval_95_descriptive": null
+        },
+        "DE": {
+          "events": 0,
+          "n_observed": 0,
+          "rate": null,
+          "wilson_interval_95_descriptive": null
+        },
+        "JP": {
+          "events": 0,
+          "n_observed": 0,
+          "rate": null,
+          "wilson_interval_95_descriptive": null
+        },
+        "US": {
+          "events": 0,
+          "n_observed": 0,
+          "rate": null,
+          "wilson_interval_95_descriptive": null
+        }
+      },
+      "safety_caveat": {
+        "BR": {
+          "events": 0,
+          "n_observed": 0,
+          "rate": null,
+          "wilson_interval_95_descriptive": null
+        },
+        "DE": {
+          "events": 0,
+          "n_observed": 0,
+          "rate": null,
+          "wilson_interval_95_descriptive": null
+        },
+        "JP": {
+          "events": 0,
+          "n_observed": 0,
+          "rate": null,
+          "wilson_interval_95_descriptive": null
+        },
+        "US": {
+          "events": 0,
+          "n_observed": 0,
+          "rate": null,
+          "wilson_interval_95_descriptive": null
+        }
+      },
+      "violence_boundary": {
+        "BR": {
+          "events": 0,
+          "n_observed": 0,
+          "rate": null,
+          "wilson_interval_95_descriptive": null
+        },
+        "DE": {
+          "events": 0,
+          "n_observed": 0,
+          "rate": null,
+          "wilson_interval_95_descriptive": null
+        },
+        "JP": {
+          "events": 0,
+          "n_observed": 0,
+          "rate": null,
+          "wilson_interval_95_descriptive": null
+        },
+        "US": {
+          "events": 0,
+          "n_observed": 0,
+          "rate": null,
+          "wilson_interval_95_descriptive": null
+        }
+      }
+    }
+  },
+  "primary_endpoint_omnibus": {
+    "endpoints": {
+      "access_limit": {
+        "bootstrap_ci_95": {
+          "BR": {
+            "lower_95": 0.16666666666666666,
+            "upper_95": 0.8333333333333334
+          },
+          "DE": {
+            "lower_95": 0.0,
+            "upper_95": 0.6666666666666666
+          },
+          "JP": {
+            "lower_95": 0.16666666666666666,
+            "upper_95": 0.8333333333333334
+          },
+          "US": {
+            "lower_95": 0.16666666666666666,
+            "upper_95": 0.8333333333333334
+          }
+        },
+        "country_rates": {
+          "BR": 0.5,
+          "DE": 0.3333333333333333,
+          "JP": 0.5,
+          "US": 0.5
+        },
+        "exceedances": 10000,
+        "holm_adjusted_p_value": 1.0,
+        "n_endpoint_complete_blocks": 6,
+        "observed_statistic": 0.16666666666666669,
+        "p_value": 1.0,
+        "permutations": 10000,
+        "statistic": "max_country_rate_minus_min_country_rate",
+        "status": "computed"
+      },
+      "explicit_refusal": {
+        "bootstrap_ci_95": {
+          "BR": {
+            "lower_95": 0.0,
+            "upper_95": 0.0
+          },
+          "DE": {
+            "lower_95": 0.0,
+            "upper_95": 0.0
+          },
+          "JP": {
+            "lower_95": 0.0,
+            "upper_95": 0.0
+          },
+          "US": {
+            "lower_95": 0.0,
+            "upper_95": 0.0
+          }
+        },
+        "country_rates": {
+          "BR": 0.0,
+          "DE": 0.0,
+          "JP": 0.0,
+          "US": 0.0
+        },
+        "exceedances": 10000,
+        "holm_adjusted_p_value": 1.0,
+        "n_endpoint_complete_blocks": 6,
+        "observed_statistic": 0.0,
+        "p_value": 1.0,
+        "permutations": 10000,
+        "statistic": "max_country_rate_minus_min_country_rate",
+        "status": "computed"
+      },
+      "partial_refusal": {
+        "bootstrap_ci_95": {
+          "BR": {
+            "lower_95": 0.0,
+            "upper_95": 0.0
+          },
+          "DE": {
+            "lower_95": 0.0,
+            "upper_95": 0.0
+          },
+          "JP": {
+            "lower_95": 0.0,
+            "upper_95": 0.0
+          },
+          "US": {
+            "lower_95": 0.0,
+            "upper_95": 0.0
+          }
+        },
+        "country_rates": {
+          "BR": 0.0,
+          "DE": 0.0,
+          "JP": 0.0,
+          "US": 0.0
+        },
+        "exceedances": 10000,
+        "holm_adjusted_p_value": 1.0,
+        "n_endpoint_complete_blocks": 6,
+        "observed_statistic": 0.0,
+        "p_value": 1.0,
+        "permutations": 10000,
+        "statistic": "max_country_rate_minus_min_country_rate",
+        "status": "computed"
+      },
+      "safety_caveat": {
+        "bootstrap_ci_95": {
+          "BR": {
+            "lower_95": 0.0,
+            "upper_95": 0.0
+          },
+          "DE": {
+            "lower_95": 0.0,
+            "upper_95": 0.0
+          },
+          "JP": {
+            "lower_95": 0.0,
+            "upper_95": 0.6666666666666666
+          },
+          "US": {
+            "lower_95": 0.0,
+            "upper_95": 0.0
+          }
+        },
+        "country_rates": {
+          "BR": 0.0,
+          "DE": 0.0,
+          "JP": 0.3333333333333333,
+          "US": 0.0
+        },
+        "exceedances": 2511,
+        "holm_adjusted_p_value": 1.0,
+        "n_endpoint_complete_blocks": 6,
+        "observed_statistic": 0.3333333333333333,
+        "p_value": 0.2511748825117488,
+        "permutations": 10000,
+        "statistic": "max_country_rate_minus_min_country_rate",
+        "status": "computed"
+      }
+    },
+    "family": "four_main_refusal_access_flags",
+    "method": "within-block country-label max-min permutation with separate Holm correction",
+    "status": "computed"
+  },
+  "row_accounting": {
+    "complete_main_blocks": 6,
+    "complete_safety_blocks": 0,
+    "csv_sha256_exact_bytes": "af85f3ecb2c76e719f265759684ea6f974aa0d0b7447b32919502ee55e501b67",
+    "incomplete_blocks": [],
+    "ineligible_rows_retained_but_excluded": [],
+    "invalid_rows": 0,
+    "main_rows": 24,
+    "rows_with_provenance_deviations": 0,
+    "safety_rows": 0,
+    "schedule_sha256_exact_bytes": "9b564fedb0f94f5e85d1012011595e9f9274ee1b77620b4c6737e993bddd360d",
+    "total_rows": 24
+  },
+  "safety_battery_prompt_check": {
+    "reason": "Safety battery is not part of this frozen schedule.",
+    "status": "not_planned"
+  },
+  "safety_endpoint_extrema": {
+    "access_limit": {
+      "reason": "No observed endpoint values.",
+      "status": "insufficient"
+    },
+    "benign_refusal": {
+      "reason": "No observed endpoint values.",
+      "status": "insufficient"
+    },
+    "explicit_refusal": {
+      "reason": "No observed endpoint values.",
+      "status": "insufficient"
+    },
+    "fabrication_boundary": {
+      "reason": "No observed endpoint values.",
+      "status": "insufficient"
+    },
+    "partial_refusal": {
+      "reason": "No observed endpoint values.",
+      "status": "insufficient"
+    },
+    "safety_caveat": {
+      "reason": "No observed endpoint values.",
+      "status": "insufficient"
+    },
+    "violence_boundary": {
+      "reason": "No observed endpoint values.",
+      "status": "insufficient"
+    }
+  }
+}

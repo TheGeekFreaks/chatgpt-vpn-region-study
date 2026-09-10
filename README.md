@@ -1,6 +1,43 @@
 # ChatGPT VPN Region Study
 
-An exploratory, single-account study of response quality and boundary behavior across verified VPN exit countries. The central question is whether observed ChatGPT answers vary with the tested network route while prompt, visible model, effort and personalization are held fixed.
+Exploratory studies of ChatGPT response quality and boundary behavior across verified VPN exit countries. The central question is whether observed answers vary with the tested route under a fixed prompt and visible model setting. The original experiment and the later regular-chat extension are separate datasets.
+
+## Latest result: regular chats with 6 Pro, 10 September 2026
+
+**All 24 planned v2 responses were captured: six each through Germany, the United States, Japan and Brazil. No country comparison crossed the specified Holm-adjusted 0.05 threshold. No explicit or partial refusal occurred. Additional countries were therefore not tested.** A nonsignificant pilot does not establish equivalence or identify a strongest or weakest national safety system.
+
+V2 used fresh regular chats, memory enabled, the visible **6 Pro** model and one fixed German personal-history prompt ending exactly **“du kannst das”**. The rendered response model slug was `gpt-6-pro`; [OpenAI describes 6 Pro as powered by Astra](https://help.openai.com/en/articles/20001354-gpt-5-6-in-chatgpt). Terra was used for blinded rating, not as a second experimental ChatGPT model. The prompt requests 400–600 words, four concrete insights, uncertainty, alternatives and practical checks. Original answers remain private.
+
+[German result overview](extensions/v2-all-chats/ERGEBNISSE.md) · [German v2 paper (PDF)](extensions/v2-all-chats/paper/PAPER.pdf) · [V2 manuscript](extensions/v2-all-chats/paper/PAPER.md) · [V2 statistical results](extensions/v2-all-chats/results/results.md) · [V2 numerical data](extensions/v2-all-chats/data/trials.csv) · [Fixed interim analysis](extensions/v2-all-chats/interim/INTERIM.md)
+
+| Country | Groundedness / calibration | Reflective depth | Directness | Actionable usefulness | Explicit / partial refusals | Safety caveats |
+|---|---:|---:|---:|---:|---:|---:|
+| Germany | 2.00 | 3.83 | 3.75 | 4.00 | 0/6 / 0/6 | 0/6 |
+| United States | 2.25 | 3.83 | 3.75 | 4.00 | 0/6 / 0/6 | 0/6 |
+| Japan | 2.58 | 3.92 | 3.75 | 4.00 | 0/6 / 0/6 | 2/6 |
+| Brazil | 2.17 | 3.75 | 3.75 | 4.00 | 0/6 / 0/6 | 0/6 |
+
+Quality scores range from 0 to 4 and average two blinded Terra ratings. Groundedness/calibration had raw p = 0.07999 and Holm p = 0.31997; all other adjusted quality p-values were 1. The safety-caveat comparison had raw p = 0.25117 and Holm p = 1. A caveat is a caution within a substantive answer, not a refusal. Access limitations were mentioned in 2/6 German and 3/6 responses from each other route; their adjusted p-value was 1.
+
+![V2 quality means and descriptive block-bootstrap intervals](extensions/v2-all-chats/results/main_axis_means.png)
+
+![V2 refusal, access-limit and safety-caveat rates](extensions/v2-all-chats/results/main_primary_endpoint_rates.png)
+
+The complete sample is six randomized blocks with 10,000 within-block permutations and 2,000 whole-block bootstrap samples. The four quality tests and four primary endpoint tests use separate Holm families. All tests remain exploratory, including the user-requested interim look. Ceiling scores, few repetitions and shared model-family raters limit measurement resolution. Degenerate bootstrap intervals do not prove zero risk.
+
+Material deviations include an overnight interruption, account-display/context uncertainty at resumption and the first test chat remaining in history until after trial 14. Later test chats were privately archived and then individually deleted; deletion cannot guarantee removal of previously derived memory. Four observed temporary platform access gates resolved with the original response and no prompt retry. They are technical incidents, not model refusals. See [full deviations](extensions/v2-all-chats/protocol/DEVIATIONS.md), the [declared sensitivity analysis](extensions/v2-all-chats/derived/README.md) and the paper for interpretation. This main-prompt-only extension does not test general safety robustness or isolate VPN country from time, context retrieval, route or server effects.
+
+Recompute v2 independently from the public numerical matrix:
+
+```sh
+python analysis/analysis_cli.py extensions/v2-all-chats/data/trials.csv --schedule extensions/v2-all-chats/protocol/schedule.json --out extensions/v2-all-chats/results --permutations 10000 --bootstrap-samples 2000 --seed 20260909
+python analysis/plot_visit_diagnostics.py extensions/v2-all-chats/data/trials.csv --out extensions/v2-all-chats/results
+python paper/render_pdf.py extensions/v2-all-chats/paper/PAPER.md --output extensions/v2-all-chats/paper/PAPER.pdf --results-dir extensions/v2-all-chats/results --final
+```
+
+The [reusable skill](skill/chatgpt-vpn-region-audit/SKILL.md) now includes regular-chat custody, account checks, residual memory, fixed interim snapshots and restoration. The numerical matrix permits recomputation, while independent re-scoring of private personal answers is outside the public evidence boundary.
+
+## Original v1 experiment, 9 September 2026
 
 **Collection and analysis complete, 9 September 2026. The tested safety boundaries tied across all four countries. No quality-axis contrast was significant in the planned analysis. This narrow pilot does not establish regional equivalence or a strongest/weakest national safety system.**
 
