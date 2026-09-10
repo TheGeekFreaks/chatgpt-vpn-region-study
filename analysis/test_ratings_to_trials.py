@@ -13,6 +13,7 @@ from pathlib import Path
 ANALYSIS_DIR = Path(__file__).resolve().parent
 sys.path.insert(0, str(ANALYSIS_DIR))
 
+from analysis_cli import load_schedule
 from ratings_to_trials import (  # type: ignore[import-not-found]
     AXES,
     ENDPOINTS,
@@ -31,10 +32,14 @@ def digest(text: str) -> str:
 
 def synthetic_mapping(
     technical_failures: frozenset[tuple[int, str]] = frozenset({(4, "main")}),
+    safety_visits: frozenset[int] = frozenset(range(1, 13)),
+    *,
+    collected_model: str = "GPT-5.6 Sol",
+    effort: str = "high",
 ) -> dict[str, object]:
     attempts: list[dict[str, object]] = []
     for visit in range(1, 25):
-        arms = ["main", "safety"] if visit <= 12 else ["main"]
+        arms = ["main", "safety"] if visit in safety_visits else ["main"]
         for arm in arms:
             technical_failure = (visit, arm) in technical_failures
             label = (
@@ -56,8 +61,8 @@ def synthetic_mapping(
                     "visit": visit,
                     "node_code": "SYN-A",
                     "model_label": "Synthetic label",
-                    "collected_model": "GPT-5.6 Sol",
-                    "effort": "high",
+                    "collected_model": collected_model,
+                    "effort": effort,
                     "personalization": (
                         "personalized" if arm == "main" else "non_personalized"
                     ),
@@ -79,6 +84,34 @@ def synthetic_mapping(
         "rateable_response_count": sum(item["status"] == "valid" for item in attempts),
         "attempts": attempts,
     }
+
+
+def write_v2_schedule(directory: Path) -> Path:
+    path = directory / "SYNTHETIC_V2_SCHEDULE.json"
+    visits = [
+        {
+            "visit": visit,
+            "block": (visit - 1) // 4 + 1,
+            "country": ("DE", "US", "JP", "BR")[(visit - 1) % 4],
+            "node_code": "SYN-A",
+            "safety": False,
+        }
+        for visit in range(1, 25)
+    ]
+    path.write_text(
+        json.dumps(
+            {
+                "main_prompt_sha256": digest("v2-main"),
+                "safety_prompt_sha256": digest("v2-safety"),
+                "collected_model": "GPT-6 Astra",
+                "effort": "pro",
+                "endpoint_inference": True,
+                "visits": visits,
+            }
+        ),
+        encoding="utf-8",
+    )
+    return path
 
 
 def rating_record(
@@ -254,6 +287,53 @@ class RatingsToTrialsTests(unittest.TestCase):
         rows, agreement = convert(attempts, a, b, {})
         self.assertEqual(sum(row["status"] == "valid" for row in rows), 36)
         self.assertEqual(agreement["rateable_records"], 36)
+
+    def test_v2_schedule_requires_twenty_four_main_only_mapping_attempts(self) -> None:
+        workspace = self.workspace()
+        schedule = load_schedule(write_v2_schedule(workspace))
+        mapping_path = self.write_json(
+            workspace,
+            "v2-mapping.json",
+            synthetic_mapping(
+                frozenset(),
+                frozenset(),
+                collected_model="GPT-6 Astra",
+                effort="pro",
+            ),
+        )
+        attempts = _mapping_attempts(mapping_path, schedule)
+        self.assertEqual(len(attempts), 24)
+        self.assertTrue(all(attempt.values["arm"] == "main" for attempt in attempts))
+
+    def test_v2_schedule_rejects_wrong_collected_model(self) -> None:
+        workspace = self.workspace()
+        schedule = load_schedule(write_v2_schedule(workspace))
+        mapping_path = self.write_json(
+            workspace,
+            "wrong-model.json",
+            synthetic_mapping(frozenset(), frozenset(), effort="pro"),
+        )
+
+        with self.assertRaisesRegex(
+            ConversionError, "collected_model does not match frozen schedule"
+        ):
+            _mapping_attempts(mapping_path, schedule)
+
+    def test_v2_schedule_rejects_wrong_effort(self) -> None:
+        workspace = self.workspace()
+        schedule = load_schedule(write_v2_schedule(workspace))
+        mapping_path = self.write_json(
+            workspace,
+            "wrong-effort.json",
+            synthetic_mapping(
+                frozenset(),
+                frozenset(),
+                collected_model="GPT-6 Astra",
+            ),
+        )
+
+        with self.assertRaisesRegex(ConversionError, "effort does not match frozen schedule"):
+            _mapping_attempts(mapping_path, schedule)
 
     def test_main_axis_values_are_averaged_and_public_csv_has_no_label_or_text(
         self,

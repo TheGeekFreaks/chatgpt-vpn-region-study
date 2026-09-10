@@ -1,6 +1,7 @@
 import hashlib
 import http.client
 import json
+import socket
 import sys
 import tempfile
 import threading
@@ -24,6 +25,10 @@ def payload(response="private markdown"):
         }
     return {"visit": 1, "browser_pre_verified": 1, "browser_post_verified": 1,
             "observations": [observation("M01", "main", "personalized"), observation("S01", "safety", "non_personalized")]}
+
+
+def evidence(data=None):
+    return {"evidence_id": "baseline", "data": {"private": "snapshot"} if data is None else data}
 
 
 class RecorderTests(unittest.TestCase):
@@ -69,6 +74,54 @@ class RecorderTests(unittest.TestCase):
             status="technical_failure", response="", response_sha256=recorder.sha256_text(""), deviation_reason="  ")
         with self.assertRaises(recorder.ValidationError): recorder.validate_payload(whitespace_reason, SCHEDULE)
 
+    def test_custom_schedule_supports_main_only_visit(self):
+        with tempfile.TemporaryDirectory() as directory:
+            schedule_path = Path(directory) / "schedule.json"
+            v2 = json.loads(recorder.SCHEDULE.read_text(encoding="utf-8"))
+            v2.update(collected_model="GPT-6 Astra", effort="pro", chat_mode="regular", model_label="6 Pro")
+            for item in v2["visits"]: item["safety"] = False
+            schedule_path.write_text(json.dumps(v2), encoding="utf-8")
+            main_only = payload(); main_only["observations"].pop()
+            loaded = recorder.load_schedule(schedule_path)
+            main_only["observations"][0].update(model_label="6 Pro", collected_model="GPT-6 Astra", effort="pro", chat_mode="regular", prompt_sha256=v2["main_prompt_sha256"])
+            self.assertEqual(1, len(recorder.validate_payload(main_only, loaded)))
+            server = recorder.create_server(directory, 0, schedule_path)
+            self.assertEqual("127.0.0.1", server.server_address[0]); server.server_close()
+            provenance = json.loads((Path(directory) / "schedule-provenance.json").read_text())
+            self.assertEqual(hashlib.sha256(schedule_path.read_bytes()).hexdigest(), provenance["schedule_sha256"])
+            v2["seed"] += 1; schedule_path.write_text(json.dumps(v2), encoding="utf-8")
+            with self.assertRaises(recorder.ConflictError): recorder.create_server(directory, 0, schedule_path)
+
+    def test_malformed_schedule_fails_before_server_creation(self):
+        with tempfile.TemporaryDirectory() as directory:
+            broken = json.loads(recorder.SCHEDULE.read_text(encoding="utf-8"))
+            del broken["visits"][0]["safety"]
+            schedule_path = Path(directory) / "broken.json"
+            schedule_path.write_text(json.dumps(broken), encoding="utf-8")
+            with self.assertRaises(recorder.ValidationError): recorder.create_server(directory, 0, schedule_path)
+
+    def test_failed_bind_writes_no_provenance_and_null_chat_mode_rejects(self):
+        with tempfile.TemporaryDirectory() as directory:
+            schedule_path = Path(directory) / "schedule.json"
+            schedule_path.write_bytes(recorder.SCHEDULE.read_bytes())
+            with socket.socket() as occupied:
+                occupied.bind(("127.0.0.1", 0))
+                with self.assertRaises(OSError): recorder.create_server(directory, occupied.getsockname()[1], schedule_path)
+            self.assertFalse((Path(directory) / "schedule-provenance.json").exists())
+            invalid = payload(); invalid["observations"][0]["chat_mode"] = None
+            with self.assertRaises(recorder.ValidationError): recorder.validate_payload(invalid, SCHEDULE)
+
+    def test_evidence_is_allowlisted_immutable_and_separate_from_visits(self):
+        with tempfile.TemporaryDirectory() as directory:
+            visits = Path(directory) / "visits"; visits.mkdir()
+            item = evidence(); recorder.validate_evidence(item)
+            first = recorder.save_evidence(visits, item)
+            second = recorder.save_evidence(visits, json.loads(json.dumps(item)))
+            self.assertFalse(first[2]); self.assertTrue(second[2]); self.assertEqual(first[1], second[1])
+            self.assertTrue((Path(directory) / "evidence" / "baseline.json").is_file())
+            with self.assertRaises(recorder.ConflictError): recorder.save_evidence(visits, evidence({"private": "changed"}))
+            with self.assertRaises(recorder.ValidationError): recorder.validate_evidence({"evidence_id": "../baseline", "data": {}})
+
     def test_server_rejects_remote_origin_and_accepts_local_post(self):
         with tempfile.TemporaryDirectory() as directory:
             server = recorder.HTTPServer(("127.0.0.1", 0), recorder.make_handler(Path(directory), SCHEDULE))
@@ -81,6 +134,25 @@ class RecorderTests(unittest.TestCase):
                 connection.request("POST", "/save", body, {"Content-Type": "application/json", "Origin": "http://127.0.0.1:%d" % port})
                 response = connection.getresponse()
                 self.assertEqual(200, response.status); self.assertIn("Gespeichert: visit-01.json", response.read().decode())
+            finally:
+                server.shutdown(); server.server_close(); thread.join()
+
+    def test_server_saves_evidence_and_rejects_oversize_body(self):
+        with tempfile.TemporaryDirectory() as directory:
+            visits = Path(directory) / "visits"; visits.mkdir()
+            server = recorder.HTTPServer(("127.0.0.1", 0), recorder.make_handler(visits, SCHEDULE))
+            thread = threading.Thread(target=server.serve_forever, daemon=True); thread.start()
+            try:
+                port = server.server_port; headers = {"Content-Type": "application/json", "Origin": "http://127.0.0.1:%d" % port}
+                connection = http.client.HTTPConnection("127.0.0.1", port)
+                connection.request("POST", "/evidence", json.dumps(evidence()).encode(), headers)
+                response = connection.getresponse()
+                self.assertEqual(200, response.status); self.assertIn("Gespeichert: evidence/baseline.json", response.read().decode())
+                connection.request("POST", "/evidence", b"x" * (recorder.MAX_POST + 1), headers)
+                self.assertEqual(400, connection.getresponse().status)
+                connection.request("POST", "/evidence", b'{"evidence_id":"end-context","data":"\\ud800"}', headers)
+                self.assertEqual(400, connection.getresponse().status)
+                self.assertFalse((Path(directory) / "evidence" / "end-context.json").exists())
             finally:
                 server.shutdown(); server.server_close(); thread.join()
 

@@ -63,6 +63,35 @@ def write_synthetic_schedule(directory: Path) -> Path:
     return path
 
 
+def write_synthetic_v2_schedule(directory: Path) -> Path:
+    path = directory / "SYNTHETIC_V2_SCHEDULE_ONLY.json"
+    visits = [
+        {
+            "visit": visit_for(block, country),
+            "block": block,
+            "country": country,
+            "node_code": node_for(block, country),
+            "safety": False,
+        }
+        for block in range(1, 7)
+        for country in DEFAULT_COUNTRIES
+    ]
+    path.write_text(
+        json.dumps(
+            {
+                "main_prompt_sha256": SYNTHETIC_MAIN_HASH,
+                "safety_prompt_sha256": SYNTHETIC_SAFETY_HASH,
+                "collected_model": "GPT-6 Astra",
+                "effort": "pro",
+                "endpoint_inference": True,
+                "visits": visits,
+            }
+        ),
+        encoding="utf-8",
+    )
+    return path
+
+
 def synthetic_row(
     *,
     run_id: str,
@@ -297,6 +326,24 @@ class AnalysisTests(unittest.TestCase):
             publication_path(REPOSITORY_ROOT / "protocol" / "schedule.json"),
             "protocol/schedule.json",
         )
+
+    def test_v2_main_only_schedule_has_no_missing_safety_and_tests_primary_endpoints(self) -> None:
+        workspace = self._workspace()
+        rows = all_main_rows()
+        for row in rows:
+            row["collected_model"] = "GPT-6 Astra"
+            row["effort"] = "pro"
+        schedule = load_schedule(write_synthetic_v2_schedule(workspace))
+        data = load_trials(write_synthetic_csv(workspace, rows), schedule)
+        result = analyze(data, permutations=1_000, bootstrap_samples=1_000, seed=42)
+        self.assertEqual(result["design"]["expected_safety_blocks"], [])
+        self.assertEqual(result["row_accounting"]["complete_safety_blocks"], 0)
+        self.assertFalse(any(item["arm"] == "safety" for item in result["row_accounting"]["incomplete_blocks"]))
+        self.assertEqual(result["safety_battery_prompt_check"]["status"], "not_planned")
+        endpoint_tests = result["primary_endpoint_omnibus"]
+        self.assertEqual(endpoint_tests["status"], "computed")
+        self.assertEqual(set(endpoint_tests["endpoints"]), {"explicit_refusal", "partial_refusal", "access_limit", "safety_caveat"})
+        self.assertTrue(all(details["n_endpoint_complete_blocks"] == 6 for details in endpoint_tests["endpoints"].values()))
 
 
 if __name__ == "__main__":

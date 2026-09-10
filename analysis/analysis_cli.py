@@ -27,7 +27,7 @@ from typing import Any, Optional
 
 
 DEFAULT_COUNTRIES = ("DE", "US", "JP", "BR")
-EXPECTED_BLOCKS = {"main": tuple(range(1, 7)), "safety": tuple(range(1, 4))}
+EXPECTED_MAIN_BLOCKS = tuple(range(1, 7))
 EXPECTED_COLLECTED_MODEL = "GPT-5.6 Sol"
 EXPECTED_EFFORT = "high"
 REPOSITORY_ROOT = Path(__file__).resolve().parent.parent
@@ -46,6 +46,12 @@ ENDPOINTS = (
     "benign_refusal",
     "violence_boundary",
     "fabrication_boundary",
+)
+PRIMARY_ENDPOINTS = (
+    "explicit_refusal",
+    "partial_refusal",
+    "access_limit",
+    "safety_caveat",
 )
 REQUIRED_COLUMNS = (
     "run_id",
@@ -117,7 +123,25 @@ class Schedule:
     sha256: str
     main_prompt_sha256: str
     safety_prompt_sha256: str
+    collected_model: str
+    effort: str
+    endpoint_inference: bool
     visits: dict[int, ScheduleVisit]
+
+    @property
+    def expected_arms_by_visit(self) -> dict[int, tuple[str, ...]]:
+        return {
+            visit: ("main", "safety") if entry.safety else ("main",)
+            for visit, entry in self.visits.items()
+        }
+
+    @property
+    def expected_main_blocks(self) -> tuple[int, ...]:
+        return tuple(sorted({entry.block for entry in self.visits.values()}))
+
+    @property
+    def expected_safety_blocks(self) -> tuple[int, ...]:
+        return tuple(sorted({entry.block for entry in self.visits.values() if entry.safety}))
 
 
 @dataclass(frozen=True)
@@ -183,11 +207,20 @@ def load_schedule(path: Path) -> Schedule:
     try:
         main_prompt = str(payload["main_prompt_sha256"]).lower()
         safety_prompt = str(payload["safety_prompt_sha256"]).lower()
+        collected_model = payload.get("collected_model", EXPECTED_COLLECTED_MODEL)
+        effort = payload.get("effort", EXPECTED_EFFORT)
+        endpoint_inference = payload.get("endpoint_inference", False)
         raw_visits = payload["visits"]
     except (KeyError, TypeError) as error:
         raise SchemaError("schedule must include main_prompt_sha256, safety_prompt_sha256, and visits") from error
     if not SHA256_RE.fullmatch(main_prompt) or not SHA256_RE.fullmatch(safety_prompt):
         raise SchemaError("schedule prompt hashes must be 64-character hexadecimal SHA-256 values")
+    if not isinstance(collected_model, str) or not collected_model:
+        raise SchemaError("schedule collected_model must be a nonempty string")
+    if not isinstance(effort, str) or not effort:
+        raise SchemaError("schedule effort must be a nonempty string")
+    if not isinstance(endpoint_inference, bool):
+        raise SchemaError("schedule endpoint_inference must be boolean when present")
     if not isinstance(raw_visits, list):
         raise SchemaError("schedule visits must be a list")
     visits: dict[int, ScheduleVisit] = {}
@@ -204,10 +237,10 @@ def load_schedule(path: Path) -> Schedule:
             raise SchemaError(f"schedule visit is missing {error.args[0]!r}") from error
         if not isinstance(visit, int) or visit < 1 or not isinstance(block, int):
             raise SchemaError("schedule visit and block must be positive integers")
-        if block not in EXPECTED_BLOCKS["main"] or country not in DEFAULT_COUNTRIES or not node_code:
+        if block not in EXPECTED_MAIN_BLOCKS or country not in DEFAULT_COUNTRIES or not node_code:
             raise SchemaError(f"schedule visit {visit} has invalid block, country, or node_code")
-        if not isinstance(safety, bool) or (block <= 3) != safety:
-            raise SchemaError(f"schedule visit {visit} must flag safety exactly for blocks 1-3")
+        if not isinstance(safety, bool):
+            raise SchemaError(f"schedule visit {visit}: safety must be boolean")
         if visit in visits:
             raise SchemaError(f"schedule contains duplicate visit {visit}")
         visits[visit] = ScheduleVisit(visit, block, country, node_code, safety)
@@ -216,15 +249,21 @@ def load_schedule(path: Path) -> Schedule:
         raise SchemaError("schedule must contain exactly visits 1 through 24")
     if {entry.country for entry in visits.values()} != set(DEFAULT_COUNTRIES):
         raise SchemaError("schedule declared country set must equal DE, US, JP, BR")
-    for block in EXPECTED_BLOCKS["main"]:
+    for block in EXPECTED_MAIN_BLOCKS:
         scheduled_countries = [entry.country for entry in visits.values() if entry.block == block]
         if sorted(scheduled_countries) != sorted(DEFAULT_COUNTRIES):
             raise SchemaError(f"schedule block {block} must contain each configured country exactly once")
+        safety_values = {entry.safety for entry in visits.values() if entry.block == block}
+        if len(safety_values) != 1:
+            raise SchemaError(f"schedule block {block} must use one safety setting for all countries")
     return Schedule(
         path=path,
         sha256=hashlib.sha256(raw_bytes).hexdigest(),
         main_prompt_sha256=main_prompt,
         safety_prompt_sha256=safety_prompt,
+        collected_model=collected_model,
+        effort=effort,
+        endpoint_inference=endpoint_inference,
         visits=visits,
     )
 
@@ -245,9 +284,8 @@ def _parse_trial(row: dict[str, str], row_number: int, schedule: Schedule) -> Tr
             f"row {row_number}: country {country!r} is not in the preregistered countries {DEFAULT_COUNTRIES}"
         )
     block = _positive_int(_text(row, "block", row_number), "block", row_number)
-    if block not in EXPECTED_BLOCKS[arm]:
-        allowed = ", ".join(str(value) for value in EXPECTED_BLOCKS[arm])
-        raise SchemaError(f"row {row_number}: {arm} blocks must be one of {allowed}")
+    if block not in EXPECTED_MAIN_BLOCKS:
+        raise SchemaError(f"row {row_number}: block must be one of 1 through 6")
     visit = _positive_int(_text(row, "visit", row_number), "visit", row_number)
 
     scores: dict[str, Optional[float]] = {}
@@ -306,8 +344,8 @@ def _parse_trial(row: dict[str, str], row_number: int, schedule: Schedule) -> Tr
             issues.append(f"schedule country mismatch (expected {scheduled.country}, got {country})")
         if node_code != scheduled.node_code:
             issues.append(f"schedule node_code mismatch (expected {scheduled.node_code}, got {node_code})")
-        if arm == "safety" and not scheduled.safety:
-            issues.append("safety row is scheduled only for visits 1-12")
+        if arm not in schedule.expected_arms_by_visit[visit]:
+            issues.append(f"{arm} arm is not planned for visit {visit}")
     expected_prompt = schedule.main_prompt_sha256 if arm == "main" else schedule.safety_prompt_sha256
     if prompt_sha256.lower() != expected_prompt:
         issues.append(f"schedule prompt_sha256 mismatch for {arm} arm")
@@ -316,12 +354,12 @@ def _parse_trial(row: dict[str, str], row_number: int, schedule: Schedule) -> Tr
         issues.append(
             f"personalization mismatch for {arm} arm (expected {expected_personalization})"
         )
-    if collected_model != EXPECTED_COLLECTED_MODEL:
+    if collected_model != schedule.collected_model:
         issues.append(
-            f"collected_model mismatch (expected {EXPECTED_COLLECTED_MODEL}, got {collected_model})"
+            f"collected_model mismatch (expected {schedule.collected_model}, got {collected_model})"
         )
-    if effort != EXPECTED_EFFORT:
-        issues.append(f"effort mismatch (expected {EXPECTED_EFFORT}, got {effort})")
+    if effort != schedule.effort:
+        issues.append(f"effort mismatch (expected {schedule.effort}, got {effort})")
     if browser_pre_verified != 1:
         issues.append("browser_pre_verified is not 1")
     if browser_post_verified != 1:
@@ -402,13 +440,13 @@ def _block_membership(trials: list[Trial], arm: str) -> dict[int, list[Trial]]:
 
 
 def complete_blocks(
-    trials: list[Trial], arm: str, countries: tuple[str, ...]
+    trials: list[Trial], arm: str, countries: tuple[str, ...], expected_blocks: tuple[int, ...]
 ) -> tuple[dict[int, dict[str, Trial]], list[dict[str, Any]]]:
     """Return structurally complete blocks and auditable reasons for exclusions."""
     complete: dict[int, dict[str, Trial]] = {}
     exclusions: list[dict[str, Any]] = []
     membership = _block_membership(trials, arm)
-    for block in EXPECTED_BLOCKS[arm]:
+    for block in expected_blocks:
         block_trials = membership.get(block, [])
         by_country: dict[str, list[Trial]] = defaultdict(list)
         for trial in block_trials:
@@ -490,6 +528,61 @@ def permutation_test(
         "permutations": permutations,
         "exceedances": at_least_as_extreme,
         "p_value": (at_least_as_extreme + 1) / (permutations + 1),
+    }
+
+
+def endpoint_complete_blocks(
+    blocks: dict[int, dict[str, Trial]], countries: tuple[str, ...], endpoint: str
+) -> dict[int, dict[str, float]]:
+    """Keep only blocks with a recorded binary endpoint for every country."""
+    complete: dict[int, dict[str, float]] = {}
+    for block, rows in blocks.items():
+        values: dict[str, int | None] = {
+            country: rows[country].endpoints[endpoint] for country in countries
+        }
+        if all(value is not None for value in values.values()):
+            endpoint_values: dict[str, float] = {}
+            for country, value in values.items():
+                assert value is not None
+                endpoint_values[country] = float(value)
+            complete[block] = endpoint_values
+    return complete
+
+
+def endpoint_permutation_test(
+    blocks: dict[int, dict[str, float]], countries: tuple[str, ...], permutations: int, seed: int
+) -> dict[str, Any]:
+    if not blocks:
+        return {
+            "status": "insufficient",
+            "reason": "No complete main blocks have observed values for this endpoint.",
+        }
+    observed_means = {
+        country: fmean(values[country] for values in blocks.values()) for country in countries
+    }
+    observed = _max_min(observed_means)
+    rng = random.Random(seed)
+    exceedances = 0
+    ordered_blocks = [blocks[block] for block in sorted(blocks)]
+    for _ in range(permutations):
+        sums = dict.fromkeys(countries, 0.0)
+        for block in ordered_blocks:
+            shuffled_labels = list(countries)
+            rng.shuffle(shuffled_labels)
+            for source_country, assigned_country in zip(countries, shuffled_labels):
+                sums[assigned_country] += block[source_country]
+        statistic = max(sums.values()) / len(ordered_blocks) - min(sums.values()) / len(ordered_blocks)
+        if statistic >= observed - 1e-12:
+            exceedances += 1
+    return {
+        "status": "computed",
+        "statistic": "max_country_rate_minus_min_country_rate",
+        "observed_statistic": observed,
+        "country_rates": observed_means,
+        "n_endpoint_complete_blocks": len(ordered_blocks),
+        "permutations": permutations,
+        "exceedances": exceedances,
+        "p_value": (exceedances + 1) / (permutations + 1),
     }
 
 
@@ -602,9 +695,11 @@ def node_balance(blocks: dict[int, dict[str, Trial]], countries: tuple[str, ...]
     return output
 
 
-def safety_prompt_check(blocks: dict[int, dict[str, Trial]]) -> dict[str, Any]:
+def safety_prompt_check(blocks: dict[int, dict[str, Trial]], safety_planned: bool) -> dict[str, Any]:
     """Expose whether the safety battery actually used one prompt digest."""
     hashes = sorted({trial.prompt_sha256 for block in blocks.values() for trial in block.values()})
+    if not safety_planned:
+        return {"status": "not_planned", "reason": "Safety battery is not part of this frozen schedule."}
     if not hashes:
         return {"status": "insufficient", "reason": "No complete valid safety blocks are available."}
     if len(hashes) == 1:
@@ -628,8 +723,12 @@ def analyze(
         raise ValueError("bootstrap_samples must be at least 1000")
     countries = DEFAULT_COUNTRIES
     trials = data.trials
-    main_blocks, main_exclusions = complete_blocks(trials, "main", countries)
-    safety_blocks, safety_exclusions = complete_blocks(trials, "safety", countries)
+    main_blocks, main_exclusions = complete_blocks(
+        trials, "main", countries, data.schedule.expected_main_blocks
+    )
+    safety_blocks, safety_exclusions = complete_blocks(
+        trials, "safety", countries, data.schedule.expected_safety_blocks
+    )
     axis_results: dict[str, Any] = {}
     raw_p_values: dict[str, Optional[float]] = {}
     for axis_index, axis in enumerate(AXES):
@@ -660,6 +759,28 @@ def analyze(
     for axis, p_value in adjusted.items():
         axis_results[axis]["holm_adjusted_p_value"] = p_value
 
+    endpoint_inference: dict[str, Any] = {"status": "not_planned", "endpoints": {}}
+    if data.schedule.endpoint_inference:
+        endpoint_results: dict[str, Any] = {}
+        endpoint_p_values: dict[str, Optional[float]] = {}
+        for endpoint_index, endpoint in enumerate(PRIMARY_ENDPOINTS):
+            test = endpoint_permutation_test(
+                endpoint_complete_blocks(main_blocks, countries, endpoint),
+                countries,
+                permutations,
+                seed + 20_000 + endpoint_index,
+            )
+            endpoint_results[endpoint] = test
+            endpoint_p_values[endpoint] = test.get("p_value")
+        for endpoint, adjusted_p_value in holm_adjust(endpoint_p_values).items():
+            endpoint_results[endpoint]["holm_adjusted_p_value"] = adjusted_p_value
+        endpoint_inference = {
+            "status": "computed",
+            "family": "four_main_refusal_access_flags",
+            "method": "within-block country-label max-min permutation with separate Holm correction",
+            "endpoints": endpoint_results,
+        }
+
     all_invalid = [trial for trial in trials if trial.status == "invalid"]
     provenance_deviations = [trial for trial in trials if trial.protocol_issues]
     return {
@@ -671,8 +792,10 @@ def analyze(
             "endpoint_fields": list(ENDPOINTS),
             "main_complete_blocks": sorted(main_blocks),
             "safety_complete_blocks": sorted(safety_blocks),
-            "expected_main_blocks": list(EXPECTED_BLOCKS["main"]),
-            "expected_safety_blocks": list(EXPECTED_BLOCKS["safety"]),
+            "expected_main_blocks": list(data.schedule.expected_main_blocks),
+            "expected_safety_blocks": list(data.schedule.expected_safety_blocks),
+            "safety_planned": bool(data.schedule.expected_safety_blocks),
+            "endpoint_inference_planned": data.schedule.endpoint_inference,
             "permutations": permutations,
             "bootstrap_samples": bootstrap_samples,
             "seed": seed,
@@ -682,6 +805,8 @@ def analyze(
                 "sha256": data.schedule.sha256,
                 "main_prompt_sha256": data.schedule.main_prompt_sha256,
                 "safety_prompt_sha256": data.schedule.safety_prompt_sha256,
+                "collected_model": data.schedule.collected_model,
+                "effort": data.schedule.effort,
             },
         },
         "row_accounting": {
@@ -712,6 +837,7 @@ def analyze(
             "schedule_sha256_exact_bytes": data.schedule.sha256,
         },
         "main_axes": axis_results,
+        "primary_endpoint_omnibus": endpoint_inference,
         "observed_endpoint_rates": {
             "main": endpoint_rates(main_blocks, countries),
             "safety": endpoint_rates(safety_blocks, countries),
@@ -719,9 +845,13 @@ def analyze(
         "safety_endpoint_extrema": endpoint_extrema(endpoint_rates(safety_blocks, countries), countries),
         "node_balance": {
             "main": node_balance(main_blocks, countries),
-            "safety": node_balance(safety_blocks, countries),
+            "safety": node_balance(safety_blocks, countries)
+            if data.schedule.expected_safety_blocks
+            else {},
         },
-        "safety_battery_prompt_check": safety_prompt_check(safety_blocks),
+        "safety_battery_prompt_check": safety_prompt_check(
+            safety_blocks, bool(data.schedule.expected_safety_blocks)
+        ),
         "limitations": [
             "This is an N-of-1 account study; it does not estimate population-level regional behavior.",
             "Invalid rows and incomplete blocks are retained in accounting and excluded from all estimands; missing values are never recoded to zero.",
@@ -745,7 +875,7 @@ def render_markdown(result: dict[str, Any]) -> str:
         "## Data completeness",
         "",
         f"- Source rows: {accounting['total_rows']} (main: {accounting['main_rows']}; safety: {accounting['safety_rows']}; explicitly invalid: {accounting['invalid_rows']}; provenance-deviant: {accounting['rows_with_provenance_deviations']}).",
-        f"- Complete valid blocks used: main {accounting['complete_main_blocks']}/6; safety {accounting['complete_safety_blocks']}/3.",
+        f"- Complete valid blocks used: main {accounting['complete_main_blocks']}/{len(design['expected_main_blocks'])}; safety {accounting['complete_safety_blocks']}/{len(design['expected_safety_blocks'])}.",
         f"- Seed: `{design['seed']}`; permutations per main axis: {design['permutations']}; bootstrap samples: {design['bootstrap_samples']}.",
         f"- Exact input hashes: CSV `{accounting['csv_sha256_exact_bytes']}`; frozen schedule `{accounting['schedule_sha256_exact_bytes']}`.",
         "",
@@ -806,6 +936,9 @@ def render_markdown(result: dict[str, Any]) -> str:
     ])
     for arm, endpoints in result["observed_endpoint_rates"].items():
         lines.extend([f"### {arm.title()} arm", ""])
+        if arm == "safety" and not result["design"]["safety_planned"]:
+            lines.extend(["**Not planned.** This frozen schedule contains no safety-battery visits.", ""])
+            continue
         if not result["design"][f"{arm}_complete_blocks"]:
             lines.extend(["**Insufficient data.** No complete valid blocks are available for this arm.", ""])
             continue
@@ -823,6 +956,27 @@ def render_markdown(result: dict[str, Any]) -> str:
             lines.append(f"| {endpoint.replace('_', ' ')} | " + " | ".join(cells) + " |")
         lines.append("")
 
+    endpoint_omnibus = result["primary_endpoint_omnibus"]
+    if endpoint_omnibus["status"] == "computed":
+        lines.extend([
+            "## Main refusal/access endpoint omnibus tests",
+            "",
+            "These four planned endpoint tests use only blocks with an observed value for every country on that endpoint. Their Holm correction is separate from the four quality-axis tests.",
+            "",
+            "| Endpoint | Complete blocks | Max-min rate | Raw permutation p | Holm p |",
+            "| --- | ---: | ---: | ---: | ---: |",
+        ])
+        for endpoint, details in endpoint_omnibus["endpoints"].items():
+            if details["status"] == "computed":
+                lines.append(
+                    f"| {endpoint.replace('_', ' ')} | {details['n_endpoint_complete_blocks']} | "
+                    f"{_format_number(details['observed_statistic'])} | {_format_number(details['p_value'], 4)} | "
+                    f"{_format_number(details['holm_adjusted_p_value'], 4)} |"
+                )
+            else:
+                lines.append(f"| {endpoint.replace('_', ' ')} | 0 | — | — | — |")
+        lines.append("")
+
     lines.extend([
         "## Safety interpretation boundary",
         "",
@@ -830,7 +984,9 @@ def render_markdown(result: dict[str, Any]) -> str:
         "",
     ])
     prompt_check = result["safety_battery_prompt_check"]
-    if prompt_check["status"] == "consistent":
+    if prompt_check["status"] == "not_planned":
+        lines.extend(["**Not planned.** The frozen schedule contains no safety battery, so no safety comparison is reported.", ""])
+    elif prompt_check["status"] == "consistent":
         lines.extend(["The complete safety rows use one shared prompt SHA-256, as required by the standardized battery.", ""])
     elif prompt_check["status"] == "protocol_deviation":
         lines.extend([f"**Protocol deviation:** {prompt_check['reason']}", ""])

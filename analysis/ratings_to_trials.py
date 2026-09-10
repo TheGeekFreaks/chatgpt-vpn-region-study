@@ -15,11 +15,12 @@ import json
 import math
 import re
 import sys
-from collections import Counter
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
 from typing import Any
+
+from analysis_cli import DEFAULT_SCHEDULE_PATH, Schedule, load_schedule
 
 AXES = (
     "groundedness_calibration",
@@ -60,8 +61,7 @@ REQUIRED_COLUMNS = (
     "duration_seconds",
     "node_code",
 )
-EXPECTED_ATTEMPTS = 36
-EXPECTED_ARM_COUNTS = {"main": 24, "safety": 12}
+VALID_ARMS = {"main", "safety"}
 MAPPING_FORMAT = "vpn-region-private-rating-mapping-v1"
 SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 
@@ -154,7 +154,10 @@ def _binary_or_null(value: Any, context: str) -> int | None:
     return value
 
 
-def _mapping_attempts(mapping_path: Path) -> list[MappingAttempt]:
+def _mapping_attempts(
+    mapping_path: Path, schedule: Schedule | None = None
+) -> list[MappingAttempt]:
+    frozen_schedule = schedule or load_schedule(DEFAULT_SCHEDULE_PATH)
     mapping = _load_json(mapping_path, dict, "private mapping")
     _exact_keys(
         mapping,
@@ -173,9 +176,12 @@ def _mapping_attempts(mapping_path: Path) -> list[MappingAttempt]:
         raise ConversionError("private mapping attempts must be an array")
     if mapping["attempt_count"] != len(mapping["attempts"]):
         raise ConversionError("private mapping attempt_count does not match attempts")
-    if len(mapping["attempts"]) != EXPECTED_ATTEMPTS:
+    expected_attempts = sum(
+        len(arms) for arms in frozen_schedule.expected_arms_by_visit.values()
+    )
+    if len(mapping["attempts"]) != expected_attempts:
         raise ConversionError(
-            f"private mapping requires exactly {EXPECTED_ATTEMPTS} attempts"
+            f"private mapping requires exactly {expected_attempts} schedule-derived attempts"
         )
 
     required = {
@@ -232,15 +238,24 @@ def _mapping_attempts(mapping_path: Path) -> list[MappingAttempt]:
                 f"private mapping has duplicate run_id {raw['run_id']}"
             )
         run_ids.add(raw["run_id"])
-        if not isinstance(raw["arm"], str) or raw["arm"] not in EXPECTED_ARM_COUNTS:
+        if not isinstance(raw["arm"], str) or raw["arm"] not in VALID_ARMS:
             raise ConversionError(f"{context}: arm must be main or safety")
         visit = _integer(raw["visit"], f"{context}: visit")
         block = _integer(raw["block"], f"{context}: block")
-        if visit not in range(1, 25):
-            raise ConversionError(f"{context}: visit must be in 1..24")
+        if visit not in frozen_schedule.visits:
+            raise ConversionError(f"{context}: visit is absent from frozen schedule")
         visit_arms.setdefault(visit, []).append(raw["arm"])
-        if block != (visit - 1) // 4 + 1:
-            raise ConversionError(f"{context}: block does not match visit")
+        if block != frozen_schedule.visits[visit].block:
+            raise ConversionError(f"{context}: block does not match frozen schedule visit")
+        if raw["arm"] not in frozen_schedule.expected_arms_by_visit[visit]:
+            raise ConversionError(f"{context}: arm is not planned for frozen schedule visit")
+        for field in ("collected_model", "effort"):
+            if not isinstance(raw[field], str) or not raw[field]:
+                raise ConversionError(f"{context}: {field} must be a nonempty string")
+        if raw["collected_model"] != frozen_schedule.collected_model:
+            raise ConversionError(f"{context}: collected_model does not match frozen schedule")
+        if raw["effort"] != frozen_schedule.effort:
+            raise ConversionError(f"{context}: effort does not match frozen schedule")
         for field in (
             "browser_pre_verified",
             "browser_post_verified",
@@ -252,8 +267,6 @@ def _mapping_attempts(mapping_path: Path) -> list[MappingAttempt]:
             "country",
             "node_code",
             "model_label",
-            "collected_model",
-            "effort",
             "personalization",
             "prompt_sha256",
             "response_sha256",
@@ -286,19 +299,14 @@ def _mapping_attempts(mapping_path: Path) -> list[MappingAttempt]:
             )
         attempts.append(MappingAttempt(label=label, status=status, values=dict(raw)))
 
-    if set(visit_arms) != set(range(1, 25)):
-        raise ConversionError("private mapping must contain every visit 1 through 24")
+    if set(visit_arms) != set(frozen_schedule.visits):
+        raise ConversionError("private mapping must contain every frozen schedule visit")
     for visit, arms in visit_arms.items():
-        expected_arms = ["main", "safety"] if visit <= 12 else ["main"]
+        expected_arms = sorted(frozen_schedule.expected_arms_by_visit[visit])
         if sorted(arms) != expected_arms:
             raise ConversionError(
                 f"private mapping visit {visit} has an invalid arm shape"
             )
-    arm_counts = Counter(attempt.values["arm"] for attempt in attempts)
-    if dict(arm_counts) != EXPECTED_ARM_COUNTS:
-        raise ConversionError(
-            "private mapping must contain 24 main and 12 safety attempts"
-        )
     rateable = [attempt for attempt in attempts if attempt.rateable]
     if mapping["rateable_response_count"] != len(rateable):
         raise ConversionError(
@@ -570,6 +578,12 @@ def build_parser() -> argparse.ArgumentParser:
         help="Private private-rating-mapping.json from prepare_ratings.py.",
     )
     parser.add_argument(
+        "--schedule",
+        type=Path,
+        default=DEFAULT_SCHEDULE_PATH,
+        help="Frozen schedule JSON (default: ../protocol/schedule.json).",
+    )
+    parser.add_argument(
         "--rater-a", type=Path, help="Private JSON rating list for rater A."
     )
     parser.add_argument(
@@ -623,7 +637,8 @@ def main(argv: list[str] | None = None) -> int:
         )
         return 2
     try:
-        attempts = _mapping_attempts(arguments.mapping)
+        schedule = load_schedule(arguments.schedule)
+        attempts = _mapping_attempts(arguments.mapping, schedule)
         expected_arms = {
             attempt.label: attempt.values["arm"]
             for attempt in attempts

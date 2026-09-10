@@ -18,9 +18,11 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+from analysis_cli import DEFAULT_SCHEDULE_PATH, Schedule, load_schedule
+
+VALID_ARMS = {"main", "safety"}
+# Legacy export for v1-focused test helpers; final collection validation is schedule-driven.
 EXPECTED_VISITS = tuple(range(1, 25))
-EXPECTED_OBSERVATIONS = 36
-EXPECTED_ARM_COUNTS = {"main": 24, "safety": 12}
 VALID_STATUSES = {"valid", "technical_failure"}
 REQUIRED_ENVELOPE_FIELDS = {
     "visit",
@@ -172,7 +174,7 @@ def _normalize_deviation_reason(raw: Any, context: str) -> str:
 
 
 def _validate_attempt(
-    observation: Any, envelope: dict[str, Any], source_visit: int, index: int
+    observation: Any, envelope: dict[str, Any], source_visit: int, index: int, schedule: Schedule
 ) -> Attempt:
     context = f"visit {source_visit} observation {index + 1}"
     if not isinstance(observation, dict):
@@ -190,14 +192,10 @@ def _validate_attempt(
         )
     if (
         not isinstance(observation["arm"], str)
-        or observation["arm"] not in EXPECTED_ARM_COUNTS
+        or observation["arm"] not in VALID_ARMS
     ):
         raise PreparationError(f"{context}: arm must be main or safety")
     block = _require_int(observation["block"], "block", context)
-    if block not in (range(1, 7) if observation["arm"] == "main" else range(1, 4)):
-        raise PreparationError(
-            f"{context}: {observation['arm']} block is outside the frozen protocol range"
-        )
     for field in (
         "collected_model",
         "country",
@@ -216,6 +214,22 @@ def _validate_attempt(
             raise PreparationError(f"{context}: {field} must be a string")
         if field != "response" and not observation[field]:
             raise PreparationError(f"{context}: {field} cannot be empty")
+    scheduled = schedule.visits.get(source_visit)
+    if scheduled is None:
+        raise PreparationError(f"{context}: visit is absent from frozen schedule")
+    if observation["arm"] not in schedule.expected_arms_by_visit[source_visit]:
+        raise PreparationError(f"{context}: arm is not planned for this frozen schedule visit")
+    if block != scheduled.block:
+        raise PreparationError(
+            f"{context}: block {block} does not match frozen visit block {scheduled.block}"
+        )
+    if observation["collected_model"] != schedule.collected_model:
+        raise PreparationError(
+            f"{context}: collected_model does not match frozen schedule"
+        )
+    if observation["effort"] != schedule.effort:
+        raise PreparationError(f"{context}: effort does not match frozen schedule")
+
     prompt_sha256 = observation["prompt_sha256"]
     response_sha256 = observation["response_sha256"]
     for field, digest in (
@@ -231,12 +245,6 @@ def _validate_attempt(
     if _sha256_text(observation["response"]) != response_sha256:
         raise PreparationError(
             f"{context}: response_sha256 does not match the exact UTF-8 response text"
-        )
-
-    expected_block = (source_visit - 1) // 4 + 1
-    if block != expected_block:
-        raise PreparationError(
-            f"{context}: block {block} does not match frozen visit block {expected_block}"
         )
 
     status = _normalize_status(observation.get("status"), context)
@@ -280,8 +288,11 @@ def _validate_attempt(
     )
 
 
-def load_attempts(visits_dir: Path, *, allow_partial: bool = False) -> list[Attempt]:
+def load_attempts(
+    visits_dir: Path, *, schedule: Schedule | None = None, allow_partial: bool = False
+) -> list[Attempt]:
     """Load and validate all canonical recorder envelopes without exposing text."""
+    frozen_schedule = schedule or load_schedule(DEFAULT_SCHEDULE_PATH)
     files = sorted(visits_dir.glob("visit-*.json"), key=lambda path: path.name)
     if not files:
         raise PreparationError(f"no recorder envelopes found in {visits_dir}")
@@ -306,7 +317,7 @@ def load_attempts(visits_dir: Path, *, allow_partial: bool = False) -> list[Atte
         if not isinstance(observations, list) or not observations:
             raise PreparationError(f"{path.name}: observations must be a nonempty list")
         for index, observation in enumerate(observations):
-            attempt = _validate_attempt(observation, envelope, visit, index)
+            attempt = _validate_attempt(observation, envelope, visit, index, frozen_schedule)
             run_id = attempt.observation["run_id"]
             if not run_id:
                 raise PreparationError(
@@ -327,16 +338,17 @@ def load_attempts(visits_dir: Path, *, allow_partial: bool = False) -> list[Atte
         )
     )
     if not allow_partial:
-        _validate_complete_collection(attempts, seen_visits)
+        _validate_complete_collection(attempts, seen_visits, frozen_schedule)
     return attempts
 
 
 def _validate_complete_collection(
-    attempts: list[Attempt], seen_visits: set[int]
+    attempts: list[Attempt], seen_visits: set[int], schedule: Schedule
 ) -> None:
-    if seen_visits != set(EXPECTED_VISITS):
-        missing = sorted(set(EXPECTED_VISITS) - seen_visits)
-        unexpected = sorted(seen_visits - set(EXPECTED_VISITS))
+    expected_visits = set(schedule.visits)
+    if seen_visits != expected_visits:
+        missing = sorted(expected_visits - seen_visits)
+        unexpected = sorted(seen_visits - expected_visits)
         details = []
         if missing:
             details.append(
@@ -347,30 +359,22 @@ def _validate_complete_collection(
                 "unexpected visits " + ", ".join(str(value) for value in unexpected)
             )
         raise PreparationError(
-            "complete collection requires visits 1 through 24; " + "; ".join(details)
+            "complete collection requires visits 1 through 24 from the frozen schedule; " + "; ".join(details)
         )
-    if len(attempts) != EXPECTED_OBSERVATIONS:
+    expected_arms = schedule.expected_arms_by_visit
+    expected_observations = sum(len(arms) for arms in expected_arms.values())
+    if len(attempts) != expected_observations:
         raise PreparationError(
-            f"complete collection requires exactly {EXPECTED_OBSERVATIONS} observations; found {len(attempts)}"
+            f"complete collection requires exactly {expected_observations} schedule-derived observations; found {len(attempts)}"
         )
-    arm_counts = {
-        arm: sum(attempt.observation["arm"] == arm for attempt in attempts)
-        for arm in EXPECTED_ARM_COUNTS
-    }
-    if arm_counts != EXPECTED_ARM_COUNTS:
-        raise PreparationError(
-            "complete collection requires 24 main and 12 safety observations; "
-            + ", ".join(f"{arm}={arm_counts[arm]}" for arm in sorted(arm_counts))
-        )
-    per_visit: dict[int, list[Attempt]] = {visit: [] for visit in EXPECTED_VISITS}
+    per_visit: dict[int, list[Attempt]] = {visit: [] for visit in expected_visits}
     for attempt in attempts:
         per_visit[attempt.source_visit].append(attempt)
     for visit, visit_attempts in per_visit.items():
         arms = sorted(attempt.observation["arm"] for attempt in visit_attempts)
-        expected_arms = ["main", "safety"] if visit <= 12 else ["main"]
-        if arms != expected_arms:
+        if arms != sorted(schedule.expected_arms_by_visit[visit]):
             raise PreparationError(
-                f"visit {visit}: expected arms {expected_arms}, found {arms}"
+                f"visit {visit}: expected arms {list(schedule.expected_arms_by_visit[visit])}, found {arms}"
             )
 
 
@@ -560,6 +564,12 @@ def build_parser() -> argparse.ArgumentParser:
         help="Private canonical recorder envelopes.",
     )
     parser.add_argument(
+        "--schedule",
+        type=Path,
+        default=DEFAULT_SCHEDULE_PATH,
+        help="Frozen schedule JSON (default: ../protocol/schedule.json).",
+    )
+    parser.add_argument(
         "--out-dir",
         type=Path,
         default=Path("work/private/blind-ratings"),
@@ -582,8 +592,9 @@ def build_parser() -> argparse.ArgumentParser:
 def main(argv: list[str] | None = None) -> int:
     arguments = build_parser().parse_args(argv)
     try:
+        schedule = load_schedule(arguments.schedule)
         attempts = load_attempts(
-            arguments.visits_dir, allow_partial=arguments.allow_partial
+            arguments.visits_dir, schedule=schedule, allow_partial=arguments.allow_partial
         )
         pack, mapping = build_blinded_artifacts(attempts, arguments.seed)
         pack_path, mapping_path = write_artifacts(pack, mapping, arguments.out_dir)
