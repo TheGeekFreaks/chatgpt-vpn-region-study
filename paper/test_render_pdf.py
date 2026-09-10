@@ -35,6 +35,10 @@ Ein **fetter** Satz mit `Code`, Umlauten ÄÖÜäöüß und einem [Link](https:/
 
 """ + ("Mehrseitiger Prüftext mit deutscher Zeichensetzung.\n\n" * 90)
 
+VALID_PNG = base64.b64decode(
+    "iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAIAAAD91JpzAAAAEklEQVR4nGPUipvGwMDAxAAGAA0mASIncv2mAAAAAElFTkSuQmCC"
+)
+
 
 class RenderPdfTest(unittest.TestCase):
     def test_renderer_handles_markdown_unicode_and_page_furniture(self) -> None:
@@ -61,15 +65,46 @@ class RenderPdfTest(unittest.TestCase):
             self.assertIn("Seite 1/", extracted)
             self.assertIn("DRAFT", extracted)
 
-    def test_known_figures_are_opt_in_and_only_existing(self) -> None:
+    def test_known_figures_are_opt_in_ordered_and_skip_invalid_files(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
             self.assertEqual(find_known_figures(root), [])
-            figure = root / "main_axis_means.png"
-            figure.write_bytes(b"not rendered in this unit test")
+            figures = [root / name for name in renderer.KNOWN_FIGURES]
+            figures[0].write_bytes(b"not rendered in this unit test")
             self.assertEqual(find_known_figures(root), [])
-            figure.write_bytes(base64.b64decode("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIHWP4z8DwHwAFgAI/ScL9fQAAAABJRU5ErkJggg=="))
-            self.assertEqual(find_known_figures(root), [figure])
+            for figure in figures:
+                figure.write_bytes(VALID_PNG)
+            self.assertEqual(find_known_figures(root), figures)
+
+            figures[2].write_bytes(b"invalid")
+            self.assertEqual(
+                find_known_figures(root), [figures[0], figures[1], figures[3]]
+            )
+
+    def test_renderer_integrates_all_known_figures_in_order(self) -> None:
+        if PdfReader is None:
+            self.skipTest(
+                "pypdf fehlt; Abbildungsintegration benötigt den gebündelten Test-Interpreter."
+            )
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            source = root / "PAPER.md"
+            source.write_text("# Test\n\nErgebnisse ausstehend.\n", encoding="utf-8")
+            for name in renderer.KNOWN_FIGURES:
+                (root / name).write_bytes(VALID_PNG)
+            output = root / "PAPER_DRAFT_SMOKE.pdf"
+
+            render_pdf(source, output, root)
+
+            extracted = "\n".join(
+                page.extract_text() or "" for page in PdfReader(str(output)).pages
+            )
+            captions = [
+                name.removesuffix(".png").replace("_", " ")
+                for name in renderer.KNOWN_FIGURES
+            ]
+            positions = [extracted.index(caption) for caption in captions]
+            self.assertEqual(positions, sorted(positions))
 
     def test_invalid_optional_figure_cannot_block_rendering(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:

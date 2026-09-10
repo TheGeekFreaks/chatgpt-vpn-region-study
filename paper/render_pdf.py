@@ -41,7 +41,12 @@ from reportlab.platypus import (
 )
 
 
-KNOWN_FIGURES = ("main_axis_means.png", "main_primary_endpoint_rates.png")
+KNOWN_FIGURES = (
+    "main_axis_means.png",
+    "main_primary_endpoint_rates.png",
+    "quality_by_block.png",
+    "capture_duration_by_visit.png",
+)
 FONT_NAME = "StudyUnicode"
 
 
