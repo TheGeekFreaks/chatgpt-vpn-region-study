@@ -13,7 +13,7 @@ from pathlib import Path
 ANALYSIS_DIR = Path(__file__).resolve().parent
 sys.path.insert(0, str(ANALYSIS_DIR))
 
-from analysis_cli import load_schedule
+from analysis_cli import DEFAULT_SCHEDULE_PATH, load_schedule
 from prepare_ratings import build_blinded_artifacts, load_attempts
 from ratings_to_trials import (  # type: ignore[import-not-found]
     AXES,
@@ -23,8 +23,12 @@ from ratings_to_trials import (  # type: ignore[import-not-found]
     _mapping_attempts,
     _parse_adjudication,
     _parse_ratings,
+    build_parser,
     convert,
 )
+from ratings_to_trials import main as conversion_main
+
+DEFAULT_TEST_SCHEDULE = load_schedule(DEFAULT_SCHEDULE_PATH)
 
 
 def digest(text: str) -> str:
@@ -38,9 +42,12 @@ def synthetic_mapping(
     collected_model: str = "GPT-5.6 Sol",
     effort: str = "high",
     chat_mode: str | None = None,
+    main_prompt_sha256: str = DEFAULT_TEST_SCHEDULE.main_prompt_sha256,
+    safety_prompt_sha256: str = DEFAULT_TEST_SCHEDULE.safety_prompt_sha256,
+    visits: tuple[int, ...] = tuple(range(1, 25)),
 ) -> dict[str, object]:
     attempts: list[dict[str, object]] = []
-    for visit in range(1, 25):
+    for visit in visits:
         arms = ["main", "safety"] if visit in safety_visits else ["main"]
         for arm in arms:
             technical_failure = (visit, arm) in technical_failures
@@ -69,7 +76,9 @@ def synthetic_mapping(
                     "personalization": (
                         "personalized" if arm == "main" else "non_personalized"
                     ),
-                    "prompt_sha256": digest(f"prompt-{arm}"),
+                    "prompt_sha256": (
+                        main_prompt_sha256 if arm == "main" else safety_prompt_sha256
+                    ),
                     "response_sha256": digest(
                         "" if technical_failure else f"synthetic {visit} {arm}"
                     ),
@@ -87,6 +96,19 @@ def synthetic_mapping(
         "rateable_response_count": sum(item["status"] == "valid" for item in attempts),
         "attempts": attempts,
     }
+
+
+def v2_partial_mapping() -> dict[str, object]:
+    return synthetic_mapping(
+        frozenset(),
+        frozenset(),
+        collected_model="GPT-6 Astra",
+        effort="pro",
+        chat_mode="regular",
+        main_prompt_sha256=digest("v2-main"),
+        safety_prompt_sha256=digest("v2-safety"),
+        visits=tuple(range(1, 15)),
+    )
 
 
 def write_v2_schedule(directory: Path) -> Path:
@@ -351,11 +373,95 @@ class RatingsToTrialsTests(unittest.TestCase):
                 collected_model="GPT-6 Astra",
                 effort="pro",
                 chat_mode="regular",
+                main_prompt_sha256=digest("v2-main"),
+                safety_prompt_sha256=digest("v2-safety"),
             ),
         )
         attempts = _mapping_attempts(mapping_path, schedule)
         self.assertEqual(len(attempts), 24)
         self.assertTrue(all(attempt.values["arm"] == "main" for attempt in attempts))
+
+    def test_partial_v2_mapping_requires_explicit_opt_in_and_emits_only_observed_rows(
+        self,
+    ) -> None:
+        workspace = self.workspace()
+        schedule = load_schedule(write_v2_schedule(workspace))
+        mapping_path = self.write_json(
+            workspace, "partial-v2-mapping.json", v2_partial_mapping()
+        )
+
+        with self.assertRaisesRegex(ConversionError, "requires exactly 24"):
+            _mapping_attempts(mapping_path, schedule)
+
+        attempts = _mapping_attempts(mapping_path, schedule, allow_partial=True)
+        first, second = rating_lists(attempts)
+        expected_arms = {
+            attempt.label: attempt.values["arm"]
+            for attempt in attempts
+            if attempt.rateable and attempt.label
+        }
+        first_ratings = _parse_ratings(
+            self.write_json(workspace, "rater-a.json", first), expected_arms, "rater A"
+        )
+        second_ratings = _parse_ratings(
+            self.write_json(workspace, "rater-b.json", second), expected_arms, "rater B"
+        )
+        rows, agreement = convert(attempts, first_ratings, second_ratings, {})
+
+        self.assertEqual(len(attempts), 14)
+        self.assertEqual(len(rows), 14)
+        self.assertEqual(agreement["rateable_records"], 14)
+        self.assertEqual({int(row["visit"]) for row in rows}, set(range(1, 15)))
+        self.assertEqual(len({row["run_id"] for row in rows}), 14)
+
+        output_path = workspace / "partial-trials.csv"
+        exit_code = conversion_main(
+            [
+                "--mapping",
+                str(mapping_path),
+                "--schedule",
+                str(schedule.path),
+                "--rater-a",
+                str(self.write_json(workspace, "cli-rater-a.json", first)),
+                "--rater-b",
+                str(self.write_json(workspace, "cli-rater-b.json", second)),
+                "--adjudication",
+                str(self.write_json(workspace, "cli-adjudication.json", [])),
+                "--out",
+                str(output_path),
+                "--allow-partial",
+            ]
+        )
+        with output_path.open(newline="", encoding="utf-8") as source:
+            cli_rows = list(csv.DictReader(source))
+        self.assertEqual(exit_code, 0)
+        self.assertEqual({int(row["visit"]) for row in cli_rows}, set(range(1, 15)))
+
+    def test_partial_v2_mapping_rejects_off_schedule_visit(self) -> None:
+        workspace = self.workspace()
+        schedule = load_schedule(write_v2_schedule(workspace))
+        mapping = v2_partial_mapping()
+        mapping["attempts"][0]["visit"] = 25
+        mapping_path = self.write_json(workspace, "off-schedule-v2-mapping.json", mapping)
+
+        with self.assertRaisesRegex(ConversionError, "visit is absent from frozen schedule"):
+            _mapping_attempts(mapping_path, schedule, allow_partial=True)
+
+    def test_partial_v2_mapping_rejects_wrong_prompt_digest(self) -> None:
+        workspace = self.workspace()
+        schedule = load_schedule(write_v2_schedule(workspace))
+        mapping = v2_partial_mapping()
+        mapping["attempts"][0]["prompt_sha256"] = digest("wrong-v2-main")
+        mapping_path = self.write_json(workspace, "wrong-prompt-v2-mapping.json", mapping)
+
+        with self.assertRaisesRegex(
+            ConversionError, "prompt_sha256 does not match frozen schedule"
+        ):
+            _mapping_attempts(mapping_path, schedule, allow_partial=True)
+
+    def test_allow_partial_flag_is_opt_in(self) -> None:
+        self.assertFalse(build_parser().parse_args([]).allow_partial)
+        self.assertTrue(build_parser().parse_args(["--allow-partial"]).allow_partial)
 
     def test_v2_recorder_shape_round_trips_through_private_custody(self) -> None:
         workspace = self.workspace()
@@ -399,6 +505,8 @@ class RatingsToTrialsTests(unittest.TestCase):
                 collected_model="GPT-6 Astra",
                 effort="pro",
                 chat_mode="temporary",
+                main_prompt_sha256=digest("v2-main"),
+                safety_prompt_sha256=digest("v2-safety"),
             ),
         )
 
@@ -411,7 +519,13 @@ class RatingsToTrialsTests(unittest.TestCase):
         mapping_path = self.write_json(
             workspace,
             "wrong-model.json",
-            synthetic_mapping(frozenset(), frozenset(), effort="pro"),
+            synthetic_mapping(
+                frozenset(),
+                frozenset(),
+                effort="pro",
+                main_prompt_sha256=digest("v2-main"),
+                safety_prompt_sha256=digest("v2-safety"),
+            ),
         )
 
         with self.assertRaisesRegex(
@@ -429,6 +543,8 @@ class RatingsToTrialsTests(unittest.TestCase):
                 frozenset(),
                 frozenset(),
                 collected_model="GPT-6 Astra",
+                main_prompt_sha256=digest("v2-main"),
+                safety_prompt_sha256=digest("v2-safety"),
             ),
         )
 

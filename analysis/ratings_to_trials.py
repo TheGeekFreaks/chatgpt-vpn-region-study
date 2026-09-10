@@ -155,7 +155,7 @@ def _binary_or_null(value: Any, context: str) -> int | None:
 
 
 def _mapping_attempts(
-    mapping_path: Path, schedule: Schedule | None = None
+    mapping_path: Path, schedule: Schedule | None = None, *, allow_partial: bool = False
 ) -> list[MappingAttempt]:
     frozen_schedule = schedule or load_schedule(DEFAULT_SCHEDULE_PATH)
     mapping = _load_json(mapping_path, dict, "private mapping")
@@ -179,7 +179,7 @@ def _mapping_attempts(
     expected_attempts = sum(
         len(arms) for arms in frozen_schedule.expected_arms_by_visit.values()
     )
-    if len(mapping["attempts"]) != expected_attempts:
+    if not allow_partial and len(mapping["attempts"]) != expected_attempts:
         raise ConversionError(
             f"private mapping requires exactly {expected_attempts} schedule-derived attempts"
         )
@@ -293,6 +293,13 @@ def _mapping_attempts(
                 raise ConversionError(
                     f"{context}: {field} must be a lowercase hexadecimal SHA-256 digest"
                 )
+        expected_prompt_sha256 = (
+            frozen_schedule.main_prompt_sha256
+            if raw["arm"] == "main"
+            else frozen_schedule.safety_prompt_sha256
+        )
+        if raw["prompt_sha256"] != expected_prompt_sha256:
+            raise ConversionError(f"{context}: prompt_sha256 does not match frozen schedule")
         if not isinstance(raw["deviation_reason"], str):
             raise ConversionError(f"{context}: deviation_reason must be a string")
         if status == "valid" and raw["deviation_reason"]:
@@ -312,7 +319,7 @@ def _mapping_attempts(
             )
         attempts.append(MappingAttempt(label=label, status=status, values=dict(raw)))
 
-    if set(visit_arms) != set(frozen_schedule.visits):
+    if not allow_partial and set(visit_arms) != set(frozen_schedule.visits):
         raise ConversionError("private mapping must contain every frozen schedule visit")
     for visit, arms in visit_arms.items():
         expected_arms = sorted(frozen_schedule.expected_arms_by_visit[visit])
@@ -616,6 +623,11 @@ def build_parser() -> argparse.ArgumentParser:
         help="Optional public numeric-only agreement JSON output path.",
     )
     parser.add_argument(
+        "--allow-partial",
+        action="store_true",
+        help="Exploratory only: convert the observed scheduled subset without creating missing rows.",
+    )
+    parser.add_argument(
         "--print-rating-template",
         action="store_true",
         help="Print the required private rater and adjudication JSON schemas, then exit.",
@@ -651,7 +663,9 @@ def main(argv: list[str] | None = None) -> int:
         return 2
     try:
         schedule = load_schedule(arguments.schedule)
-        attempts = _mapping_attempts(arguments.mapping, schedule)
+        attempts = _mapping_attempts(
+            arguments.mapping, schedule, allow_partial=arguments.allow_partial
+        )
         expected_arms = {
             attempt.label: attempt.values["arm"]
             for attempt in attempts
