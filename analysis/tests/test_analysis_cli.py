@@ -22,6 +22,8 @@ from analysis_cli import (  # noqa: E402
     REPOSITORY_ROOT,
     SchemaError,
     analyze,
+    create_charts,
+    endpoint_bootstrap_cis,
     load_schedule,
     load_trials,
     publication_path,
@@ -344,6 +346,60 @@ class AnalysisTests(unittest.TestCase):
         self.assertEqual(endpoint_tests["status"], "computed")
         self.assertEqual(set(endpoint_tests["endpoints"]), {"explicit_refusal", "partial_refusal", "access_limit", "safety_caveat"})
         self.assertTrue(all(details["n_endpoint_complete_blocks"] == 6 for details in endpoint_tests["endpoints"].values()))
+        first_intervals = endpoint_tests["endpoints"]["explicit_refusal"]["bootstrap_ci_95"]
+        repeated = analyze(data, permutations=1_000, bootstrap_samples=1_000, seed=42)
+        self.assertEqual(first_intervals, repeated["primary_endpoint_omnibus"]["endpoints"]["explicit_refusal"]["bootstrap_ci_95"])
+
+    def test_endpoint_bootstrap_resamples_complete_blocks_jointly(self) -> None:
+        blocks = {
+            1: {country: 0.0 for country in DEFAULT_COUNTRIES},
+            2: {country: 1.0 for country in DEFAULT_COUNTRIES},
+        }
+        intervals = endpoint_bootstrap_cis(blocks, DEFAULT_COUNTRIES, bootstrap_samples=1_000, seed=44)
+        self.assertEqual(len({tuple(interval.values()) for interval in intervals.values() if interval is not None}), 1)
+        with self.assertRaisesRegex(ValueError, "bootstrap_samples must be positive"):
+            endpoint_bootstrap_cis(blocks, DEFAULT_COUNTRIES, bootstrap_samples=0, seed=44)
+
+    def test_v2_endpoint_chart_keeps_missing_endpoint_values_as_no_data(self) -> None:
+        try:
+            import matplotlib  # noqa: F401
+        except ImportError:
+            self.skipTest("matplotlib is optional")
+
+        workspace = self._workspace()
+        rows = all_main_rows()
+        for row in rows:
+            row["collected_model"] = "GPT-6 Astra"
+            row["effort"] = "pro"
+            row["safety_caveat"] = ""
+            if row["country"] == "BR":
+                row["partial_refusal"] = ""
+            if row["country"] == "DE" and row["block"] == "1":
+                row["explicit_refusal"] = "1"
+        schedule = load_schedule(write_synthetic_v2_schedule(workspace))
+        data = load_trials(write_synthetic_csv(workspace, rows), schedule)
+        result = analyze(data, permutations=1_000, bootstrap_samples=1_000, seed=42)
+
+        self.assertTrue(result["design"]["endpoint_inference_planned"])
+        endpoint_rates = result["observed_endpoint_rates"]["main"]
+        self.assertEqual(endpoint_rates["explicit_refusal"]["DE"]["events"], 1)
+        self.assertEqual(endpoint_rates["explicit_refusal"]["DE"]["n_observed"], 6)
+        self.assertIsNone(endpoint_rates["partial_refusal"]["BR"]["rate"])
+        self.assertTrue(all(endpoint_rates["safety_caveat"][country]["rate"] is None for country in DEFAULT_COUNTRIES))
+        endpoint_results = result["primary_endpoint_omnibus"]["endpoints"]
+        self.assertEqual(endpoint_results["explicit_refusal"]["n_endpoint_complete_blocks"], 6)
+        self.assertEqual(endpoint_results["partial_refusal"]["status"], "insufficient")
+        self.assertTrue(all(value is None for value in endpoint_results["partial_refusal"]["bootstrap_ci_95"].values()))
+        chart_status = create_charts(result, workspace)
+        self.assertEqual(chart_status["path"], "main_axis_means.png")
+        self.assertEqual(chart_status["additional_paths"], ["main_primary_endpoint_rates.png"])
+        self.assertGreater((workspace / chart_status["additional_paths"][0]).stat().st_size, 0)
+
+        v1_chart_status = create_charts(
+            analyze(load_synthetic_data(workspace, all_main_rows()), permutations=1_000, bootstrap_samples=1_000),
+            workspace,
+        )
+        self.assertNotIn("additional_paths", v1_chart_status)
 
 
 if __name__ == "__main__":

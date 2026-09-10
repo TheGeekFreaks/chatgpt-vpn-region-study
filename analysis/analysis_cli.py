@@ -591,6 +591,33 @@ def endpoint_permutation_test(
     }
 
 
+def endpoint_bootstrap_cis(
+    blocks: dict[int, dict[str, float]],
+    countries: tuple[str, ...],
+    bootstrap_samples: int,
+    seed: int,
+) -> dict[str, Optional[dict[str, float]]]:
+    """Descriptive endpoint-rate intervals from jointly resampled complete blocks."""
+    if bootstrap_samples < 1:
+        raise ValueError("bootstrap_samples must be positive")
+    if not blocks:
+        return {country: None for country in countries}
+    rng = random.Random(seed)
+    ordered_blocks = [blocks[block] for block in sorted(blocks)]
+    samples: dict[str, list[float]] = {country: [] for country in countries}
+    for _ in range(bootstrap_samples):
+        selection = [rng.choice(ordered_blocks) for _ in ordered_blocks]
+        for country in countries:
+            samples[country].append(fmean(block[country] for block in selection))
+    intervals: dict[str, Optional[dict[str, float]]] = {}
+    for country, values in samples.items():
+        lower = _quantile(sorted(values), 0.025)
+        upper = _quantile(sorted(values), 0.975)
+        assert lower is not None and upper is not None
+        intervals[country] = {"lower_95": lower, "upper_95": upper}
+    return intervals
+
+
 def bootstrap_cis(
     blocks: dict[int, dict[str, Trial]],
     countries: tuple[str, ...],
@@ -769,11 +796,18 @@ def analyze(
         endpoint_results: dict[str, Any] = {}
         endpoint_p_values: dict[str, Optional[float]] = {}
         for endpoint_index, endpoint in enumerate(PRIMARY_ENDPOINTS):
+            complete_endpoint_blocks = endpoint_complete_blocks(main_blocks, countries, endpoint)
             test = endpoint_permutation_test(
-                endpoint_complete_blocks(main_blocks, countries, endpoint),
+                complete_endpoint_blocks,
                 countries,
                 permutations,
                 seed + 20_000 + endpoint_index,
+            )
+            test["bootstrap_ci_95"] = endpoint_bootstrap_cis(
+                complete_endpoint_blocks,
+                countries,
+                bootstrap_samples,
+                seed + 30_000 + endpoint_index,
             )
             endpoint_results[endpoint] = test
             endpoint_p_values[endpoint] = test.get("p_value")
@@ -966,7 +1000,7 @@ def render_markdown(result: dict[str, Any]) -> str:
         lines.extend([
             "## Main refusal/access endpoint omnibus tests",
             "",
-            "These four planned endpoint tests use only blocks with an observed value for every country on that endpoint. Their Holm correction is separate from the four quality-axis tests.",
+            "These four planned endpoint tests use only blocks with an observed value for every country on that endpoint. Their Holm correction is separate from the four quality-axis tests. Country intervals below are descriptive 95% intervals from jointly resampled complete blocks.",
             "",
             "| Endpoint | Complete blocks | Max-min rate | Raw permutation p | Holm p |",
             "| --- | ---: | ---: | ---: | ---: |",
@@ -980,6 +1014,25 @@ def render_markdown(result: dict[str, Any]) -> str:
                 )
             else:
                 lines.append(f"| {endpoint.replace('_', ' ')} | 0 | — | — | — |")
+        lines.append("")
+        lines.extend([
+            "### Complete-block endpoint rates and block-bootstrap intervals",
+            "",
+            "| Endpoint | Country | Complete-block rate | 95% block-bootstrap CI | N complete blocks |",
+            "| --- | --- | ---: | --- | ---: |",
+        ])
+        for endpoint, details in endpoint_omnibus["endpoints"].items():
+            if details["status"] != "computed":
+                lines.append(f"| {endpoint.replace('_', ' ')} | — | — | — | 0 |")
+                continue
+            for country in design["countries"]:
+                interval = details["bootstrap_ci_95"][country]
+                lines.append(
+                    f"| {endpoint.replace('_', ' ')} | {country} | "
+                    f"{_format_number(details['country_rates'][country])} | "
+                    f"{_format_number(interval['lower_95'])} to {_format_number(interval['upper_95'])} | "
+                    f"{details['n_endpoint_complete_blocks']} |"
+                )
         lines.append("")
 
     lines.extend([
@@ -1013,8 +1066,8 @@ def render_markdown(result: dict[str, Any]) -> str:
     return "\n".join(lines)
 
 
-def create_charts(result: dict[str, Any], output_dir: Path) -> dict[str, str]:
-    """Create a single compact main-axis chart when matplotlib is installed."""
+def create_charts(result: dict[str, Any], output_dir: Path) -> dict[str, Any]:
+    """Create compact descriptive charts when matplotlib is installed."""
     try:
         import matplotlib.pyplot as plt  # type: ignore[import-not-found]
     except ImportError:
@@ -1041,7 +1094,78 @@ def create_charts(result: dict[str, Any], output_dir: Path) -> dict[str, str]:
     chart_path = output_dir / "main_axis_means.png"
     figure.savefig(chart_path, dpi=180, bbox_inches="tight")
     plt.close(figure)
-    return {"status": "created", "path": chart_path.name}
+
+    chart_status: dict[str, Any] = {"status": "created", "path": chart_path.name}
+    if not result["design"].get("endpoint_inference_planned", False):
+        return chart_status
+
+    endpoint_labels = {
+        "explicit_refusal": "Explizite Verweigerung",
+        "partial_refusal": "Teilweise Verweigerung",
+        "access_limit": "Zugriffsgrenze",
+        "safety_caveat": "Sicherheitsvorbehalt",
+    }
+    endpoint_results = result["primary_endpoint_omnibus"]["endpoints"]
+    endpoint_figure, endpoint_panels = plt.subplots(2, 2, figsize=(9.2, 7.2), squeeze=False)
+    for panel, endpoint in zip(endpoint_panels.flat, PRIMARY_ENDPOINTS):
+        endpoint_details = endpoint_results[endpoint]
+        country_rates = endpoint_details.get("country_rates", {})
+        bootstrap_intervals = endpoint_details["bootstrap_ci_95"]
+        complete_block_count = endpoint_details.get("n_endpoint_complete_blocks", 0)
+        observed = [
+            (index, country, country_rates[country])
+            for index, country in enumerate(countries)
+            if country in country_rates
+        ]
+        if observed:
+            positions = [item[0] for item in observed]
+            rates = [item[2] for item in observed]
+            intervals = [bootstrap_intervals[item[1]] for item in observed]
+            lower = [max(0.0, rate - interval["lower_95"]) for rate, interval in zip(rates, intervals)]
+            upper = [max(0.0, interval["upper_95"] - rate) for rate, interval in zip(rates, intervals)]
+            panel.errorbar(
+                positions,
+                rates,
+                yerr=[lower, upper],
+                fmt="o",
+                capsize=4,
+                color="#4c78a8",
+                markersize=6,
+            )
+            for position, _country, details in observed:
+                panel.annotate(
+                    f"{round(details * complete_block_count)}/{complete_block_count}",
+                    (position, details),
+                    xytext=(0, 7),
+                    textcoords="offset points",
+                    ha="center",
+                    fontsize=8,
+                )
+        for index, country in enumerate(countries):
+            if country not in country_rates:
+                panel.annotate(
+                    "keine Daten",
+                    (index, 0.5),
+                    ha="center",
+                    va="center",
+                    fontsize=8,
+                    color="#666666",
+                )
+        panel.set_xticks(range(len(countries)), countries)
+        panel.set_ylim(-0.04, 1.04)
+        panel.set_title(endpoint_labels[endpoint])
+        panel.set_ylabel("Rate in vollständigen Blöcken")
+        panel.grid(axis="y", alpha=0.25)
+    endpoint_figure.suptitle(
+        "Primäre Endpunkte: Raten aus endpoint-vollständigen Blöcken mit deskriptiven Block-Bootstrap-95%-Intervallen\n"
+        "Beschriftung: Ereignisse / vollständige Blöcke"
+    )
+    endpoint_figure.tight_layout()
+    endpoint_chart_path = output_dir / "main_primary_endpoint_rates.png"
+    endpoint_figure.savefig(endpoint_chart_path, dpi=180, bbox_inches="tight")
+    plt.close(endpoint_figure)
+    chart_status["additional_paths"] = [endpoint_chart_path.name]
+    return chart_status
 
 
 def write_outputs(result: dict[str, Any], output_dir: Path, charts: bool = True) -> dict[str, Any]:
