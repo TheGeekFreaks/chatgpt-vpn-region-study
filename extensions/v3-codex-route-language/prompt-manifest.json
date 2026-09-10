@@ -1,0 +1,19 @@
+{
+  "study_id": "v3-codex-astra-route-language-pilot",
+  "version": 1,
+  "input_status": "frozen_before_collection",
+  "collection_status": "not_started",
+  "contains_private_prompt_text": false,
+  "translation_review": "independent_model_assisted_semantic_review_pass",
+  "human_linguist_validation": false,
+  "source_language": "de",
+  "source_prompt_sha256": "09ee5922accdddf4bb295693499fce9305cc6cc00fd89893bc28c61a87ae4b06",
+  "historical_question_count": 8,
+  "prompts": [
+    {"language": "de", "filename": "main.de.txt", "sha256": "09ee5922accdddf4bb295693499fce9305cc6cc00fd89893bc28c61a87ae4b06", "bytes": 4761, "closing_line": "du kannst das"},
+    {"language": "en-US", "filename": "main.en-US.txt", "sha256": "3a073fafb85e606b67ff16bc123738c611841e88f97986a40cda0416436d3607", "bytes": 4305, "closing_line": "You can do this."},
+    {"language": "ja", "filename": "main.ja.txt", "sha256": "6084d96e5784d19a4c328938fad04d034ec36b0be3162be935f68ae095e4c12a", "bytes": 5662, "closing_line": "あなたならできます。"},
+    {"language": "pt-BR", "filename": "main.pt-BR.txt", "sha256": "374baae9d73cc25062da3fdc4b361f6a98ddea8c7274b151e2e4e9abf644da60", "bytes": 4744, "closing_line": "Você consegue."},
+    {"language": "bg", "filename": "main.bg.txt", "sha256": "4ee4dd62e8c4c88081a11e94ba84b4032a9be15ac1c7bf7f6a9ebecc3799449c", "bytes": 7556, "closing_line": "Ти можеш да го направиш."}
+  ]
+}

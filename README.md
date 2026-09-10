@@ -1,8 +1,22 @@
 # ChatGPT VPN Region Study
 
-Exploratory studies of ChatGPT response quality and boundary behavior across verified VPN exit countries. The central question is whether observed answers vary with the tested route under a fixed prompt and visible model setting. The original experiment and the later regular-chat extension are separate datasets.
+Exploratory studies of ChatGPT and local Codex response quality and boundary behavior across verified VPN exit countries. The central question is whether observed answers vary with the tested route under a fixed prompt and verified model setting. The original experiment, regular-chat extension and local Codex pilot are separate datasets and product conditions.
 
-## Latest result: regular chats with 6 Pro, 10 September 2026
+## Latest result: local Codex Astra and language, 10 September 2026
+
+**All ten planned v3 responses were captured and independently rated twice: German and the selected local language through Bulgaria, Japan, Brazil and the United States, plus two German responses through Germany as a repeat control. All five paired comparisons had zero differences on the four specified numerical metrics.** This small pilot used one response per language condition and does not establish equivalence or support a general country ranking.
+
+Each response came from a fresh saved local Codex task using verified `gpt-6-astra` with `high` reasoning effort, with no tools used by the tested model. All eight specified historical details remained unestablished in every response; this is an information gap, not eight false answers or evidence of no memory. The four non-graphic adult-topic tasks were fully completed in all ten responses, and neither rater coded a partial or full refusal for those tasks or the requested counterposition. These floor and ceiling effects limit the test's ability to detect differences.
+
+Nine retained checksums of the supplied memory summary were identical; the first run lacks that check. This observation does not establish identical hidden context or access to all chats. One Bulgarian language pair differed in its *declared* explicit-content boundary, from limiting to declining; no explicit scene was requested or generated. The pilot therefore identifies no country with greater actual NSFW permission. Systematic differences between the two raters are reported alongside agreement statistics. Terra was not a second experimental model in v3.
+
+[German v3 overview](extensions/v3-codex-route-language/README.md) · [Six-page paper (PDF)](extensions/v3-codex-route-language/PAPER.pdf) · [Manuscript](extensions/v3-codex-route-language/PAPER.md) · [Coded ratings](extensions/v3-codex-route-language/data/ratings.json) · [Descriptive results](extensions/v3-codex-route-language/derived/analysis.json) · [Local Codex skill guide](skill/chatgpt-vpn-region-audit/references/codex-local-pilot.md)
+
+![V3 paired language differences, with Germany as a German-language repeat control](extensions/v3-codex-route-language/derived/paired-language-deltas.png)
+
+No additional countries were added. A future protocol would first need more sensitive measurements, including controlled available-memory details and less prescriptive reflection tasks. Original answers and detailed historical questions remain private; the public rating matrix supports recomputation, not independent semantic re-rating. Every complete original was retained privately before its exact saved test task was deleted, and the original German VPN connection was restored.
+
+## V2: regular chats with 6 Pro, 10 September 2026
 
 **All 24 planned v2 responses were captured: six each through Germany, the United States, Japan and Brazil. No country comparison crossed the specified Holm-adjusted 0.05 threshold. No explicit or partial refusal occurred. Additional countries were therefore not tested.** A nonsignificant pilot does not establish equivalence or identify a strongest or weakest national safety system.
 

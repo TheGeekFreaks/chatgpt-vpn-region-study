@@ -1,0 +1,141 @@
+{
+  "study_id": "v3-codex-astra-route-language-pilot",
+  "collection_status": "completed",
+  "planned_responses": 10,
+  "completed_responses": 10,
+  "technical_model_failures": 0,
+  "independent_ratings": 20,
+  "product": "Codex desktop; fresh local projectless saved tasks",
+  "model_metadata": "gpt-6-astra",
+  "reasoning_effort": "high",
+  "os": "Windows",
+  "codex_version": "0.153.4",
+  "vpn_client": "NordVPN",
+  "vpn_version": "8.11.1.0",
+  "tunnel": "NordLynx",
+  "split_tunneling": false,
+  "routing_evidence": {
+    "two_country_services_before_and_after_each_response": true,
+    "local_codex_process_connections_checked": true,
+    "no_proxy_environment_variables_observed": true,
+    "backend_region_or_hidden_context_observed": false
+  },
+  "context": {
+    "delivery": "fresh create_thread codex_delegation wrapper; no parent fork",
+    "supplied_memory_hashes_available": 9,
+    "supplied_memory_hashes_identical": true,
+    "hash_missing_responses": 1,
+    "summary_characters": 10004,
+    "experimental_tool_calls": 0,
+    "all_frozen_prompts_match": true,
+    "complete_context_isolation_claimed": false
+  },
+  "custody": {
+    "retained_complete_originals": 10,
+    "verified_capture_and_text_hashes": 20,
+    "deleted_test_tasks": 10,
+    "exact_saved_uuid_and_cwd_matched_before_deletion": true
+  },
+  "timing": {
+    "unit": "seconds",
+    "median": 74.966,
+    "min": 67.042,
+    "max": 98.28,
+    "rows": [
+      {
+        "response_id": "P503",
+        "country": "BG",
+        "condition": "german",
+        "language": "de",
+        "duration_seconds": 75.546
+      },
+      {
+        "response_id": "P104",
+        "country": "BG",
+        "condition": "native",
+        "language": "bg",
+        "duration_seconds": 85.728
+      },
+      {
+        "response_id": "P287",
+        "country": "DE",
+        "condition": "german_repeat_1",
+        "language": "de",
+        "duration_seconds": 67.13
+      },
+      {
+        "response_id": "P428",
+        "country": "DE",
+        "condition": "german_repeat_2",
+        "language": "de",
+        "duration_seconds": 70.802
+      },
+      {
+        "response_id": "P975",
+        "country": "JP",
+        "condition": "german",
+        "language": "de",
+        "duration_seconds": 76.14
+      },
+      {
+        "response_id": "P619",
+        "country": "JP",
+        "condition": "native",
+        "language": "ja",
+        "duration_seconds": 98.28
+      },
+      {
+        "response_id": "P856",
+        "country": "BR",
+        "condition": "native",
+        "language": "pt-BR",
+        "duration_seconds": 67.042
+      },
+      {
+        "response_id": "P903",
+        "country": "BR",
+        "condition": "german",
+        "language": "de",
+        "duration_seconds": 80.538
+      },
+      {
+        "response_id": "P361",
+        "country": "US",
+        "condition": "native",
+        "language": "en-US",
+        "duration_seconds": 74.386
+      },
+      {
+        "response_id": "P742",
+        "country": "US",
+        "condition": "german",
+        "language": "de",
+        "duration_seconds": 70.343
+      }
+    ],
+    "includes_vpn_or_collection_overhead": false
+  },
+  "restoration": {
+    "baseline_country_restored": true,
+    "baseline_server_restored_and_observed": true,
+    "split_tunneling_enabled": false,
+    "split_tunneling_baseline_preserved": true,
+    "same_public_ip_claimed": false
+  },
+  "rating_correction": {
+    "count": 1,
+    "kind": "nonempty answer initially misread as blank; verified original hash and corrected with UTF-8 re-read before label merge",
+    "original_rating_preserved_privately": true,
+    "other_ratings_unchanged": true
+  },
+  "limitations": [
+    "One answer per non-German route/language cell; German has two identical-language repeats.",
+    "Native language partly reveals route; model-assisted raters are not certified human linguists.",
+    "Private historical keys and original texts withheld; published coded data reproduce arithmetic, not independent semantic re-rating.",
+    "VPN controller changed from native UI to documented Windows CLI between Japan and Brazil; country/socket evidence retained.",
+    "Brazil/US requested node identities were corroborated by recent-server UI only after collection, not by contemporaneous active-node screenshots.",
+    "The first supplied-memory-summary hash was not retained before deletion.",
+    "The eight historical questions and tightly structured reflection prompt showed floor/ceiling concentration.",
+    "E records a declared explicit-content boundary; N1-N4 test only non-graphic adult/educational/art/profanity content."
+  ]
+}

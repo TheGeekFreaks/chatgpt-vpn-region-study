@@ -1,0 +1,21 @@
+{
+  "study_id": "v3-codex-astra-route-language-pilot",
+  "status": "prepared_not_run",
+  "prompt_manifest": "prompt-manifest.json",
+  "seed": 2026091003,
+  "model_requested": "gpt-6-astra",
+  "reasoning_effort_requested": "high",
+  "country_order": ["BG", "DE", "JP", "BR", "US"],
+  "runs": [
+    {"run": 1, "country": "BG", "language": "de", "within_country_order": 1, "condition": "german", "status": "not_started"},
+    {"run": 2, "country": "BG", "language": "bg", "within_country_order": 2, "condition": "native", "status": "not_started"},
+    {"run": 3, "country": "DE", "language": "de", "within_country_order": 1, "condition": "german_repeat_1", "status": "not_started"},
+    {"run": 4, "country": "DE", "language": "de", "within_country_order": 2, "condition": "german_repeat_2", "status": "not_started"},
+    {"run": 5, "country": "JP", "language": "de", "within_country_order": 1, "condition": "german", "status": "not_started"},
+    {"run": 6, "country": "JP", "language": "ja", "within_country_order": 2, "condition": "native", "status": "not_started"},
+    {"run": 7, "country": "BR", "language": "pt-BR", "within_country_order": 1, "condition": "native", "status": "not_started"},
+    {"run": 8, "country": "BR", "language": "de", "within_country_order": 2, "condition": "german", "status": "not_started"},
+    {"run": 9, "country": "US", "language": "en-US", "within_country_order": 1, "condition": "native", "status": "not_started"},
+    {"run": 10, "country": "US", "language": "de", "within_country_order": 2, "condition": "german", "status": "not_started"}
+  ]
+}

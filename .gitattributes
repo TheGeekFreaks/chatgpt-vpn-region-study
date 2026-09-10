@@ -1,6 +1,8 @@
 *.md text eol=lf
 *.py text eol=lf
 *.json text eol=lf
+# Matplotlib emits trailing coordinate separators inside multiline SVG paths.
+extensions/v3-codex-route-language/derived/*.svg text eol=lf whitespace=-blank-at-eol
 *.pdf binary
 *.png binary
 

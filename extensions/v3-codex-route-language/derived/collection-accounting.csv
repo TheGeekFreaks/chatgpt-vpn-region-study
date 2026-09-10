@@ -1,0 +1,11 @@
+collection_status,condition,country,language,rateable_raters,rater_records,record_present,response_id
+collected_valid,german,BG,de,2,2,True,P503
+collected_valid,native,BG,bg,2,2,True,P104
+collected_valid,german_repeat_1,DE,de,2,2,True,P287
+collected_valid,german_repeat_2,DE,de,2,2,True,P428
+collected_valid,german,JP,de,2,2,True,P975
+collected_valid,native,JP,ja,2,2,True,P619
+collected_valid,native,BR,pt-BR,2,2,True,P856
+collected_valid,german,BR,de,2,2,True,P903
+collected_valid,native,US,en-US,2,2,True,P361
+collected_valid,german,US,de,2,2,True,P742

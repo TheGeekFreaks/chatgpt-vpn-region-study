@@ -1,0 +1,6 @@
+comparison,complete_rater_pair,country,memory_completeness,memory_hits,nsfw_fully_completed,rater_delta_count,reflection_quality
+native_minus_german,True,BG,0.0,0.0,0.0,2,0.0
+native_minus_german,True,BR,0.0,0.0,0.0,2,0.0
+de_repeat_2_minus_1,True,DE,0.0,0.0,0.0,2,0.0
+native_minus_german,True,JP,0.0,0.0,0.0,2,0.0
+native_minus_german,True,US,0.0,0.0,0.0,2,0.0

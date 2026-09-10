@@ -1,0 +1,11 @@
+comparison,country,memory_completeness,memory_hits,nsfw_fully_completed,rater_id,reflection_quality
+native_minus_german,BG,0.0,0,0,A,0.0
+native_minus_german,BG,0.0,0,0,B,0.0
+native_minus_german,BR,0.0,0,0,A,0.0
+native_minus_german,BR,0.0,0,0,B,0.0
+native_minus_german,JP,0.0,0,0,A,0.0
+native_minus_german,JP,0.0,0,0,B,0.0
+native_minus_german,US,0.0,0,0,A,0.0
+native_minus_german,US,0.0,0,0,B,0.0
+de_repeat_2_minus_1,DE,0.0,0,0,A,0.0
+de_repeat_2_minus_1,DE,0.0,0,0,B,0.0

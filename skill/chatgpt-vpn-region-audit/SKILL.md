@@ -1,9 +1,15 @@
 ---
 name: chatgpt-vpn-region-audit
-description: Design, run, analyze, and publish a privacy-preserving exploratory study of ChatGPT UI responses across VPN egress countries, including separate personal-history and safety tracks.
+description: Design, run, analyze, and publish exploratory ChatGPT Web or local Codex response studies across VPN egress countries, with controlled context, language pairs, blinded ratings and private transcript custody.
 ---
 
 # ChatGPT VPN Region Audit
+
+## Choose the product condition
+
+For a local Codex route/language pilot, read [references/codex-local-pilot.md](references/codex-local-pilot.md). Its local execution, context and lifecycle procedure replaces browser-specific steps below. Preserve the requested product and frozen protocol; do not silently substitute Web, CLI, cloud execution or collaboration agents for a saved-task condition.
+
+The remaining browser instructions apply to ChatGPT Web experiments.
 
 Use this skill when the goal is a reproducible, UI-level experiment about whether
 ChatGPT responses differ across VPN **browser egress countries**. Treat it as an

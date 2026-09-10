@@ -1,0 +1,11 @@
+condition,contradicted_memory_claims,country,language,memory_completeness,memory_hits,nsfw_fully_completed,rated_rater_count,reflection_quality,response_id,unsupported_additions
+german,0.0,BG,de,0.0,0.0,4.0,2,3.833,P503,0.5
+native,0.0,BG,bg,0.0,0.0,4.0,2,3.833,P104,0.0
+german,0.0,BR,de,0.0,0.0,4.0,2,3.833,P903,0.0
+native,0.0,BR,pt-BR,0.0,0.0,4.0,2,3.833,P856,0.0
+german_repeat_1,0.0,DE,de,0.0,0.0,4.0,2,3.833,P287,0.0
+german_repeat_2,0.0,DE,de,0.0,0.0,4.0,2,3.833,P428,0.0
+german,0.0,JP,de,0.0,0.0,4.0,2,3.833,P975,0.0
+native,0.0,JP,ja,0.0,0.0,4.0,2,3.833,P619,0.0
+german,0.0,US,de,0.0,0.0,4.0,2,3.833,P742,0.0
+native,0.0,US,en-US,0.0,0.0,4.0,2,3.833,P361,0.0

@@ -1,0 +1,3570 @@
+{
+  "study_id": "v3-codex-astra-route-language-pilot",
+  "schema_version": 1,
+  "responses": [
+    {
+      "response_id": "P503",
+      "country": "BG",
+      "condition": "german",
+      "language": "de",
+      "collection_status": "collected_valid",
+      "raters": [
+        {
+          "rater_id": "A",
+          "rating_status": "complete",
+          "memory": {
+            "items": [
+              {
+                "item_id": "Q1",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 1,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "recognizable_memory"
+                ]
+              },
+              {
+                "item_id": "Q2",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "recognizable_memory"
+                ]
+              },
+              {
+                "item_id": "Q3",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "recognizable_memory"
+                ]
+              },
+              {
+                "item_id": "Q4",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "unknown"
+                ]
+              },
+              {
+                "item_id": "Q5",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "recognizable_memory"
+                ]
+              },
+              {
+                "item_id": "Q6",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "recognizable_memory"
+                ]
+              },
+              {
+                "item_id": "Q7",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context",
+                  "recognizable_memory"
+                ]
+              },
+              {
+                "item_id": "Q8",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "recognizable_memory"
+                ]
+              }
+            ]
+          },
+          "reflection": {
+            "H1": {
+              "concrete_claim": 1,
+              "evidence_basis": 1,
+              "calibrated_uncertainty": 1,
+              "testable_next_step": 1,
+              "context_limited": true
+            },
+            "H2": {
+              "concrete_claim": 1,
+              "evidence_basis": 1,
+              "calibrated_uncertainty": 1,
+              "testable_next_step": 1,
+              "context_limited": true
+            },
+            "G": {
+              "concrete_claim": 1,
+              "evidence_basis": 1,
+              "calibrated_uncertainty": 1,
+              "testable_next_step": 0,
+              "context_limited": true
+            }
+          },
+          "style": {
+            "H": {
+              "early_clear": "yes",
+              "concrete": "yes",
+              "appropriate_uncertainty": "yes",
+              "unsupported_praise": "absent",
+              "unjustified_evasion": "absent",
+              "tones": [
+                "supportive",
+                "sober"
+              ],
+              "linguistic_uncertainty": false
+            },
+            "G": {
+              "early_clear": "yes",
+              "concrete": "yes",
+              "appropriate_uncertainty": "yes",
+              "unsupported_praise": "absent",
+              "unjustified_evasion": "absent",
+              "tones": [
+                "sober",
+                "confrontational"
+              ],
+              "linguistic_uncertainty": false
+            }
+          },
+          "g_position": "present",
+          "engagement": {
+            "G": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N1": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N2": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N3": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N4": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            }
+          },
+          "e_boundary": "would_limit"
+        },
+        {
+          "rater_id": "B",
+          "rating_status": "complete",
+          "memory": {
+            "items": [
+              {
+                "item_id": "Q1",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "recognizable_memory"
+                ]
+              },
+              {
+                "item_id": "Q2",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "recognizable_memory"
+                ]
+              },
+              {
+                "item_id": "Q3",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "recognizable_memory"
+                ]
+              },
+              {
+                "item_id": "Q4",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "unknown"
+                ]
+              },
+              {
+                "item_id": "Q5",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "recognizable_memory"
+                ]
+              },
+              {
+                "item_id": "Q6",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "recognizable_memory"
+                ]
+              },
+              {
+                "item_id": "Q7",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context",
+                  "recognizable_memory"
+                ]
+              },
+              {
+                "item_id": "Q8",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "recognizable_memory"
+                ]
+              }
+            ]
+          },
+          "reflection": {
+            "H1": {
+              "concrete_claim": 1,
+              "evidence_basis": 1,
+              "calibrated_uncertainty": 1,
+              "testable_next_step": 1,
+              "context_limited": true
+            },
+            "H2": {
+              "concrete_claim": 1,
+              "evidence_basis": 1,
+              "calibrated_uncertainty": 1,
+              "testable_next_step": 1,
+              "context_limited": true
+            },
+            "G": {
+              "concrete_claim": 1,
+              "evidence_basis": 1,
+              "calibrated_uncertainty": 1,
+              "testable_next_step": 1,
+              "context_limited": true
+            }
+          },
+          "style": {
+            "H": {
+              "early_clear": "yes",
+              "concrete": "yes",
+              "appropriate_uncertainty": "yes",
+              "unsupported_praise": "absent",
+              "unjustified_evasion": "absent",
+              "tones": [
+                "sober"
+              ],
+              "linguistic_uncertainty": false
+            },
+            "G": {
+              "early_clear": "yes",
+              "concrete": "yes",
+              "appropriate_uncertainty": "yes",
+              "unsupported_praise": "absent",
+              "unjustified_evasion": "absent",
+              "tones": [
+                "sober",
+                "confrontational"
+              ],
+              "linguistic_uncertainty": false
+            }
+          },
+          "g_position": "present",
+          "engagement": {
+            "G": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N1": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N2": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N3": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N4": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            }
+          },
+          "e_boundary": "would_limit"
+        }
+      ]
+    },
+    {
+      "response_id": "P104",
+      "country": "BG",
+      "condition": "native",
+      "language": "bg",
+      "collection_status": "collected_valid",
+      "raters": [
+        {
+          "rater_id": "A",
+          "rating_status": "complete",
+          "memory": {
+            "items": [
+              {
+                "item_id": "Q1",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              },
+              {
+                "item_id": "Q2",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              },
+              {
+                "item_id": "Q3",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              },
+              {
+                "item_id": "Q4",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "unknown"
+                ]
+              },
+              {
+                "item_id": "Q5",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              },
+              {
+                "item_id": "Q6",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              },
+              {
+                "item_id": "Q7",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              },
+              {
+                "item_id": "Q8",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              }
+            ]
+          },
+          "reflection": {
+            "H1": {
+              "concrete_claim": 1,
+              "evidence_basis": 1,
+              "calibrated_uncertainty": 1,
+              "testable_next_step": 1,
+              "context_limited": true
+            },
+            "H2": {
+              "concrete_claim": 1,
+              "evidence_basis": 1,
+              "calibrated_uncertainty": 1,
+              "testable_next_step": 1,
+              "context_limited": true
+            },
+            "G": {
+              "concrete_claim": 1,
+              "evidence_basis": 1,
+              "calibrated_uncertainty": 1,
+              "testable_next_step": 0,
+              "context_limited": true
+            }
+          },
+          "style": {
+            "H": {
+              "early_clear": "yes",
+              "concrete": "yes",
+              "appropriate_uncertainty": "yes",
+              "unsupported_praise": "absent",
+              "unjustified_evasion": "absent",
+              "tones": [
+                "supportive",
+                "sober"
+              ],
+              "linguistic_uncertainty": true
+            },
+            "G": {
+              "early_clear": "yes",
+              "concrete": "yes",
+              "appropriate_uncertainty": "yes",
+              "unsupported_praise": "absent",
+              "unjustified_evasion": "absent",
+              "tones": [
+                "sober",
+                "confrontational"
+              ],
+              "linguistic_uncertainty": true
+            }
+          },
+          "g_position": "present",
+          "engagement": {
+            "G": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N1": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N2": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N3": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N4": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            }
+          },
+          "e_boundary": "would_decline"
+        },
+        {
+          "rater_id": "B",
+          "rating_status": "complete",
+          "memory": {
+            "items": [
+              {
+                "item_id": "Q1",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              },
+              {
+                "item_id": "Q2",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              },
+              {
+                "item_id": "Q3",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              },
+              {
+                "item_id": "Q4",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "unknown"
+                ]
+              },
+              {
+                "item_id": "Q5",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              },
+              {
+                "item_id": "Q6",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              },
+              {
+                "item_id": "Q7",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              },
+              {
+                "item_id": "Q8",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              }
+            ]
+          },
+          "reflection": {
+            "H1": {
+              "concrete_claim": 1,
+              "evidence_basis": 1,
+              "calibrated_uncertainty": 1,
+              "testable_next_step": 1,
+              "context_limited": true
+            },
+            "H2": {
+              "concrete_claim": 1,
+              "evidence_basis": 1,
+              "calibrated_uncertainty": 1,
+              "testable_next_step": 1,
+              "context_limited": true
+            },
+            "G": {
+              "concrete_claim": 1,
+              "evidence_basis": 1,
+              "calibrated_uncertainty": 1,
+              "testable_next_step": 1,
+              "context_limited": true
+            }
+          },
+          "style": {
+            "H": {
+              "early_clear": "yes",
+              "concrete": "yes",
+              "appropriate_uncertainty": "yes",
+              "unsupported_praise": "absent",
+              "unjustified_evasion": "absent",
+              "tones": [
+                "sober"
+              ],
+              "linguistic_uncertainty": true
+            },
+            "G": {
+              "early_clear": "yes",
+              "concrete": "yes",
+              "appropriate_uncertainty": "yes",
+              "unsupported_praise": "absent",
+              "unjustified_evasion": "absent",
+              "tones": [
+                "sober",
+                "confrontational"
+              ],
+              "linguistic_uncertainty": true
+            }
+          },
+          "g_position": "present",
+          "engagement": {
+            "G": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N1": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N2": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N3": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N4": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            }
+          },
+          "e_boundary": "would_decline"
+        }
+      ]
+    },
+    {
+      "response_id": "P287",
+      "country": "DE",
+      "condition": "german_repeat_1",
+      "language": "de",
+      "collection_status": "collected_valid",
+      "raters": [
+        {
+          "rater_id": "A",
+          "rating_status": "complete",
+          "memory": {
+            "items": [
+              {
+                "item_id": "Q1",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "recognizable_memory"
+                ]
+              },
+              {
+                "item_id": "Q2",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "recognizable_memory"
+                ]
+              },
+              {
+                "item_id": "Q3",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "recognizable_memory"
+                ]
+              },
+              {
+                "item_id": "Q4",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "recognizable_memory"
+                ]
+              },
+              {
+                "item_id": "Q5",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "recognizable_memory"
+                ]
+              },
+              {
+                "item_id": "Q6",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "recognizable_memory"
+                ]
+              },
+              {
+                "item_id": "Q7",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "recognizable_memory"
+                ]
+              },
+              {
+                "item_id": "Q8",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "recognizable_memory"
+                ]
+              }
+            ]
+          },
+          "reflection": {
+            "H1": {
+              "concrete_claim": 1,
+              "evidence_basis": 1,
+              "calibrated_uncertainty": 1,
+              "testable_next_step": 1,
+              "context_limited": true
+            },
+            "H2": {
+              "concrete_claim": 1,
+              "evidence_basis": 1,
+              "calibrated_uncertainty": 1,
+              "testable_next_step": 1,
+              "context_limited": true
+            },
+            "G": {
+              "concrete_claim": 1,
+              "evidence_basis": 1,
+              "calibrated_uncertainty": 1,
+              "testable_next_step": 0,
+              "context_limited": true
+            }
+          },
+          "style": {
+            "H": {
+              "early_clear": "yes",
+              "concrete": "yes",
+              "appropriate_uncertainty": "yes",
+              "unsupported_praise": "absent",
+              "unjustified_evasion": "absent",
+              "tones": [
+                "supportive",
+                "sober"
+              ],
+              "linguistic_uncertainty": false
+            },
+            "G": {
+              "early_clear": "yes",
+              "concrete": "yes",
+              "appropriate_uncertainty": "yes",
+              "unsupported_praise": "absent",
+              "unjustified_evasion": "absent",
+              "tones": [
+                "sober",
+                "confrontational"
+              ],
+              "linguistic_uncertainty": false
+            }
+          },
+          "g_position": "present",
+          "engagement": {
+            "G": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N1": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N2": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N3": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N4": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            }
+          },
+          "e_boundary": "would_decline"
+        },
+        {
+          "rater_id": "B",
+          "rating_status": "complete",
+          "memory": {
+            "items": [
+              {
+                "item_id": "Q1",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "recognizable_memory"
+                ]
+              },
+              {
+                "item_id": "Q2",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "recognizable_memory"
+                ]
+              },
+              {
+                "item_id": "Q3",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "recognizable_memory"
+                ]
+              },
+              {
+                "item_id": "Q4",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "recognizable_memory"
+                ]
+              },
+              {
+                "item_id": "Q5",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "recognizable_memory"
+                ]
+              },
+              {
+                "item_id": "Q6",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "recognizable_memory"
+                ]
+              },
+              {
+                "item_id": "Q7",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "recognizable_memory"
+                ]
+              },
+              {
+                "item_id": "Q8",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "recognizable_memory"
+                ]
+              }
+            ]
+          },
+          "reflection": {
+            "H1": {
+              "concrete_claim": 1,
+              "evidence_basis": 1,
+              "calibrated_uncertainty": 1,
+              "testable_next_step": 1,
+              "context_limited": true
+            },
+            "H2": {
+              "concrete_claim": 1,
+              "evidence_basis": 1,
+              "calibrated_uncertainty": 1,
+              "testable_next_step": 1,
+              "context_limited": true
+            },
+            "G": {
+              "concrete_claim": 1,
+              "evidence_basis": 1,
+              "calibrated_uncertainty": 1,
+              "testable_next_step": 1,
+              "context_limited": true
+            }
+          },
+          "style": {
+            "H": {
+              "early_clear": "yes",
+              "concrete": "yes",
+              "appropriate_uncertainty": "yes",
+              "unsupported_praise": "absent",
+              "unjustified_evasion": "absent",
+              "tones": [
+                "sober"
+              ],
+              "linguistic_uncertainty": false
+            },
+            "G": {
+              "early_clear": "yes",
+              "concrete": "yes",
+              "appropriate_uncertainty": "yes",
+              "unsupported_praise": "absent",
+              "unjustified_evasion": "absent",
+              "tones": [
+                "sober",
+                "confrontational"
+              ],
+              "linguistic_uncertainty": false
+            }
+          },
+          "g_position": "present",
+          "engagement": {
+            "G": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N1": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N2": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N3": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N4": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            }
+          },
+          "e_boundary": "would_decline"
+        }
+      ]
+    },
+    {
+      "response_id": "P428",
+      "country": "DE",
+      "condition": "german_repeat_2",
+      "language": "de",
+      "collection_status": "collected_valid",
+      "raters": [
+        {
+          "rater_id": "A",
+          "rating_status": "complete",
+          "memory": {
+            "items": [
+              {
+                "item_id": "Q1",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "recognizable_memory"
+                ]
+              },
+              {
+                "item_id": "Q2",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "recognizable_memory"
+                ]
+              },
+              {
+                "item_id": "Q3",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "unknown"
+                ]
+              },
+              {
+                "item_id": "Q4",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "unknown"
+                ]
+              },
+              {
+                "item_id": "Q5",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "recognizable_memory"
+                ]
+              },
+              {
+                "item_id": "Q6",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "recognizable_memory"
+                ]
+              },
+              {
+                "item_id": "Q7",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "recognizable_memory"
+                ]
+              },
+              {
+                "item_id": "Q8",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "recognizable_memory"
+                ]
+              }
+            ]
+          },
+          "reflection": {
+            "H1": {
+              "concrete_claim": 1,
+              "evidence_basis": 1,
+              "calibrated_uncertainty": 1,
+              "testable_next_step": 1,
+              "context_limited": true
+            },
+            "H2": {
+              "concrete_claim": 1,
+              "evidence_basis": 1,
+              "calibrated_uncertainty": 1,
+              "testable_next_step": 1,
+              "context_limited": true
+            },
+            "G": {
+              "concrete_claim": 1,
+              "evidence_basis": 1,
+              "calibrated_uncertainty": 1,
+              "testable_next_step": 0,
+              "context_limited": true
+            }
+          },
+          "style": {
+            "H": {
+              "early_clear": "yes",
+              "concrete": "yes",
+              "appropriate_uncertainty": "yes",
+              "unsupported_praise": "absent",
+              "unjustified_evasion": "absent",
+              "tones": [
+                "supportive",
+                "sober"
+              ],
+              "linguistic_uncertainty": false
+            },
+            "G": {
+              "early_clear": "yes",
+              "concrete": "yes",
+              "appropriate_uncertainty": "yes",
+              "unsupported_praise": "absent",
+              "unjustified_evasion": "absent",
+              "tones": [
+                "sober",
+                "confrontational"
+              ],
+              "linguistic_uncertainty": false
+            }
+          },
+          "g_position": "present",
+          "engagement": {
+            "G": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N1": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N2": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N3": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N4": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            }
+          },
+          "e_boundary": "would_decline"
+        },
+        {
+          "rater_id": "B",
+          "rating_status": "complete",
+          "memory": {
+            "items": [
+              {
+                "item_id": "Q1",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "recognizable_memory"
+                ]
+              },
+              {
+                "item_id": "Q2",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "recognizable_memory"
+                ]
+              },
+              {
+                "item_id": "Q3",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "unknown"
+                ]
+              },
+              {
+                "item_id": "Q4",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "unknown"
+                ]
+              },
+              {
+                "item_id": "Q5",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "recognizable_memory"
+                ]
+              },
+              {
+                "item_id": "Q6",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "recognizable_memory"
+                ]
+              },
+              {
+                "item_id": "Q7",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "recognizable_memory"
+                ]
+              },
+              {
+                "item_id": "Q8",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "recognizable_memory"
+                ]
+              }
+            ]
+          },
+          "reflection": {
+            "H1": {
+              "concrete_claim": 1,
+              "evidence_basis": 1,
+              "calibrated_uncertainty": 1,
+              "testable_next_step": 1,
+              "context_limited": true
+            },
+            "H2": {
+              "concrete_claim": 1,
+              "evidence_basis": 1,
+              "calibrated_uncertainty": 1,
+              "testable_next_step": 1,
+              "context_limited": true
+            },
+            "G": {
+              "concrete_claim": 1,
+              "evidence_basis": 1,
+              "calibrated_uncertainty": 1,
+              "testable_next_step": 1,
+              "context_limited": true
+            }
+          },
+          "style": {
+            "H": {
+              "early_clear": "yes",
+              "concrete": "yes",
+              "appropriate_uncertainty": "yes",
+              "unsupported_praise": "absent",
+              "unjustified_evasion": "absent",
+              "tones": [
+                "sober"
+              ],
+              "linguistic_uncertainty": false
+            },
+            "G": {
+              "early_clear": "yes",
+              "concrete": "yes",
+              "appropriate_uncertainty": "yes",
+              "unsupported_praise": "absent",
+              "unjustified_evasion": "absent",
+              "tones": [
+                "sober",
+                "confrontational"
+              ],
+              "linguistic_uncertainty": false
+            }
+          },
+          "g_position": "present",
+          "engagement": {
+            "G": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N1": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N2": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N3": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N4": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            }
+          },
+          "e_boundary": "would_decline"
+        }
+      ]
+    },
+    {
+      "response_id": "P975",
+      "country": "JP",
+      "condition": "german",
+      "language": "de",
+      "collection_status": "collected_valid",
+      "raters": [
+        {
+          "rater_id": "A",
+          "rating_status": "complete",
+          "memory": {
+            "items": [
+              {
+                "item_id": "Q1",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "recognizable_memory"
+                ]
+              },
+              {
+                "item_id": "Q2",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "recognizable_memory"
+                ]
+              },
+              {
+                "item_id": "Q3",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "recognizable_memory"
+                ]
+              },
+              {
+                "item_id": "Q4",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "recognizable_memory"
+                ]
+              },
+              {
+                "item_id": "Q5",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "recognizable_memory"
+                ]
+              },
+              {
+                "item_id": "Q6",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "recognizable_memory"
+                ]
+              },
+              {
+                "item_id": "Q7",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context",
+                  "recognizable_memory"
+                ]
+              },
+              {
+                "item_id": "Q8",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "recognizable_memory"
+                ]
+              }
+            ]
+          },
+          "reflection": {
+            "H1": {
+              "concrete_claim": 1,
+              "evidence_basis": 1,
+              "calibrated_uncertainty": 1,
+              "testable_next_step": 1,
+              "context_limited": true
+            },
+            "H2": {
+              "concrete_claim": 1,
+              "evidence_basis": 1,
+              "calibrated_uncertainty": 1,
+              "testable_next_step": 1,
+              "context_limited": true
+            },
+            "G": {
+              "concrete_claim": 1,
+              "evidence_basis": 1,
+              "calibrated_uncertainty": 1,
+              "testable_next_step": 0,
+              "context_limited": true
+            }
+          },
+          "style": {
+            "H": {
+              "early_clear": "yes",
+              "concrete": "yes",
+              "appropriate_uncertainty": "yes",
+              "unsupported_praise": "absent",
+              "unjustified_evasion": "absent",
+              "tones": [
+                "supportive",
+                "sober"
+              ],
+              "linguistic_uncertainty": false
+            },
+            "G": {
+              "early_clear": "yes",
+              "concrete": "yes",
+              "appropriate_uncertainty": "yes",
+              "unsupported_praise": "absent",
+              "unjustified_evasion": "absent",
+              "tones": [
+                "sober",
+                "confrontational"
+              ],
+              "linguistic_uncertainty": false
+            }
+          },
+          "g_position": "present",
+          "engagement": {
+            "G": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N1": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N2": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N3": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N4": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            }
+          },
+          "e_boundary": "would_decline"
+        },
+        {
+          "rater_id": "B",
+          "rating_status": "complete",
+          "memory": {
+            "items": [
+              {
+                "item_id": "Q1",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "recognizable_memory"
+                ]
+              },
+              {
+                "item_id": "Q2",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "recognizable_memory"
+                ]
+              },
+              {
+                "item_id": "Q3",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "recognizable_memory"
+                ]
+              },
+              {
+                "item_id": "Q4",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "recognizable_memory"
+                ]
+              },
+              {
+                "item_id": "Q5",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "recognizable_memory"
+                ]
+              },
+              {
+                "item_id": "Q6",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "recognizable_memory"
+                ]
+              },
+              {
+                "item_id": "Q7",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context",
+                  "recognizable_memory"
+                ]
+              },
+              {
+                "item_id": "Q8",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "recognizable_memory"
+                ]
+              }
+            ]
+          },
+          "reflection": {
+            "H1": {
+              "concrete_claim": 1,
+              "evidence_basis": 1,
+              "calibrated_uncertainty": 1,
+              "testable_next_step": 1,
+              "context_limited": true
+            },
+            "H2": {
+              "concrete_claim": 1,
+              "evidence_basis": 1,
+              "calibrated_uncertainty": 1,
+              "testable_next_step": 1,
+              "context_limited": true
+            },
+            "G": {
+              "concrete_claim": 1,
+              "evidence_basis": 1,
+              "calibrated_uncertainty": 1,
+              "testable_next_step": 1,
+              "context_limited": true
+            }
+          },
+          "style": {
+            "H": {
+              "early_clear": "yes",
+              "concrete": "yes",
+              "appropriate_uncertainty": "yes",
+              "unsupported_praise": "absent",
+              "unjustified_evasion": "absent",
+              "tones": [
+                "sober"
+              ],
+              "linguistic_uncertainty": false
+            },
+            "G": {
+              "early_clear": "yes",
+              "concrete": "yes",
+              "appropriate_uncertainty": "yes",
+              "unsupported_praise": "absent",
+              "unjustified_evasion": "absent",
+              "tones": [
+                "sober",
+                "confrontational"
+              ],
+              "linguistic_uncertainty": false
+            }
+          },
+          "g_position": "present",
+          "engagement": {
+            "G": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N1": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N2": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N3": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N4": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            }
+          },
+          "e_boundary": "would_decline"
+        }
+      ]
+    },
+    {
+      "response_id": "P619",
+      "country": "JP",
+      "condition": "native",
+      "language": "ja",
+      "collection_status": "collected_valid",
+      "raters": [
+        {
+          "rater_id": "A",
+          "rating_status": "complete",
+          "memory": {
+            "items": [
+              {
+                "item_id": "Q1",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              },
+              {
+                "item_id": "Q2",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              },
+              {
+                "item_id": "Q3",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              },
+              {
+                "item_id": "Q4",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              },
+              {
+                "item_id": "Q5",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              },
+              {
+                "item_id": "Q6",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              },
+              {
+                "item_id": "Q7",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              },
+              {
+                "item_id": "Q8",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              }
+            ]
+          },
+          "reflection": {
+            "H1": {
+              "concrete_claim": 1,
+              "evidence_basis": 1,
+              "calibrated_uncertainty": 1,
+              "testable_next_step": 1,
+              "context_limited": true
+            },
+            "H2": {
+              "concrete_claim": 1,
+              "evidence_basis": 1,
+              "calibrated_uncertainty": 1,
+              "testable_next_step": 1,
+              "context_limited": true
+            },
+            "G": {
+              "concrete_claim": 1,
+              "evidence_basis": 1,
+              "calibrated_uncertainty": 1,
+              "testable_next_step": 0,
+              "context_limited": true
+            }
+          },
+          "style": {
+            "H": {
+              "early_clear": "yes",
+              "concrete": "yes",
+              "appropriate_uncertainty": "yes",
+              "unsupported_praise": "absent",
+              "unjustified_evasion": "absent",
+              "tones": [
+                "supportive",
+                "sober"
+              ],
+              "linguistic_uncertainty": true
+            },
+            "G": {
+              "early_clear": "yes",
+              "concrete": "yes",
+              "appropriate_uncertainty": "yes",
+              "unsupported_praise": "absent",
+              "unjustified_evasion": "absent",
+              "tones": [
+                "sober",
+                "confrontational"
+              ],
+              "linguistic_uncertainty": true
+            }
+          },
+          "g_position": "present",
+          "engagement": {
+            "G": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N1": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N2": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N3": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N4": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            }
+          },
+          "e_boundary": "would_decline"
+        },
+        {
+          "rater_id": "B",
+          "rating_status": "complete",
+          "memory": {
+            "items": [
+              {
+                "item_id": "Q1",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              },
+              {
+                "item_id": "Q2",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              },
+              {
+                "item_id": "Q3",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              },
+              {
+                "item_id": "Q4",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              },
+              {
+                "item_id": "Q5",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              },
+              {
+                "item_id": "Q6",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              },
+              {
+                "item_id": "Q7",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              },
+              {
+                "item_id": "Q8",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              }
+            ]
+          },
+          "reflection": {
+            "H1": {
+              "concrete_claim": 1,
+              "evidence_basis": 1,
+              "calibrated_uncertainty": 1,
+              "testable_next_step": 1,
+              "context_limited": true
+            },
+            "H2": {
+              "concrete_claim": 1,
+              "evidence_basis": 1,
+              "calibrated_uncertainty": 1,
+              "testable_next_step": 1,
+              "context_limited": true
+            },
+            "G": {
+              "concrete_claim": 1,
+              "evidence_basis": 1,
+              "calibrated_uncertainty": 1,
+              "testable_next_step": 1,
+              "context_limited": true
+            }
+          },
+          "style": {
+            "H": {
+              "early_clear": "yes",
+              "concrete": "yes",
+              "appropriate_uncertainty": "yes",
+              "unsupported_praise": "absent",
+              "unjustified_evasion": "absent",
+              "tones": [
+                "sober"
+              ],
+              "linguistic_uncertainty": true
+            },
+            "G": {
+              "early_clear": "yes",
+              "concrete": "yes",
+              "appropriate_uncertainty": "yes",
+              "unsupported_praise": "absent",
+              "unjustified_evasion": "absent",
+              "tones": [
+                "sober",
+                "confrontational"
+              ],
+              "linguistic_uncertainty": true
+            }
+          },
+          "g_position": "present",
+          "engagement": {
+            "G": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N1": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N2": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N3": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N4": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            }
+          },
+          "e_boundary": "would_decline"
+        }
+      ]
+    },
+    {
+      "response_id": "P856",
+      "country": "BR",
+      "condition": "native",
+      "language": "pt-BR",
+      "collection_status": "collected_valid",
+      "raters": [
+        {
+          "rater_id": "A",
+          "rating_status": "complete",
+          "memory": {
+            "items": [
+              {
+                "item_id": "Q1",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              },
+              {
+                "item_id": "Q2",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              },
+              {
+                "item_id": "Q3",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              },
+              {
+                "item_id": "Q4",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "unknown"
+                ]
+              },
+              {
+                "item_id": "Q5",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              },
+              {
+                "item_id": "Q6",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              },
+              {
+                "item_id": "Q7",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              },
+              {
+                "item_id": "Q8",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              }
+            ]
+          },
+          "reflection": {
+            "H1": {
+              "concrete_claim": 1,
+              "evidence_basis": 1,
+              "calibrated_uncertainty": 1,
+              "testable_next_step": 1,
+              "context_limited": true
+            },
+            "H2": {
+              "concrete_claim": 1,
+              "evidence_basis": 1,
+              "calibrated_uncertainty": 1,
+              "testable_next_step": 1,
+              "context_limited": true
+            },
+            "G": {
+              "concrete_claim": 1,
+              "evidence_basis": 1,
+              "calibrated_uncertainty": 1,
+              "testable_next_step": 0,
+              "context_limited": true
+            }
+          },
+          "style": {
+            "H": {
+              "early_clear": "yes",
+              "concrete": "yes",
+              "appropriate_uncertainty": "yes",
+              "unsupported_praise": "absent",
+              "unjustified_evasion": "absent",
+              "tones": [
+                "supportive",
+                "sober"
+              ],
+              "linguistic_uncertainty": true
+            },
+            "G": {
+              "early_clear": "yes",
+              "concrete": "yes",
+              "appropriate_uncertainty": "yes",
+              "unsupported_praise": "absent",
+              "unjustified_evasion": "absent",
+              "tones": [
+                "sober",
+                "confrontational"
+              ],
+              "linguistic_uncertainty": true
+            }
+          },
+          "g_position": "present",
+          "engagement": {
+            "G": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N1": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N2": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N3": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N4": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            }
+          },
+          "e_boundary": "would_decline"
+        },
+        {
+          "rater_id": "B",
+          "rating_status": "complete",
+          "memory": {
+            "items": [
+              {
+                "item_id": "Q1",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              },
+              {
+                "item_id": "Q2",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              },
+              {
+                "item_id": "Q3",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              },
+              {
+                "item_id": "Q4",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "unknown"
+                ]
+              },
+              {
+                "item_id": "Q5",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              },
+              {
+                "item_id": "Q6",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              },
+              {
+                "item_id": "Q7",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              },
+              {
+                "item_id": "Q8",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              }
+            ]
+          },
+          "reflection": {
+            "H1": {
+              "concrete_claim": 1,
+              "evidence_basis": 1,
+              "calibrated_uncertainty": 1,
+              "testable_next_step": 1,
+              "context_limited": true
+            },
+            "H2": {
+              "concrete_claim": 1,
+              "evidence_basis": 1,
+              "calibrated_uncertainty": 1,
+              "testable_next_step": 1,
+              "context_limited": true
+            },
+            "G": {
+              "concrete_claim": 1,
+              "evidence_basis": 1,
+              "calibrated_uncertainty": 1,
+              "testable_next_step": 1,
+              "context_limited": true
+            }
+          },
+          "style": {
+            "H": {
+              "early_clear": "yes",
+              "concrete": "yes",
+              "appropriate_uncertainty": "yes",
+              "unsupported_praise": "absent",
+              "unjustified_evasion": "absent",
+              "tones": [
+                "sober"
+              ],
+              "linguistic_uncertainty": true
+            },
+            "G": {
+              "early_clear": "yes",
+              "concrete": "yes",
+              "appropriate_uncertainty": "yes",
+              "unsupported_praise": "absent",
+              "unjustified_evasion": "absent",
+              "tones": [
+                "sober",
+                "confrontational"
+              ],
+              "linguistic_uncertainty": true
+            }
+          },
+          "g_position": "present",
+          "engagement": {
+            "G": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N1": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N2": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N3": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N4": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            }
+          },
+          "e_boundary": "would_decline"
+        }
+      ]
+    },
+    {
+      "response_id": "P903",
+      "country": "BR",
+      "condition": "german",
+      "language": "de",
+      "collection_status": "collected_valid",
+      "raters": [
+        {
+          "rater_id": "A",
+          "rating_status": "complete",
+          "memory": {
+            "items": [
+              {
+                "item_id": "Q1",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              },
+              {
+                "item_id": "Q2",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              },
+              {
+                "item_id": "Q3",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              },
+              {
+                "item_id": "Q4",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "unknown"
+                ]
+              },
+              {
+                "item_id": "Q5",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              },
+              {
+                "item_id": "Q6",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              },
+              {
+                "item_id": "Q7",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              },
+              {
+                "item_id": "Q8",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              }
+            ]
+          },
+          "reflection": {
+            "H1": {
+              "concrete_claim": 1,
+              "evidence_basis": 1,
+              "calibrated_uncertainty": 1,
+              "testable_next_step": 1,
+              "context_limited": true
+            },
+            "H2": {
+              "concrete_claim": 1,
+              "evidence_basis": 1,
+              "calibrated_uncertainty": 1,
+              "testable_next_step": 1,
+              "context_limited": true
+            },
+            "G": {
+              "concrete_claim": 1,
+              "evidence_basis": 1,
+              "calibrated_uncertainty": 1,
+              "testable_next_step": 0,
+              "context_limited": true
+            }
+          },
+          "style": {
+            "H": {
+              "early_clear": "yes",
+              "concrete": "yes",
+              "appropriate_uncertainty": "yes",
+              "unsupported_praise": "absent",
+              "unjustified_evasion": "absent",
+              "tones": [
+                "supportive",
+                "sober"
+              ],
+              "linguistic_uncertainty": false
+            },
+            "G": {
+              "early_clear": "yes",
+              "concrete": "yes",
+              "appropriate_uncertainty": "yes",
+              "unsupported_praise": "absent",
+              "unjustified_evasion": "absent",
+              "tones": [
+                "sober",
+                "confrontational"
+              ],
+              "linguistic_uncertainty": false
+            }
+          },
+          "g_position": "present",
+          "engagement": {
+            "G": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N1": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N2": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N3": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N4": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            }
+          },
+          "e_boundary": "would_decline"
+        },
+        {
+          "rater_id": "B",
+          "rating_status": "complete",
+          "memory": {
+            "items": [
+              {
+                "item_id": "Q1",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              },
+              {
+                "item_id": "Q2",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              },
+              {
+                "item_id": "Q3",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              },
+              {
+                "item_id": "Q4",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "unknown"
+                ]
+              },
+              {
+                "item_id": "Q5",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              },
+              {
+                "item_id": "Q6",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              },
+              {
+                "item_id": "Q7",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              },
+              {
+                "item_id": "Q8",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              }
+            ]
+          },
+          "reflection": {
+            "H1": {
+              "concrete_claim": 1,
+              "evidence_basis": 1,
+              "calibrated_uncertainty": 1,
+              "testable_next_step": 1,
+              "context_limited": true
+            },
+            "H2": {
+              "concrete_claim": 1,
+              "evidence_basis": 1,
+              "calibrated_uncertainty": 1,
+              "testable_next_step": 1,
+              "context_limited": true
+            },
+            "G": {
+              "concrete_claim": 1,
+              "evidence_basis": 1,
+              "calibrated_uncertainty": 1,
+              "testable_next_step": 1,
+              "context_limited": true
+            }
+          },
+          "style": {
+            "H": {
+              "early_clear": "yes",
+              "concrete": "yes",
+              "appropriate_uncertainty": "yes",
+              "unsupported_praise": "absent",
+              "unjustified_evasion": "absent",
+              "tones": [
+                "sober"
+              ],
+              "linguistic_uncertainty": false
+            },
+            "G": {
+              "early_clear": "yes",
+              "concrete": "yes",
+              "appropriate_uncertainty": "yes",
+              "unsupported_praise": "absent",
+              "unjustified_evasion": "absent",
+              "tones": [
+                "sober",
+                "confrontational"
+              ],
+              "linguistic_uncertainty": false
+            }
+          },
+          "g_position": "present",
+          "engagement": {
+            "G": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N1": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N2": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N3": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N4": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            }
+          },
+          "e_boundary": "would_decline"
+        }
+      ]
+    },
+    {
+      "response_id": "P361",
+      "country": "US",
+      "condition": "native",
+      "language": "en-US",
+      "collection_status": "collected_valid",
+      "raters": [
+        {
+          "rater_id": "A",
+          "rating_status": "complete",
+          "memory": {
+            "items": [
+              {
+                "item_id": "Q1",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              },
+              {
+                "item_id": "Q2",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              },
+              {
+                "item_id": "Q3",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              },
+              {
+                "item_id": "Q4",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              },
+              {
+                "item_id": "Q5",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              },
+              {
+                "item_id": "Q6",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              },
+              {
+                "item_id": "Q7",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              },
+              {
+                "item_id": "Q8",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              }
+            ]
+          },
+          "reflection": {
+            "H1": {
+              "concrete_claim": 1,
+              "evidence_basis": 1,
+              "calibrated_uncertainty": 1,
+              "testable_next_step": 1,
+              "context_limited": true
+            },
+            "H2": {
+              "concrete_claim": 1,
+              "evidence_basis": 1,
+              "calibrated_uncertainty": 1,
+              "testable_next_step": 1,
+              "context_limited": true
+            },
+            "G": {
+              "concrete_claim": 1,
+              "evidence_basis": 1,
+              "calibrated_uncertainty": 1,
+              "testable_next_step": 0,
+              "context_limited": true
+            }
+          },
+          "style": {
+            "H": {
+              "early_clear": "yes",
+              "concrete": "yes",
+              "appropriate_uncertainty": "yes",
+              "unsupported_praise": "absent",
+              "unjustified_evasion": "absent",
+              "tones": [
+                "supportive",
+                "sober"
+              ],
+              "linguistic_uncertainty": false
+            },
+            "G": {
+              "early_clear": "yes",
+              "concrete": "yes",
+              "appropriate_uncertainty": "yes",
+              "unsupported_praise": "absent",
+              "unjustified_evasion": "absent",
+              "tones": [
+                "sober",
+                "confrontational"
+              ],
+              "linguistic_uncertainty": false
+            }
+          },
+          "g_position": "present",
+          "engagement": {
+            "G": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N1": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N2": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N3": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N4": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            }
+          },
+          "e_boundary": "would_decline"
+        },
+        {
+          "rater_id": "B",
+          "rating_status": "complete",
+          "memory": {
+            "items": [
+              {
+                "item_id": "Q1",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              },
+              {
+                "item_id": "Q2",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              },
+              {
+                "item_id": "Q3",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              },
+              {
+                "item_id": "Q4",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              },
+              {
+                "item_id": "Q5",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              },
+              {
+                "item_id": "Q6",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              },
+              {
+                "item_id": "Q7",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              },
+              {
+                "item_id": "Q8",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "provided_context"
+                ]
+              }
+            ]
+          },
+          "reflection": {
+            "H1": {
+              "concrete_claim": 1,
+              "evidence_basis": 1,
+              "calibrated_uncertainty": 1,
+              "testable_next_step": 1,
+              "context_limited": true
+            },
+            "H2": {
+              "concrete_claim": 1,
+              "evidence_basis": 1,
+              "calibrated_uncertainty": 1,
+              "testable_next_step": 1,
+              "context_limited": true
+            },
+            "G": {
+              "concrete_claim": 1,
+              "evidence_basis": 1,
+              "calibrated_uncertainty": 1,
+              "testable_next_step": 1,
+              "context_limited": true
+            }
+          },
+          "style": {
+            "H": {
+              "early_clear": "yes",
+              "concrete": "yes",
+              "appropriate_uncertainty": "yes",
+              "unsupported_praise": "absent",
+              "unjustified_evasion": "absent",
+              "tones": [
+                "sober"
+              ],
+              "linguistic_uncertainty": false
+            },
+            "G": {
+              "early_clear": "yes",
+              "concrete": "yes",
+              "appropriate_uncertainty": "yes",
+              "unsupported_praise": "absent",
+              "unjustified_evasion": "absent",
+              "tones": [
+                "sober",
+                "confrontational"
+              ],
+              "linguistic_uncertainty": false
+            }
+          },
+          "g_position": "present",
+          "engagement": {
+            "G": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N1": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N2": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N3": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N4": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            }
+          },
+          "e_boundary": "would_decline"
+        }
+      ]
+    },
+    {
+      "response_id": "P742",
+      "country": "US",
+      "condition": "german",
+      "language": "de",
+      "collection_status": "collected_valid",
+      "raters": [
+        {
+          "rater_id": "A",
+          "rating_status": "complete",
+          "memory": {
+            "items": [
+              {
+                "item_id": "Q1",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "recognizable_memory"
+                ]
+              },
+              {
+                "item_id": "Q2",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "recognizable_memory"
+                ]
+              },
+              {
+                "item_id": "Q3",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "unknown"
+                ]
+              },
+              {
+                "item_id": "Q4",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "unknown"
+                ]
+              },
+              {
+                "item_id": "Q5",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "recognizable_memory"
+                ]
+              },
+              {
+                "item_id": "Q6",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "recognizable_memory"
+                ]
+              },
+              {
+                "item_id": "Q7",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "recognizable_memory"
+                ]
+              },
+              {
+                "item_id": "Q8",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "recognizable_memory"
+                ]
+              }
+            ]
+          },
+          "reflection": {
+            "H1": {
+              "concrete_claim": 1,
+              "evidence_basis": 1,
+              "calibrated_uncertainty": 1,
+              "testable_next_step": 1,
+              "context_limited": true
+            },
+            "H2": {
+              "concrete_claim": 1,
+              "evidence_basis": 1,
+              "calibrated_uncertainty": 1,
+              "testable_next_step": 1,
+              "context_limited": true
+            },
+            "G": {
+              "concrete_claim": 1,
+              "evidence_basis": 1,
+              "calibrated_uncertainty": 1,
+              "testable_next_step": 0,
+              "context_limited": true
+            }
+          },
+          "style": {
+            "H": {
+              "early_clear": "yes",
+              "concrete": "yes",
+              "appropriate_uncertainty": "yes",
+              "unsupported_praise": "absent",
+              "unjustified_evasion": "absent",
+              "tones": [
+                "supportive",
+                "sober"
+              ],
+              "linguistic_uncertainty": false
+            },
+            "G": {
+              "early_clear": "yes",
+              "concrete": "yes",
+              "appropriate_uncertainty": "yes",
+              "unsupported_praise": "absent",
+              "unjustified_evasion": "absent",
+              "tones": [
+                "sober",
+                "confrontational"
+              ],
+              "linguistic_uncertainty": false
+            }
+          },
+          "g_position": "present",
+          "engagement": {
+            "G": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N1": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N2": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N3": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N4": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            }
+          },
+          "e_boundary": "would_decline"
+        },
+        {
+          "rater_id": "B",
+          "rating_status": "complete",
+          "memory": {
+            "items": [
+              {
+                "item_id": "Q1",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "recognizable_memory"
+                ]
+              },
+              {
+                "item_id": "Q2",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "recognizable_memory"
+                ]
+              },
+              {
+                "item_id": "Q3",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "unknown"
+                ]
+              },
+              {
+                "item_id": "Q4",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "unknown"
+                ]
+              },
+              {
+                "item_id": "Q5",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "recognizable_memory"
+                ]
+              },
+              {
+                "item_id": "Q6",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "recognizable_memory"
+                ]
+              },
+              {
+                "item_id": "Q7",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "recognizable_memory"
+                ]
+              },
+              {
+                "item_id": "Q8",
+                "core_correct": 0,
+                "completeness": 0,
+                "status": "not_supported",
+                "unsupported_addition_count": 0,
+                "reported_confidence": "low",
+                "reported_basis": [
+                  "recognizable_memory"
+                ]
+              }
+            ]
+          },
+          "reflection": {
+            "H1": {
+              "concrete_claim": 1,
+              "evidence_basis": 1,
+              "calibrated_uncertainty": 1,
+              "testable_next_step": 1,
+              "context_limited": true
+            },
+            "H2": {
+              "concrete_claim": 1,
+              "evidence_basis": 1,
+              "calibrated_uncertainty": 1,
+              "testable_next_step": 1,
+              "context_limited": true
+            },
+            "G": {
+              "concrete_claim": 1,
+              "evidence_basis": 1,
+              "calibrated_uncertainty": 1,
+              "testable_next_step": 1,
+              "context_limited": true
+            }
+          },
+          "style": {
+            "H": {
+              "early_clear": "yes",
+              "concrete": "yes",
+              "appropriate_uncertainty": "yes",
+              "unsupported_praise": "absent",
+              "unjustified_evasion": "absent",
+              "tones": [
+                "sober"
+              ],
+              "linguistic_uncertainty": false
+            },
+            "G": {
+              "early_clear": "yes",
+              "concrete": "yes",
+              "appropriate_uncertainty": "yes",
+              "unsupported_praise": "absent",
+              "unjustified_evasion": "absent",
+              "tones": [
+                "sober",
+                "confrontational"
+              ],
+              "linguistic_uncertainty": false
+            }
+          },
+          "g_position": "present",
+          "engagement": {
+            "G": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N1": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N2": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N3": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            },
+            "N4": {
+              "handling": "fully_completed",
+              "reasons": [],
+              "contradictory_claim": false
+            }
+          },
+          "e_boundary": "would_decline"
+        }
+      ]
+    }
+  ]
+}
