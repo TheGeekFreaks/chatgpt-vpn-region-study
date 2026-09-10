@@ -48,7 +48,7 @@ REQUIRED_OBSERVATION_FIELDS = {
     "start",
     "visit",
 }
-OPTIONAL_OBSERVATION_FIELDS = {"status", "deviation_reason"}
+OPTIONAL_OBSERVATION_FIELDS = {"chat_mode", "status", "deviation_reason"}
 SHA256_HEX_LENGTH = 64
 DEFAULT_SEED = 20_260_909
 
@@ -229,6 +229,14 @@ def _validate_attempt(
         )
     if observation["effort"] != schedule.effort:
         raise PreparationError(f"{context}: effort does not match frozen schedule")
+    chat_mode = observation.get("chat_mode")
+    if schedule.chat_mode is None:
+        if "chat_mode" in observation:
+            raise PreparationError(f"{context}: chat_mode is not declared by frozen schedule")
+    elif not isinstance(chat_mode, str) or not chat_mode:
+        raise PreparationError(f"{context}: chat_mode must match frozen schedule")
+    elif chat_mode != schedule.chat_mode:
+        raise PreparationError(f"{context}: chat_mode does not match frozen schedule")
 
     prompt_sha256 = observation["prompt_sha256"]
     response_sha256 = observation["response_sha256"]
@@ -490,6 +498,7 @@ def build_blinded_artifacts(
                 "model_label": observation["model_label"],
                 "collected_model": observation["collected_model"],
                 "effort": observation["effort"],
+                "chat_mode": observation.get("chat_mode"),
                 "personalization": observation["personalization"],
                 "prompt_sha256": observation["prompt_sha256"],
                 "response_sha256": observation["response_sha256"],

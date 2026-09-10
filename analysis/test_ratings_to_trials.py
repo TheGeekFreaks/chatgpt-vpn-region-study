@@ -14,6 +14,7 @@ ANALYSIS_DIR = Path(__file__).resolve().parent
 sys.path.insert(0, str(ANALYSIS_DIR))
 
 from analysis_cli import load_schedule
+from prepare_ratings import build_blinded_artifacts, load_attempts
 from ratings_to_trials import (  # type: ignore[import-not-found]
     AXES,
     ENDPOINTS,
@@ -36,6 +37,7 @@ def synthetic_mapping(
     *,
     collected_model: str = "GPT-5.6 Sol",
     effort: str = "high",
+    chat_mode: str | None = None,
 ) -> dict[str, object]:
     attempts: list[dict[str, object]] = []
     for visit in range(1, 25):
@@ -63,6 +65,7 @@ def synthetic_mapping(
                     "model_label": "Synthetic label",
                     "collected_model": collected_model,
                     "effort": effort,
+                    "chat_mode": chat_mode,
                     "personalization": (
                         "personalized" if arm == "main" else "non_personalized"
                     ),
@@ -105,6 +108,7 @@ def write_v2_schedule(directory: Path) -> Path:
                 "safety_prompt_sha256": digest("v2-safety"),
                 "collected_model": "GPT-6 Astra",
                 "effort": "pro",
+                "chat_mode": "regular",
                 "endpoint_inference": True,
                 "visits": visits,
             }
@@ -112,6 +116,42 @@ def write_v2_schedule(directory: Path) -> Path:
         encoding="utf-8",
     )
     return path
+
+
+def write_v2_recorder_envelopes(directory: Path) -> Path:
+    visits_dir = directory / "v2-recorder-visits"
+    visits_dir.mkdir(parents=True)
+    for visit in range(1, 25):
+        response = f"v2 recorder-shaped response {visit}"
+        observation = {
+            "arm": "main",
+            "block": (visit - 1) // 4 + 1,
+            "chat_mode": "regular",
+            "collected_model": "GPT-6 Astra",
+            "country": ("DE", "US", "JP", "BR")[(visit - 1) % 4],
+            "effort": "pro",
+            "end": "2026-01-01T00:00:01.250000Z",
+            "model_label": "6 Pro",
+            "node_code": "SYN-A",
+            "personalization": "personalized",
+            "prompt_sha256": digest("v2-main"),
+            "response": response,
+            "response_sha256": digest(response),
+            "run_id": f"v2-recorder-{visit:02d}",
+            "start": "2026-01-01T00:00:00Z",
+            "visit": visit,
+        }
+        envelope = {
+            "browser_post_verified": True,
+            "browser_pre_verified": True,
+            "observations": [observation],
+            "same_ip_verified": True,
+            "visit": visit,
+        }
+        (visits_dir / f"visit-{visit:02d}.json").write_text(
+            json.dumps(envelope), encoding="utf-8"
+        )
+    return visits_dir
 
 
 def rating_record(
@@ -288,6 +328,17 @@ class RatingsToTrialsTests(unittest.TestCase):
         self.assertEqual(sum(row["status"] == "valid" for row in rows), 36)
         self.assertEqual(agreement["rateable_records"], 36)
 
+    def test_legacy_mapping_without_chat_mode_is_accepted(self) -> None:
+        workspace = self.workspace()
+        mapping = synthetic_mapping(frozenset())
+        for attempt in mapping["attempts"]:
+            del attempt["chat_mode"]
+
+        attempts = _mapping_attempts(
+            self.write_json(workspace, "legacy-mapping.json", mapping)
+        )
+        self.assertEqual(len(attempts), 36)
+
     def test_v2_schedule_requires_twenty_four_main_only_mapping_attempts(self) -> None:
         workspace = self.workspace()
         schedule = load_schedule(write_v2_schedule(workspace))
@@ -299,11 +350,60 @@ class RatingsToTrialsTests(unittest.TestCase):
                 frozenset(),
                 collected_model="GPT-6 Astra",
                 effort="pro",
+                chat_mode="regular",
             ),
         )
         attempts = _mapping_attempts(mapping_path, schedule)
         self.assertEqual(len(attempts), 24)
         self.assertTrue(all(attempt.values["arm"] == "main" for attempt in attempts))
+
+    def test_v2_recorder_shape_round_trips_through_private_custody(self) -> None:
+        workspace = self.workspace()
+        schedule = load_schedule(write_v2_schedule(workspace))
+        prepared = load_attempts(write_v2_recorder_envelopes(workspace), schedule=schedule)
+        pack, mapping = build_blinded_artifacts(prepared, seed=17)
+        self.assertEqual(len(pack["records"]), 24)
+        self.assertTrue(
+            all(item["chat_mode"] == "regular" for item in mapping["attempts"])
+        )
+
+        mapping_path = self.write_json(workspace, "v2-mapping.json", mapping)
+        attempts = _mapping_attempts(mapping_path, schedule)
+        first, second = rating_lists(attempts)
+        expected_arms = {
+            attempt.label: attempt.values["arm"]
+            for attempt in attempts
+            if attempt.rateable and attempt.label
+        }
+        first_ratings = _parse_ratings(
+            self.write_json(workspace, "rater-a.json", first), expected_arms, "rater A"
+        )
+        second_ratings = _parse_ratings(
+            self.write_json(workspace, "rater-b.json", second), expected_arms, "rater B"
+        )
+        rows, agreement = convert(attempts, first_ratings, second_ratings, {})
+
+        self.assertEqual(len(rows), 24)
+        self.assertEqual(agreement["rateable_records"], 24)
+        self.assertTrue(all(row["status"] == "valid" for row in rows))
+
+    def test_v2_mapping_rejects_wrong_chat_mode(self) -> None:
+        workspace = self.workspace()
+        schedule = load_schedule(write_v2_schedule(workspace))
+        mapping_path = self.write_json(
+            workspace,
+            "wrong-chat-mode.json",
+            synthetic_mapping(
+                frozenset(),
+                frozenset(),
+                collected_model="GPT-6 Astra",
+                effort="pro",
+                chat_mode="temporary",
+            ),
+        )
+
+        with self.assertRaisesRegex(ConversionError, "chat_mode does not match frozen schedule"):
+            _mapping_attempts(mapping_path, schedule)
 
     def test_v2_schedule_rejects_wrong_collected_model(self) -> None:
         workspace = self.workspace()

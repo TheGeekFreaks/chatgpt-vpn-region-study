@@ -99,6 +99,7 @@ def write_v2_schedule(directory: Path) -> Path:
                 "safety_prompt_sha256": hashlib.sha256(b"synthetic-safety").hexdigest(),
                 "collected_model": "GPT-6 Astra",
                 "effort": "pro",
+                "chat_mode": "regular",
                 "endpoint_inference": True,
                 "visits": visits,
             }
@@ -115,6 +116,7 @@ def write_v2_main_only_envelopes(directory: Path) -> Path:
         item = observation(visit, "main")
         item["collected_model"] = "GPT-6 Astra"
         item["effort"] = "pro"
+        item["chat_mode"] = "regular"
         envelope = {
             "visit": visit,
             "browser_pre_verified": True,
@@ -250,6 +252,20 @@ class PrepareRatingsTests(unittest.TestCase):
         path.write_text(json.dumps(payload), encoding="utf-8")
 
         with self.assertRaisesRegex(PreparationError, "effort does not match frozen schedule"):
+            load_attempts(visits_dir, schedule=schedule)
+
+    def test_v2_schedule_rejects_wrong_chat_mode(self) -> None:
+        workspace = self._workspace()
+        schedule = load_schedule(write_v2_schedule(workspace))
+        visits_dir = write_v2_main_only_envelopes(workspace)
+        path = visits_dir / "visit-01.json"
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        payload["observations"][0]["chat_mode"] = "temporary"
+        path.write_text(json.dumps(payload), encoding="utf-8")
+
+        with self.assertRaisesRegex(
+            PreparationError, "chat_mode does not match frozen schedule"
+        ):
             load_attempts(visits_dir, schedule=schedule)
 
     def test_wrong_block_or_unverified_valid_attempt_is_rejected(self) -> None:

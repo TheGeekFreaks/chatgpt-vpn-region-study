@@ -214,7 +214,12 @@ def _mapping_attempts(
         context = f"private mapping attempt {index}"
         if not isinstance(raw, dict):
             raise ConversionError(f"{context} must be an object")
-        _exact_keys(raw, required, context)
+        expected_fields = required | (
+            {"chat_mode"}
+            if frozen_schedule.chat_mode is not None or "chat_mode" in raw
+            else set()
+        )
+        _exact_keys(raw, expected_fields, context)
         status = raw["status"]
         if not isinstance(status, str) or status not in {"valid", "technical_failure"}:
             raise ConversionError(f"{context}: unsupported status")
@@ -256,6 +261,14 @@ def _mapping_attempts(
             raise ConversionError(f"{context}: collected_model does not match frozen schedule")
         if raw["effort"] != frozen_schedule.effort:
             raise ConversionError(f"{context}: effort does not match frozen schedule")
+        chat_mode = raw.get("chat_mode")
+        if frozen_schedule.chat_mode is None:
+            if chat_mode is not None:
+                raise ConversionError(f"{context}: chat_mode is not declared by frozen schedule")
+        elif not isinstance(chat_mode, str) or not chat_mode:
+            raise ConversionError(f"{context}: chat_mode must match frozen schedule")
+        elif chat_mode != frozen_schedule.chat_mode:
+            raise ConversionError(f"{context}: chat_mode does not match frozen schedule")
         for field in (
             "browser_pre_verified",
             "browser_post_verified",

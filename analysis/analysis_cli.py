@@ -125,6 +125,7 @@ class Schedule:
     safety_prompt_sha256: str
     collected_model: str
     effort: str
+    chat_mode: str | None
     endpoint_inference: bool
     visits: dict[int, ScheduleVisit]
 
@@ -209,6 +210,7 @@ def load_schedule(path: Path) -> Schedule:
         safety_prompt = str(payload["safety_prompt_sha256"]).lower()
         collected_model = payload.get("collected_model", EXPECTED_COLLECTED_MODEL)
         effort = payload.get("effort", EXPECTED_EFFORT)
+        chat_mode = payload.get("chat_mode")
         endpoint_inference = payload.get("endpoint_inference", False)
         raw_visits = payload["visits"]
     except (KeyError, TypeError) as error:
@@ -219,6 +221,8 @@ def load_schedule(path: Path) -> Schedule:
         raise SchemaError("schedule collected_model must be a nonempty string")
     if not isinstance(effort, str) or not effort:
         raise SchemaError("schedule effort must be a nonempty string")
+    if chat_mode is not None and (not isinstance(chat_mode, str) or not chat_mode):
+        raise SchemaError("schedule chat_mode must be a nonempty string when present")
     if not isinstance(endpoint_inference, bool):
         raise SchemaError("schedule endpoint_inference must be boolean when present")
     if not isinstance(raw_visits, list):
@@ -263,6 +267,7 @@ def load_schedule(path: Path) -> Schedule:
         safety_prompt_sha256=safety_prompt,
         collected_model=collected_model,
         effort=effort,
+        chat_mode=chat_mode,
         endpoint_inference=endpoint_inference,
         visits=visits,
     )
